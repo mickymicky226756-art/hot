@@ -909,12 +909,6 @@
 
                 <h4 style="margin:20px 0 10px;">Pending Transactions</h4>
                 <div id="adminRequestList">Loading requests...</div>
-
-                <h4 style="margin:30px 0 10px; display:flex; justify-content:space-between; align-items:center;">
-                    <span><i class="fa-solid fa-clock-rotate-left"></i> Deposit History</span>
-                    <button style="background:var(--accent-green); color:white; border:none; padding:5px 15px; border-radius:12px; cursor:pointer; font-weight:bold; font-size:0.8rem;" onclick="loadAdminDepositHistory()">Load History</button>
-                </h4>
-                <div id="adminDepositHistoryList" style="font-size:0.85rem;">Click load to view approved deposits...</div>
                 
                 <button class="btn-full" style="background:#ef4444; margin-top:30px;" onclick="window.location.reload()">Admin Logout</button>
             </div>
@@ -1290,6 +1284,7 @@
                     let dis = "";
                     if (pCount >= limit) { btnTxt = "Limit Reached"; dis = "disabled"; }
 
+                    // የ Badge Limit እና VIP
                     const vipBadge = plan.price > 2000 ? '<div class="badge-hot">VIP</div>' : '';
 
                     const planHtml = `
@@ -1997,47 +1992,6 @@
                     db.ref('users/'+uid).once('value', s => db.ref('users/'+uid).update({ balance: parseFloat(s.val().balance||0) + amt }));
                 }
                 showToast("Action saved");
-            });
-        }
-
-        // --- NEW: APPROVED DEPOSITS HISTORY ---
-        function loadAdminDepositHistory() {
-            const list = document.getElementById('adminDepositHistoryList');
-            list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Loading history...</p>';
-            
-            db.ref('deposits').once('value', snap => {
-                list.innerHTML = "";
-                let count = 0;
-                if(snap.exists()) {
-                    const arr = [];
-                    snap.forEach(ch => {
-                        const r = ch.val();
-                        if(r.status === 'approve') {
-                            arr.push(r);
-                        }
-                    });
-                    
-                    // Sort by newest first
-                    arr.sort((a, b) => b.timestamp - a.timestamp); 
-                    
-                    arr.forEach(r => {
-                        count++;
-                        const date = new Date(r.timestamp).toLocaleString();
-                        list.insertAdjacentHTML('beforeend', `
-                        <div style="background:#dcfce7; border-left:4px solid var(--accent-green); padding:12px; border-radius:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <strong style="color:var(--accent-green); font-size:1.1rem;">ETB ${r.amount}</strong><br>
-                                <small style="color:var(--text-main); font-weight:bold;">User: ${r.phone}</small><br>
-                                <small style="color:var(--text-muted);">Txn: ${r.txnId}</small>
-                            </div>
-                            <div style="text-align:right;">
-                                <span style="background:var(--accent-green); color:white; font-size:0.7rem; padding:3px 8px; border-radius:8px;">Approved</span><br>
-                                <small style="color:var(--text-muted); font-size:0.75rem; margin-top:5px; display:block;">${date}</small>
-                            </div>
-                        </div>`);
-                    });
-                }
-                if(count === 0) list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No approved deposits found.</p>';
             });
         }
 
