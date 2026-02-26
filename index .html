@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hot Fruit Farming | Invest & Grow</title>
+
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/415/415682.png">    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    
+    <style>
+        /* --- Modern Organic Farming Theme --- */
+        :root {
+            --primary-color: #f97316; /* Bright Orange */
+            --primary-dark: #c2410c;  /* Deep Orange */
+            --primary-light: #ffedd5; 
+            --accent-green: #16a34a;  /* Fresh Green */
+            --accent-green-light: #dcfce7;
+            --text-main: #27272a;
+            --text-muted: #71717a;
+            --bg-body: #fafaf9;
+            --card-bg: rgba(255, 255, 255, 0.98);
+            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
+            --shadow-float: 0 20px 25px -5px rgba(249, 115, 22, 0.2);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-pill: 50px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body {
+            /* Beautiful Orchard/Farm Background */
+            background: url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1080&q=80') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            overflow-x: hidden;
+        }
+
+        /* Dark Overlay to make content pop */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(250,250,249,0.85) 0%, rgba(255,237,213,0.95) 100%);
+            z-index: -1;
+        }
+
+        /* --- Animations --- */
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .animate-up { animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        /* --- Custom Floating Header --- */
+        header {
+            background: transparent;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 0; width: 100%;
+            z-index: 100;
+        }
+
+        .logo { 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            color: var(--primary-dark); 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 2px 10px rgba(255,255,255,0.8);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-btn {
+            background: white;
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+            text-decoration: none;
+            border: 2px solid var(--primary-light);
+            transition: 0.3s;
+        }
+        
+        .info-btn:active {
+            transform: scale(0.95);
+        }
+
+        .download-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: var(--shadow-float);
+            cursor: pointer;
+            text-decoration: none;
+            border: 2px solid var(--primary-color);
+            transition: 0.3s;
+        }
+        
+        .download-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .user-pill {
+            background: white;
+            color: var(--primary-dark);
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+            border: 2px solid var(--primary-light);
+        }
+
+        /* --- Views --- */
+        .view-section { display: none; padding-top: 80px; }
+        .view-section.active-view { display: block; }
+
+        /* --- Home Dashboard --- */
+        .wallet-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            margin: 0 20px 25px;
+            padding: 30px 25px;
+            border-radius: 30px;
+            color: white;
+            box-shadow: var(--shadow-float);
+            position: relative;
+            overflow: hidden;
+        }
+        .wallet-card::after {
+            content: '\f4d8'; /* Leaf Icon */
+            font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            position: absolute; right: -20px; bottom: -20px;
+            font-size: 8rem; opacity: 0.1; transform: rotate(-15deg);
+        }
+        
+        .bal-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
+        .bal-amount { font-size: 2.8rem; font-weight: 800; line-height: 1.1; margin: 5px 0 15px; }
+        .bal-sub { display: flex; justify-content: space-between; font-size: 0.9rem; background: rgba(0,0,0,0.15); padding: 10px 15px; border-radius: 12px; backdrop-filter: blur(5px); }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: space-around;
+            row-gap: 20px;
+            padding: 0 10px;
+            margin-bottom: 30px;
+        }
+        .action-circle {
+            display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer;
+            width: 30%; 
+        }
+        .action-circle .icon-box {
+            width: 50px; height: 50px; border-radius: 16px;
+            background: white; color: var(--primary-color);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.3rem; box-shadow: var(--shadow-soft);
+            transition: 0.3s;
+        }
+        .action-circle:hover .icon-box { transform: translateY(-5px); box-shadow: 0 15px 20px rgba(249, 115, 22, 0.15); }
+        .action-circle span { font-size: 0.75rem; font-weight: 600; color: var(--text-main); }
+
+        /* --- Page Layouts --- */
+        .page-header {
+            text-align: center; padding: 20px 20px 40px;
+            position: relative;
+        }
+        .page-header h2 { font-size: 1.8rem; color: var(--primary-dark); font-weight: 800; }
+        .page-header p { color: var(--text-muted); font-size: 0.9rem; }
+        
+        .back-btn { 
+            position: absolute; left: 20px; top: 25px;
+            width: 40px; height: 40px; border-radius: 12px;
+            background: white; border: none; box-shadow: var(--shadow-soft);
+            color: var(--primary-color); font-size: 1.2rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .content-box {
+            background: var(--card-bg); border-radius: 30px 30px 0 0;
+            padding: 30px 20px; min-height: calc(100vh - 150px);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.05);
+        }
+
+        /* --- Global Forms & Buttons --- */
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; padding-left: 5px; }
+        input { 
+            width: 100%; padding: 16px 20px; background: #f4f4f5; 
+            border: 2px solid transparent; border-radius: 16px; 
+            font-size: 1rem; color: var(--text-main); outline: none; transition: 0.3s; 
+        }
+        input:focus { border-color: var(--primary-color); background: white; box-shadow: 0 0 0 4px var(--primary-light); }
+        
+        .btn-full { 
+            width: 100%; padding: 16px; background: var(--primary-color); 
+            color: white; border: none; border-radius: 16px; font-size: 1.05rem; 
+            font-weight: 700; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+        }
+        .btn-full:active { transform: scale(0.98); }
+
+        /* --- Quick Deposit Amounts --- */
+        .quick-amounts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 25px; }
+        .amt-btn { background: var(--primary-light); color: var(--primary-dark); border: 1px solid var(--primary-color); border-radius: 12px; padding: 12px 5px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.3s; text-align: center; }
+        .amt-btn:hover, .amt-btn:active { background: var(--primary-color); color: white; }
+
+        /* --- Farm Shop (Products) --- */
+        .farm-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .product-card {
+            background: white; border-radius: 24px; display: flex; padding: 15px;
+            box-shadow: var(--shadow-soft); border: 1px solid #f4f4f5; position: relative;
+        }
+        .prod-img-box { position: relative; width: 100px; height: 100px; border-radius: 16px; overflow: hidden; flex-shrink: 0; margin-right: 15px; }
+        .prod-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .badge-limit { position: absolute; bottom: 5px; left: 5px; background: rgba(0,0,0,0.6); color: white; font-size: 0.65rem; font-weight: bold; padding: 2px 6px; border-radius: 6px; z-index: 2; backdrop-filter: blur(2px); }
+
+        .prod-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .prod-info h4 { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+        .roi-tag { display: inline-block; background: var(--accent-green-light); color: var(--accent-green); font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 8px; margin: 5px 0; width: max-content; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+        .price-val { font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); }
+        .btn-buy { background: var(--primary-color); color: white; border: none; padding: 8px 16px; border-radius: 12px; font-weight: 600; cursor: pointer; }
+        .btn-buy:disabled { background: #d4d4d8; cursor: not-allowed; box-shadow: none; }
+        .badge-hot { position: absolute; top: -10px; right: 20px; background: #ef4444; color: white; font-size: 0.7rem; font-weight: bold; padding: 4px 10px; border-radius: 10px; }
+
+        /* --- Orders/My Harvest --- */
+        .harvest-card { background: white; border-radius: 20px; padding: 20px; margin-bottom: 15px; border-left: 6px solid var(--accent-green); box-shadow: var(--shadow-soft); }
+        .harvest-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #e4e4e7; padding-bottom: 10px; margin-bottom: 10px; }
+        .btn-collect { background: var(--accent-green); color: white; padding: 10px 20px; border: none; border-radius: 12px; font-weight: bold; width: 100%; margin-top: 10px; cursor: pointer; }
+        .btn-collect:disabled { background: #f4f4f5; color: #a1a1aa; border: 1px solid #e4e4e7; }
+
+        /* --- Bank Cards UI --- */
+        .bank-box { background: linear-gradient(to right, #1e293b, #0f172a); color: white; padding: 20px; border-radius: 20px; margin-bottom: 15px; position: relative; overflow: hidden; }
+        .bank-box::before { content: ''; position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%; }
+
+        /* --- Floating Bottom Nav --- */
+        .bottom-nav {
+            position: fixed; bottom: 20px; left: 5%; width: 90%;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            padding: 15px 10px; display: flex; justify-content: space-around;
+            border-radius: var(--radius-pill); box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            z-index: 1000; border: 1px solid rgba(255,255,255,0.5);
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #a1a1aa; font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: 0.3s; width: 60px; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; transition: 0.3s; }
+        .nav-item.active { color: var(--primary-color); }
+        .nav-item.active i { transform: translateY(-3px); color: var(--primary-dark); }
+
+        /* --- Modals (General) --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 2000; }
+        .modal-content { background: white; width: 90%; max-width: 420px; margin: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 30px; border-radius: 30px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        .close { position: absolute; top: 20px; right: 25px; font-size: 1.5rem; color: #a1a1aa; cursor: pointer; }
+
+        /* --- FULL SCREEN AUTH SPECIFICS --- */
+        #authModal { 
+            background: url('https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?auto=format&fit=crop&w=1080&q=80') center/cover fixed; 
+            display: flex; align-items: center; justify-content: center; 
+        }
+        #authModal::before { 
+            content: ''; position: absolute; top:0; left:0; width:100%; height:100%; 
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); 
+        }
+        #authModal .modal-content { 
+            position: relative;
+            width: 100%; 
+            max-width: 100%; 
+            height: 100vh;
+            border-radius: 0;
+            top: 0; left: 0; transform: none; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.92);
+            padding: 40px 20px; 
+            box-sizing: border-box;
+        }
+        #loginForm, #signupForm { width: 100%; max-width: 380px; text-align: center; }
+        .auth-logo { width: 85px; margin-bottom: 15px; }
+
+        .phone-group { display: flex; align-items: center; background: #f4f4f5; border-radius: 16px; padding: 0 15px; margin-bottom: 15px; border: 2px solid transparent; transition: 0.3s; }
+        .phone-group:focus-within { border-color: var(--primary-color); background: white; }
+        .phone-group span { font-weight: bold; color: var(--text-main); border-right: 2px solid #e4e4e7; padding-right: 10px; margin-right: 10px; }
+        .phone-group input { background: transparent; border: none; padding: 16px 0; text-align: left; }
+        .phone-group input:focus { box-shadow: none; }
+
+        /* --- Admin --- */
+        .admin-box { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); border: 1px solid #eee; }
+        .req-card { border-left: 4px solid #f59e0b; padding: 15px; background: #fffbeb; border-radius: 12px; margin-bottom: 10px; }
+        .req-card.withdraw { border-left-color: #3b82f6; background: #eff6ff; }
+
+        /* Toast */
+        #toast { visibility: hidden; background: #27272a; color: white; text-align: center; padding: 15px 25px; border-radius: 30px; position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); z-index: 3000; font-weight: 500; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        #toast.show { visibility: visible; animation: popIn 0.3s, fadeOut 0.5s 2.5s forwards; }
+        @keyframes popIn { from { bottom: 80px; opacity: 0; } to { bottom: 100px; opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; } }
+
+        /* --- Lucky Draw Wheel Styles --- */
+        .wheel-wrapper { position: relative; width: 280px; height: 280px; margin: 0 auto 30px; border-radius: 50%; padding: 10px; background: rgba(139, 92, 246, 0.15); box-shadow: 0 0 30px rgba(139, 92, 246, 0.3); }
+        .wheel-pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%) rotate(135deg); z-index: 10; font-size: 2.5rem; color: #ef4444; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3)); }
+        .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid white; box-shadow: var(--shadow-float); overflow: hidden; position: relative; }
+        .wheel-inner { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient( #f97316 0deg 60deg, #3b82f6 60deg 120deg, #16a34a 120deg 180deg, #8b5cf6 180deg 240deg, #ec4899 240deg 300deg, #eab308 300deg 360deg ); position: relative; transition: transform 4s cubic-bezier(0.17, 0.67, 0.1, 1); }
+        .wheel-item { position: absolute; width: 100%; height: 100%; text-align: center; color: white; font-weight: 800; font-size: 0.85rem; padding-top: 15px; box-sizing: border-box; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); transform-origin: center; }
+        .item-1 { transform: rotate(30deg); }
+        .item-2 { transform: rotate(90deg); }
+        .item-3 { transform: rotate(150deg); }
+        .item-4 { transform: rotate(210deg); }
+        .item-5 { transform: rotate(270deg); }
+        .item-6 { transform: rotate(330deg); }
+
+    </style>
+</head>
+<body>
+
+    <div id="authModal" class="modal" style="display:flex;">
+        <div class="modal-content animate-up">
+            <img src="https://cdn-icons-png.flaticon.com/512/415/415682.png" alt="Farm Logo" class="auth-logo">
+            <h2 id="authTitle" style="color:var(--primary-dark); font-weight:800; margin-bottom:5px;">Welcome Back</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:25px;">Cultivate your wealth daily.</p>
+            
+            <div id="loginForm">
+                <div class="phone-group">
+                    <span>+251</span>
+                    <input type="tel" id="loginPhone" placeholder="9xxxxxxxx" maxlength="9">
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginPass" placeholder="Password">
+                </div>
+                <button class="btn-full" onclick="login()">Login</button>
+                <p style="margin-top:20px; font-size:0.9rem; color:var(--text-muted);">
+                    New Farmer? <a href="#" onclick="toggleAuth('signup')" style="color:var(--primary-color); font-weight:bold; text-decoration:none;">Register Now</a>
+                </p>
+            </div>
+
+            <div id="signupForm" style="display:none;">
+                <div class="phone-group">
+                    <span>+251</span>
+                    <input type="tel" id="regPhone" placeholder="9xxxxxxxx" maxlength="9">
+                </div>
+                
+                <div class="input-group"><input type="password" id="regPass" placeholder="Create Password"></div>
+                <div class="input-group"><input type="password" id="regPassConfirm" placeholder="Confirm Password"></div>
+                
+                <div style="display:flex; gap:10px; margin-bottom:15px; align-items:center;">
+                    <canvas id="captchaCanvas" width="140" height="56" style="border-radius:16px; background:#f4f4f5; border: 1px solid #e4e4e7; cursor:pointer;" onclick="generateCaptcha()" title="Click to refresh"></canvas>
+                    <input type="text" id="regCaptcha" placeholder="4 Letters" maxlength="4" style="margin-bottom:0; text-transform:uppercase;">
+                </div>
+
+                <div class="input-group"><input type="text" id="regRef" placeholder="Invite Code (Optional)"></div>
+
+                <button class="btn-full" onclick="signup()">Start Farming</button>
+                <p style="margin-top:20px; font-size:0.9rem; color:var(--text-muted);">
+                    Already registered? <a href="#" onclick="toggleAuth('login')" style="color:var(--primary-color); font-weight:bold; text-decoration:none;">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="claimSuccessModal" class="modal">
+        <div class="modal-content animate-up">
+            <i class="fa-solid fa-basket-shopping" style="font-size: 4rem; color: var(--accent-green); margin-bottom: 15px;" id="claimModalIcon"></i>
+            <h2 style="color:var(--text-main); font-weight:800;" id="claimModalTitle">Harvest Collected!</h2>
+            <p id="claimModalDesc" style="color:var(--text-muted); margin: 10px 0;">Your daily profit is ready.</p>
+            <div style="font-size: 3rem; font-weight: 800; color: var(--primary-color); margin: 15px 0;">ETB <span id="claimModalAmount">0.00</span></div>
+            <button class="btn-full" onclick="closeModal('claimSuccessModal')" style="background: var(--accent-green);">Awesome!</button>
+        </div>
+    </div>
+
+    <div id="app" style="display:none;">
+        
+        <header>
+            <div class="logo"><i class="fa-solid fa-leaf"></i> Hot Fruit</div>
+            <div class="header-actions">
+                <a href="#" class="info-btn" onclick="switchView('info')">
+                    <i class="fa-solid fa-circle-info"></i> Info
+                </a>
+                <a href="hot.apk" download class="download-btn">
+                    <i class="fa-solid fa-download"></i> App
+                </a>
+                <div class="user-pill" onclick="switchView('profile')">
+                    <i class="fa-solid fa-user-circle"></i> <span id="headerName">User</span>
+                </div>
+            </div>
+        </header>
+
+        <section id="view-home" class="view-section active-view animate-up">
+            
+            <div class="wallet-card">
+                <div class="bal-label" data-lang="balance">Total Funds</div>
+                <div class="bal-amount">ETB <span id="displayBalance">0.00</span></div>
+                <div class="bal-sub">
+                    <span><i class="fa-solid fa-seedling"></i> <span data-lang="income">Harvest Income</span></span>
+                    <strong style="font-size:1.1rem;">ETB <span id="displayIncome">0.00</span></strong>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <div class="action-circle" onclick="switchView('deposit')">
+                    <div class="icon-box"><i class="fa-solid fa-wallet"></i></div>
+                    <span data-lang="deposit">Deposit</span>
+                </div>
+                <div class="action-circle" onclick="switchView('withdraw')">
+                    <div class="icon-box" style="color: #3b82f6;"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                    <span data-lang="withdraw">Withdraw</span>
+                </div>
+                <div class="action-circle" onclick="switchView('gift')">
+                    <div class="icon-box" style="color: #ec4899;"><i class="fa-solid fa-gift"></i></div>
+                    <span data-lang="gift">Gift</span>
+                </div>
+                <div class="action-circle" onclick="switchView('luckydraw')">
+                    <div class="icon-box" style="color: #8b5cf6;"><i class="fa-solid fa-dharmachakra"></i></div>
+                    <span data-lang="lucky">Lucky Draw</span>
+                </div>
+                <div class="action-circle" onclick="switchView('support')">
+                    <div class="icon-box" style="color: #06b6d4;"><i class="fa-brands fa-telegram"></i></div>
+                    <span data-lang="service">Support</span>
+                </div>
+                <div class="action-circle" onclick="switchView('invite')">
+                    <div class="icon-box" style="color: #eab308;"><i class="fa-solid fa-users"></i></div>
+                    <span data-lang="invite">Invite</span>
+                </div>
+            </div>
+
+            <div style="padding: 0 20px 20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <h3 style="color:var(--text-main); font-weight:700; font-size:1.2rem;" data-lang="navShop">Available Farms</h3>
+                    <span style="color:var(--primary-color); font-size:0.85rem; font-weight:600; cursor:pointer;" onclick="switchView('shop')">See All <i class="fa-solid fa-arrow-right" style="margin-left: 3px;"></i></span>
+                </div>
+                <div class="farm-grid" id="homePlanList">
+                    <p style="text-align:center; color:var(--text-muted);">Loading packages...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-info" class="view-section animate-up">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>About Hot Fruit</h2>
+                <p>Learn more about our platform.</p>
+            </div>
+            <div class="content-box">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <i class="fa-solid fa-leaf" style="font-size: 4rem; color: var(--accent-green);"></i>
+                </div>
+                <div style="background: #fff; padding: 25px 20px; border-radius: 20px; box-shadow: var(--shadow-soft); line-height: 1.8;">
+                    <h3 style="color: var(--primary-dark); margin-bottom: 15px; font-weight: 800; font-size: 1.3rem; text-align: center;">እንኳን ወደ Hot Fruit Farming በደህና መጡ!</h3>
+                    
+                    <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 15px;">
+                        <strong>Hot Fruit Farming</strong> ዘመናዊ እና ትርፋማ የሆነ የፍራፍሬ እርሻ ኢንቨስትመንት መድረክ ነው! አላማችን ማንኛውም ሰው በትንሽ ካፒታል በመጀመር፣ በአጭር ጊዜ ውስጥ አስተማማኝ እና የተረጋጋ ትርፍ የሚያገኝበትን መንገድ ማመቻቸት ነው።
+                    </p>
+                    
+                    <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 15px;">
+                        <strong style="font-size: 1.1rem; color: var(--primary-color);">ለምን እኛን መረጡ?</strong><br>
+                        <i class="fa-solid fa-check" style="color: var(--accent-green); margin-right: 5px;"></i> <b>አስተማማኝ ትርፍ፡</b> የእርስዎ ኢንቨስትመንት በቀጥታ ትርፋማ በሆኑ የፍራፍሬ እርሻዎች ላይ ስለሚውል በየቀኑ ገቢ ያገኛሉ።<br>
+                        <i class="fa-solid fa-check" style="color: var(--accent-green); margin-right: 5px;"></i> <b>ቀላል አጠቃቀም፡</b> መድረካችን ግልፅ፣ ፈጣን እና ለማንም ለመጠቀም ቀላል እንዲሆን ተደርጎ የተሰራ ነው።<br>
+                        <i class="fa-solid fa-check" style="color: var(--accent-green); margin-right: 5px;"></i> <b>ፈጣን ክፍያ (Withdrawal)፡</b> ያገኙትን ትርፍ ያለምንም መዘግየት ወዲያውኑ ወደ ባንክዎ ማውጣት ይችላሉ።<br>
+                        <i class="fa-solid fa-check" style="color: var(--accent-green); margin-right: 5px;"></i> <b>የጉርሻ ሲስተም፡</b> ጓደኞችዎን ሲጋብዙ እና እርሻ ሲገዙ ተጨማሪ የኮሚሽን እና የ Lucky Draw (የእጣ) ማዞሪያ ያገኛሉ።
+                    </p>
+
+                    <div style="background: var(--accent-green-light); padding: 15px; border-radius: 12px; text-align: center; margin-top: 20px;">
+                        <p style="font-size: 0.95rem; font-weight: bold; color: var(--accent-green); margin: 0;">
+                            አሁኑኑ ኢንቨስት በማድረግ የፋይናንስ ነፃነትዎን ያረጋግጡ፤ አብረን እናድጋለን!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-luckydraw" class="view-section animate-up">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Lucky Draw</h2>
+                <p>Spin to win daily rewards!</p>
+            </div>
+            <div class="content-box">
+                <div style="text-align:center; padding: 20px 10px;">
+                    <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 25px;">
+                        Available Spins: <span id="spinCountDisplay" style="background:var(--primary-color); color:white; padding: 5px 15px; border-radius:12px; font-size: 1.5rem; margin-left: 10px;">0</span>
+                    </div>
+
+                    <div class="wheel-wrapper">
+                        <i class="fa-solid fa-location-arrow wheel-pointer"></i>
+                        <div class="wheel">
+                            <div id="luckyWheelInner" class="wheel-inner">
+                                <div class="wheel-item item-1"><i class="fa-solid fa-tv" style="font-size:2rem; margin-bottom:5px;"></i><br>TV</div>
+                                <div class="wheel-item item-2"><i class="fa-solid fa-mobile-screen" style="font-size:2rem; margin-bottom:5px;"></i><br>iPhone 17</div>
+                                <div class="wheel-item item-3"><i class="fa-solid fa-money-bill-wave" style="font-size:2rem; margin-bottom:5px;"></i><br>Cash</div>
+                                <div class="wheel-item item-4"><i class="fa-solid fa-headphones" style="font-size:2rem; margin-bottom:5px;"></i><br>Headset</div>
+                                <div class="wheel-item item-5"><i class="fa-solid fa-shirt" style="font-size:2rem; margin-bottom:5px;"></i><br>Laundry</div>
+                                <div class="wheel-item item-6"><i class="fa-solid fa-money-bill-wave" style="font-size:2rem; margin-bottom:5px;"></i><br>Cash</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-full" style="background:#8b5cf6; margin-top:30px; box-shadow:0 8px 20px rgba(139, 92, 246, 0.3);" onclick="spinWheel()">Spin Now</button>
+                    
+                    <div style="background:#fff7ed; border:1px solid #ffedd5; color:#c2410c; padding:15px; border-radius:16px; font-size:0.85rem; font-weight:600; margin-top:25px; line-height: 1.6; text-align: left;">
+                        <h4 style="margin-bottom:8px; color:var(--primary-dark);"><i class="fa-solid fa-circle-question"></i> How to get more spins?</h4>
+                        <ul style="padding-left: 15px; color: var(--text-main);">
+                            <li>Registering a new account (+1 Spin)</li>
+                            <li>Purchasing any farm package (+1 Spin)</li>
+                            <li>When your invited friend makes their first investment (+1 Spin)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-gift" class="view-section animate-up">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Gift Code</h2>
+                <p>Redeem your special gift code here.</p>
+            </div>
+            <div class="content-box">
+                <div style="text-align:center; margin-bottom:25px;">
+                    <i class="fa-solid fa-gift" style="font-size: 4rem; color: #ec4899; margin-bottom: 15px;"></i>
+                    <p style="color:var(--text-muted); font-size:0.9rem;">Enter your promotional code below to claim free rewards or balance.</p>
+                </div>
+                <div class="input-group">
+                    <label>Gift Code</label>
+                    <input type="text" id="giftCodeInput" placeholder="Enter code (e.g. WELCOME50)" style="text-transform:uppercase;">
+                </div>
+                <button class="btn-full" style="background:#ec4899; box-shadow:0 8px 20px rgba(236, 72, 153, 0.3);" onclick="redeemGiftCode()">Claim Reward</button>
+            </div>
+        </section>
+
+        <section id="view-deposit" class="view-section animate-up">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Add Funds</h2>
+                <p>Invest to start your farming journey.</p>
+            </div>
+            <div class="content-box">
+                <div id="depositStep1">
+                    <h4 style="margin-bottom:15px; color:var(--text-main);">Step 1: Enter Deposit Amount</h4>
+                    
+                    <div class="input-group" style="margin-top:20px; margin-bottom: 10px;">
+                        <label>Amount to Send (Min: 1000 ETB)</label>
+                        <input type="number" id="depAmountPage" placeholder="Enter Amount">
+                    </div>
+
+                    <div class="quick-amounts">
+                        <button class="amt-btn" onclick="setDepositAmount(1000)">1000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(3000)">3000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(5000)">5000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(7000)">7000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(9000)">9000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(11000)">11000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(13000)">13000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(15000)">15000</button>
+                    </div>
+
+                    <button class="btn-full" onclick="nextDepositStep()">Next Step <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+
+                <div id="depositStep2" style="display:none;">
+                    <h4 style="margin-bottom:15px; color:var(--text-muted);">Step 2: Select Bank & Transfer</h4>
+                    <div id="allBankCardsContainer">Loading banks...</div>
+
+                    <div style="background:var(--accent-green-light); color:var(--accent-green); padding:15px; border-radius:16px; margin-bottom:20px; font-weight:600; font-size:0.9rem; margin-top: 20px;">
+                        <i class="fa-solid fa-shield-check"></i> After transferring the exact amount, submit your details below.
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Sender Full Name</label>
+                        <input type="text" id="depSenderName" placeholder="As written on bank">
+                    </div>
+                    <div class="input-group">
+                        <label>Transaction Ref / ID</label>
+                        <input type="text" id="depTransIdPage" placeholder="Enter reference code">
+                    </div>
+                    
+                    <button class="btn-full" onclick="submitDepositFromPage()">Confirm Payment</button>
+                    <button style="width:100%; background:none; border:none; color:var(--text-muted); font-weight:bold; margin-top:15px; cursor:pointer;" onclick="prevDepositStep()">Back</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-withdraw" class="view-section animate-up">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Withdraw</h2>
+                <p>Cash out your harvest profits.</p>
+            </div>
+            <div class="content-box">
+                <div style="text-align:center; margin-bottom:25px;">
+                    <p style="color:var(--text-muted); font-size:0.9rem; font-weight:600;">Available Balance</p>
+                    <h2 style="font-size:2.5rem; color:var(--primary-dark); font-weight:800;">ETB <span id="withDisplayBal">0.00</span></h2>
+                </div>
+
+                <div style="background:#fff7ed; border:1px solid #ffedd5; color:#c2410c; padding:12px; border-radius:12px; font-size:0.85rem; font-weight:600; margin-bottom:20px;">
+                    <i class="fa-solid fa-circle-info"></i> Fee: 10% | Min Withdraw: 200 ETB
+                </div>
+
+                <div id="withdrawInputs">
+                    <div class="input-group">
+                        <label>Withdrawal Amount</label>
+                        <input type="number" id="withAmount" placeholder="Enter amount">
+                    </div>
+                    <div class="input-group">
+                        <label>Security Password</label>
+                        <input type="password" id="withAuthPass" placeholder="Enter withdrawal password">
+                    </div>
+                    <button class="btn-full" onclick="submitWithdraw()">Submit Request</button>
+                </div>
+
+                <div id="withdrawMsg" style="display:none; text-align:center;">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size:3rem; color:#ef4444; margin-bottom:15px;"></i>
+                    <p style="color:var(--text-main); font-weight:600;">Please bind your bank account first!</p>
+                    <button class="btn-full" style="margin-top:15px;" onclick="switchView('bankcard')">Setup Bank Info</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-support" class="view-section animate-up">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Support Center</h2>
+                <p>Choose an option below to connect with us.</p>
+            </div>
+            <div class="content-box" style="text-align: center;">
+                <button class="btn-full" style="background: #0088cc; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/your_channel_link', '_blank')">
+                    <i class="fa-brands fa-telegram" style="font-size: 1.2rem;"></i> Telegram Channel
+                </button>
+                <button class="btn-full" style="background: #0088cc; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/your_group_link', '_blank')">
+                    <i class="fa-solid fa-users" style="font-size: 1.2rem;"></i> Telegram Group
+                </button>
+                <button class="btn-full" style="background: var(--primary-color); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/HotFruitFarming_bot', '_blank')">
+                    <i class="fa-solid fa-headset" style="font-size: 1.2rem;"></i> Customer Service
+                </button>
+            </div>
+        </section>
+
+        <section id="view-shop" class="view-section animate-up">
+            <div class="page-header">
+                <h2>Farm Packages</h2>
+                <p>Invest in farms and earn daily.</p>
+            </div>
+            <div class="content-box" style="background: transparent; box-shadow:none; padding-top:0;">
+                <div class="farm-grid" id="shopPlanList">
+                    <p style="text-align:center; color:var(--text-muted);">Loading packages...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-orders" class="view-section animate-up">
+            <div class="page-header">
+                <h2>My Harvest</h2>
+                <p>Collect your daily profits here.</p>
+            </div>
+            <div class="content-box">
+                <div style="background:#fffbeb; border:1px solid #fef3c7; color:#d97706; padding:12px; border-radius:12px; font-size:0.85rem; font-weight:600; margin-bottom:20px; text-align:center;">
+                    <i class="fa-solid fa-clock"></i> ማሳሰቢያ፡ ምርት መሰብሰቢያ ሰዓት ከሌሊቱ 6:00 እስከ ቀን 6:00 (12:00 AM - 12:00 PM) ብቻ ነው
+                </div>
+                <div id="myOrdersList">
+                    <p style="text-align:center; color:var(--text-muted);">Loading active farms...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-profile" class="view-section animate-up">
+            <div class="page-header" style="padding-bottom: 20px;">
+                <div style="width:80px; height:80px; background:white; color:var(--primary-color); border-radius:50%; font-size:2.5rem; display:flex; align-items:center; justify-content:center; margin: 0 auto 10px; box-shadow:var(--shadow-soft);">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                </div>
+                <h2 id="profileName">User Name</h2>
+                <p id="profilePhone">09XXXXXXXX</p>
+                
+                <div style="margin-top:15px; background:white; display:inline-block; padding:8px 20px; border-radius:50px; font-weight:700; color:var(--primary-dark); box-shadow:var(--shadow-soft); cursor:pointer;" onclick="copyRefLink()">
+                    Code: <span id="myRefCode">...</span> <i class="fa-regular fa-copy" style="margin-left:5px;"></i>
+                </div>
+            </div>
+
+            <div class="content-box">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:25px;">
+                    <div style="background:#fff7ed; padding:15px; border-radius:16px; text-align:center;">
+                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Total Recharge</div>
+                        <div style="font-size:1.2rem; font-weight:800; color:var(--primary-dark);" id="profTotDep">0.00</div>
+                    </div>
+                    <div style="background:#eff6ff; padding:15px; border-radius:16px; text-align:center;">
+                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Total Withdraw</div>
+                        <div style="font-size:1.2rem; font-weight:800; color:#1d4ed8;" id="profTotWith">0.00</div>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom:15px; color:var(--text-main);"><i class="fa-solid fa-gear" style="color:var(--primary-color);"></i> Settings & Menu</h4>
+                
+                <div style="background:white; border-radius:20px; box-shadow:var(--shadow-soft); overflow:hidden; margin-bottom:20px;">
+                    <div style="padding:18px 20px; border-bottom:1px solid #f4f4f5; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="switchView('transactions')">
+                        <span style="font-weight:600;"><i class="fa-solid fa-receipt" style="width:25px; color:#8b5cf6;"></i> Transaction Details</span>
+                        <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
+                    </div>
+                    <div style="padding:18px 20px; border-bottom:1px solid #f4f4f5; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="switchView('bankcard')">
+                        <span style="font-weight:600;"><i class="fa-solid fa-building-columns" style="width:25px; color:var(--primary-color);"></i> Bank Info</span>
+                        <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
+                    </div>
+                    <div style="padding:18px 20px; border-bottom:1px solid #f4f4f5; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="switchView('orders')">
+                        <span style="font-weight:600;"><i class="fa-solid fa-seedling" style="width:25px; color:var(--accent-green);"></i> My Farms</span>
+                        <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
+                    </div>
+                    <div style="padding:18px 20px; border-bottom:1px solid #f4f4f5; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="switchView('changepass')">
+                        <span style="font-weight:600;"><i class="fa-solid fa-lock" style="width:25px; color:#f59e0b;"></i> Change Password</span>
+                        <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
+                    </div>
+                    <div style="padding:18px 20px; border-bottom:1px solid #f4f4f5; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="openModal('langModal')">
+                        <span style="font-weight:600;"><i class="fa-solid fa-globe" style="width:25px; color:#3b82f6;"></i> Language / ቋንቋ</span>
+                        <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
+                    </div>
+                    <div style="padding:18px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="window.location.reload()">
+                        <span style="font-weight:600; color:#ef4444;"><i class="fa-solid fa-power-off" style="width:25px;"></i> Log Out</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-changepass" class="view-section animate-up">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('profile')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Change Password</h2>
+                <p>Secure your account.</p>
+            </div>
+            <div class="content-box">
+                <div class="input-group">
+                    <label>Current Password</label>
+                    <input type="password" id="cpOldPass" placeholder="Enter your old password">
+                </div>
+                <div class="input-group">
+                    <label>New Password</label>
+                    <input type="password" id="cpNewPass" placeholder="Enter new password">
+                </div>
+                <button class="btn-full" onclick="changeAccountPassword()">Update Password</button>
+            </div>
+        </section>
+
+        <section id="view-transactions" class="view-section animate-up">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('profile')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Transaction Details</h2>
+                <p>Track your history</p>
+            </div>
+            <div class="content-box">
+                <div style="display:flex; justify-content:space-around; margin-bottom: 20px; border-bottom: 2px solid #f4f4f5; padding-bottom: 10px;">
+                    <div id="tab-dep" onclick="showTxnTab('dep')" style="font-weight:bold; color:var(--primary-color); cursor:pointer; border-bottom: 2px solid var(--primary-color); padding-bottom:5px; transition:0.3s;">Deposit</div>
+                    <div id="tab-wit" onclick="showTxnTab('wit')" style="font-weight:bold; color:var(--text-muted); cursor:pointer; padding-bottom:5px; transition:0.3s;">Withdraw</div>
+                    <div id="tab-inc" onclick="showTxnTab('inc')" style="font-weight:bold; color:var(--text-muted); cursor:pointer; padding-bottom:5px; transition:0.3s;">Income</div>
+                </div>
+                
+                <div id="txn-dep-list">Loading deposits...</div>
+                <div id="txn-wit-list" style="display:none;">Loading withdrawals...</div>
+                <div id="txn-inc-list" style="display:none;">Loading income...</div>
+            </div>
+        </section>
+
+        <section id="view-bankcard" class="view-section animate-up">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('profile')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Bank Details</h2>
+                <p>Secure your withdrawal method.</p>
+            </div>
+            <div class="content-box">
+                <div class="input-group">
+                    <label>Bank Name (e.g. CBE, Telebirr)</label>
+                    <input type="text" id="bindBankName" placeholder="Bank Name">
+                </div>
+                <div class="input-group">
+                    <label>Account Holder Name</label>
+                    <input type="text" id="bindAccName" placeholder="Full Name">
+                </div>
+                <div class="input-group">
+                    <label>Account Number</label>
+                    <input type="number" id="bindAccNum" placeholder="Account Number">
+                </div>
+                <div class="input-group" style="margin-top:25px;">
+                    <label style="color:var(--primary-color);">Set Withdrawal Password</label>
+                    <input type="password" id="bindWithPass" placeholder="Create a secure code">
+                </div>
+                <div class="input-group" style="margin-top:15px;">
+                    <label style="color:var(--primary-color);">Admin Verification Code</label>
+                    <input type="text" id="bindVerCode" placeholder="Enter code from admin" style="text-transform:uppercase;">
+                </div>
+                <button class="btn-full" onclick="saveBankInfo()">Save Bank Details</button>
+            </div>
+        </section>
+
+        <section id="view-invite" class="view-section animate-up">
+            <div class="page-header">
+                <button class="back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+                <h2>Build Your Team</h2>
+                <p>Earn massive commissions.</p>
+            </div>
+            <div class="content-box">
+                <div style="background:#fff7ed; border:2px dashed var(--primary-color); border-radius:20px; padding:30px; text-align:center; margin-bottom:25px;">
+                    <div style="font-size:0.9rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Your Referral Code</div>
+                    <div id="invitePageCode" style="font-size:2.5rem; font-weight:800; color:var(--primary-dark); letter-spacing:2px; margin:10px 0;">...</div>
+                    <button class="btn-full" style="padding:12px; font-size:1rem;" onclick="copyRefLink()"><i class="fa-solid fa-link"></i> Copy Invite Link</button>
+                </div>
+
+                <h4 style="margin-bottom:15px;">Team Statistics</h4>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+                    <div style="background:white; padding:15px; border-radius:16px; box-shadow:var(--shadow-soft); text-align:center;">
+                        <div style="font-size:1.5rem; font-weight:800; color:var(--primary-color);" id="teamTotalCnt">0</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Total Members</div>
+                    </div>
+                    <div style="background:white; padding:15px; border-radius:16px; box-shadow:var(--shadow-soft); text-align:center;">
+                        <div style="font-size:1.5rem; font-weight:800; color:var(--accent-green);" id="teamInvestCnt">0</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Active Investors</div>
+                    </div>
+                </div>
+                <div style="background:white; padding:20px; border-radius:16px; box-shadow:var(--shadow-soft); text-align:center; margin-top:15px;">
+                    <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Total Team Commission</div>
+                    <div style="font-size:1.8rem; font-weight:800; color:var(--primary-dark);">ETB <span id="teamTotComm">0.00</span></div>
+                </div>
+
+                <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:16px; padding:15px; margin-top:20px; font-size:0.85rem; color:#1e3a8a;">
+                    <h4 style="margin-bottom:10px; color:#1d4ed8;"><i class="fa-solid fa-circle-info"></i> Commission Rules</h4>
+                    <ul style="list-style:none; padding-left:0; line-height:1.6;">
+                        <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 1:</b> 10% on Purchase, 8% on Daily Income</li>
+                        <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 2:</b> 3% on Purchase, 3% on Daily Income</li>
+                        <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 3:</b> 2% on Purchase, 2% on Daily Income</li>
+                        <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 4:</b> 1% on Purchase, 1% on Daily Income</li>
+                    </ul>
+                    <p style="margin-top:8px; font-weight:600; font-size:0.8rem;">* Commissions are added instantly to your balance without deducting from your team's earnings.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-admin" class="view-section animate-up">
+            <div class="page-header">
+                <h2>Admin Panel</h2>
+                <p>System Management</p>
+            </div>
+            <div class="content-box">
+                
+                <div class="admin-box" style="border-left:4px solid #ec4899;">
+                    <h4><i class="fa-solid fa-gift" style="color:#ec4899;"></i> Generate Gift Code</h4>
+                    <div class="input-group"><input type="text" id="adminGiftCode" placeholder="Code Name (e.g. BONUS2024)" style="text-transform:uppercase;"></div>
+                    <div style="display:flex; gap:10px; margin-bottom:15px;">
+                        <input type="number" id="adminGiftMin" placeholder="Min (ETB)" style="width:50%; padding:16px;">
+                        <input type="number" id="adminGiftMax" placeholder="Max (ETB)" style="width:50%; padding:16px;">
+                    </div>
+                    <div class="input-group"><input type="number" id="adminGiftExpiry" placeholder="Valid for (Minutes)"></div>
+                    <button class="btn-full" style="background:#ec4899; box-shadow:0 8px 20px rgba(236, 72, 153, 0.3);" onclick="createAdminGiftCode()">Publish Code</button>
+                    <div id="adminExistingCodes" style="margin-top:15px; font-size:0.85rem;"></div>
+                </div>
+
+                <div class="admin-box" style="border-left:4px solid #8b5cf6;">
+                    <h4><i class="fa-solid fa-shield-halved" style="color:#8b5cf6;"></i> Generate Bank Ver. Code</h4>
+                    <div class="input-group">
+                        <input type="number" id="adminBankVerPhone" placeholder="User Phone (e.g. 912345678)">
+                    </div>
+                    <button class="btn-full" style="background:#8b5cf6; box-shadow:0 8px 20px rgba(139, 92, 246, 0.3);" onclick="createBankVerificationCode()">Generate Code</button>
+                    <div id="adminBankVerResult" style="margin-top:15px; font-weight:bold; color:var(--primary-dark); font-size:1.2rem; text-align:center;"></div>
+                </div>
+
+                <div class="admin-box">
+                    <h4 id="adminPlanTitle"><i class="fa-solid fa-plus"></i> Add Farm Package</h4>
+                    <div class="input-group"><input type="text" id="adminPlanName" placeholder="Package Name (e.g. Apple Farm)"></div>
+                    <div class="input-group"><input type="number" id="adminPlanPrice" placeholder="Price (ETB)"></div>
+                    <div class="input-group"><input type="number" id="adminPlanRoi" placeholder="Daily Profit (ETB)"></div>
+                    <div class="input-group"><input type="number" id="adminPlanDuration" placeholder="Duration (Days)"></div>
+                    
+                    <div class="input-group"><input type="number" id="adminPlanLimit" placeholder="Purchase Limit (e.g. 1)"></div>
+                    
+                    <div class="input-group"><input type="text" id="adminPlanImg" placeholder="Image URL"></div>
+                    <button class="btn-full" id="adminSavePlanBtn" onclick="saveAdminPlan()">Publish Package</button>
+                    <button class="btn-full" id="adminCancelEditBtn" style="display:none; background:#a1a1aa; margin-top:10px;" onclick="cancelEditPlan()">Cancel Edit</button>
+                    
+                    <h4 style="margin:20px 0 10px;">Existing Packages</h4>
+                    <div id="adminExistingPlans" style="font-size:0.85rem;">Loading packages...</div>
+                </div>
+
+                <div class="admin-box">
+                    <h4><i class="fa-solid fa-building-columns"></i> Add Deposit Bank</h4>
+                    <div class="input-group"><input type="text" id="adminBankName" placeholder="Bank Name"></div>
+                    <div class="input-group"><input type="text" id="adminAccountName" placeholder="Account Holder"></div>
+                    <div class="input-group"><input type="number" id="adminAccountNum" placeholder="Account Number"></div>
+                    <button class="btn-full" style="background:#0f172a;" onclick="addNewPaymentMethod()">Save Bank</button>
+                    <div id="adminExistingBanks" style="margin-top:15px; font-size:0.85rem;"></div>
+                </div>
+
+                <h4 style="margin:20px 0 10px;">Pending Transactions</h4>
+                <div id="adminRequestList">Loading requests...</div>
+
+                <h4 style="margin:30px 0 10px; display:flex; justify-content:space-between; align-items:center;">
+                    <span><i class="fa-solid fa-clock-rotate-left"></i> Deposit History</span>
+                    <button style="background:var(--accent-green); color:white; border:none; padding:5px 15px; border-radius:12px; cursor:pointer; font-weight:bold; font-size:0.8rem;" onclick="loadAdminDepositHistory()">Load History</button>
+                </h4>
+                <div id="adminDepositHistoryList" style="font-size:0.85rem;">Click load to view approved deposits...</div>
+                
+                <button class="btn-full" style="background:#ef4444; margin-top:30px;" onclick="window.location.reload()">Admin Logout</button>
+            </div>
+        </section>
+
+        <div class="bottom-nav" id="bottomNav">
+            <div class="nav-item active" onclick="switchView('home')" id="nav-home">
+                <i class="fa-solid fa-house-chimney"></i><span data-lang="navHome">Home</span>
+            </div>
+            <div class="nav-item" onclick="switchView('shop')" id="nav-shop">
+                <i class="fa-solid fa-basket-shopping"></i><span data-lang="navShop">Farms</span>
+            </div>
+            <div class="nav-item" onclick="switchView('orders')" id="nav-orders">
+                <i class="fa-solid fa-seedling"></i><span data-lang="navTask">Harvest</span>
+            </div>
+            <div class="nav-item" onclick="switchView('profile')" id="nav-profile">
+                <i class="fa-solid fa-user"></i><span data-lang="navProfile">Profile</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="langModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('langModal')">&times;</span>
+            <h3 style="margin-bottom:20px; color:var(--text-main);">Select Language</h3>
+            <div style="background:#f4f4f5; padding:15px; border-radius:12px; margin-bottom:10px; cursor:pointer; font-weight:bold;" onclick="changeLanguage('en')">🇺🇸 English</div>
+            <div style="background:#f4f4f5; padding:15px; border-radius:12px; cursor:pointer; font-weight:bold;" onclick="changeLanguage('am')">🇪🇹 አማርኛ</div>
+        </div>
+    </div>
+
+    <div id="toast">Notification</div>
+
+    <script>
+        // --- NEW FIREBASE CONFIG ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDm521gjURmAXB3l6VflxMLqDziZxcBCmw",
+            authDomain: "wwhh-12b9d.firebaseapp.com",
+            databaseURL: "https://wwhh-12b9d-default-rtdb.firebaseio.com",
+            projectId: "wwhh-12b9d",
+            storageBucket: "wwhh-12b9d.firebasestorage.app",
+            messagingSenderId: "408482669779",
+            appId: "1:408482669779:web:b91d7e49df8d6c0b472026",
+            measurementId: "G-GQ7YXT1XF4"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let currentUser = null;
+        let userData = {};
+        let currentCaptcha = "";
+        let editingPlanKey = null; 
+        
+        // --- LANGUAGE SYSTEM ---
+        const translations = {
+            en: {
+                balance: "Total Funds", income: "Harvest Income",
+                deposit: "Deposit", withdraw: "Withdraw", service: "Support", invite: "Invite", gift: "Gift", lucky: "Lucky Draw",
+                navHome: "Home", navShop: "Farms", navTask: "Harvest", navProfile: "Profile"
+            },
+            am: {
+                balance: "ጠቅላላ ቀሪ ሂሳብ", income: "የእርሻ ገቢ",
+                deposit: "ገንዘብ አስገባ", withdraw: "ገንዘብ አውጣ", service: "እርዳታ", invite: "ጋብዝ", gift: "ስጦታ", lucky: "እጣ",
+                navHome: "ዋና ገጽ", navShop: "እርሻዎች", navTask: "ምርት", navProfile: "ፕሮፋይል"
+            }
+        };
+
+        let currentLang = localStorage.getItem('appLang') || 'en';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('appLang', lang);
+            applyLanguage();
+            closeModal('langModal');
+            loadShopPlans();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.getAttribute('data-lang');
+                if (t[key]) el.innerText = t[key];
+            });
+        }
+
+        // --- CAPTCHA GENERATION ---
+        function generateCaptcha() {
+            const canvas = document.getElementById('captchaCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+            currentCaptcha = "";
+            for(let i=0; i<4; i++) {
+                currentCaptcha += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            for(let i=0; i<25; i++) {
+                ctx.fillStyle = `rgba(0,0,0,0.1)`;
+                ctx.beginPath();
+                ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*2+1, 0, 2*Math.PI);
+                ctx.fill();
+            }
+            
+            for(let i=0; i<4; i++) {
+                ctx.strokeStyle = `rgba(0,0,0,0.2)`;
+                ctx.beginPath();
+                ctx.moveTo(Math.random()*canvas.width, Math.random()*canvas.height);
+                ctx.lineTo(Math.random()*canvas.width, Math.random()*canvas.height);
+                ctx.stroke();
+            }
+            
+            ctx.font = "bold 26px Poppins";
+            ctx.fillStyle = "var(--primary-dark)";
+            ctx.textBaseline = "middle";
+            
+            for(let i=0; i<4; i++) {
+                const x = 20 + (i * 25);
+                const y = canvas.height / 2;
+                const angle = (Math.random() - 0.5) * 0.6; 
+                
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(angle);
+                ctx.fillText(currentCaptcha[i], 0, 0);
+                ctx.restore();
+            }
+        }
+
+        // --- AUTHENTICATION ---
+        function toggleAuth(mode) {
+            if(mode === 'signup') {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('signupForm').style.display = 'block';
+                document.getElementById('authTitle').innerText = "Create Account";
+                generateCaptcha();
+            } else {
+                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('signupForm').style.display = 'none';
+                document.getElementById('authTitle').innerText = "Welcome Back";
+            }
+        }
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref');
+            if (refCode) {
+                toggleAuth('signup');
+                const refInput = document.getElementById('regRef');
+                if(refInput) { refInput.value = refCode; refInput.readOnly = true; }
+            } else {
+                generateCaptcha();
+            }
+        };
+
+        function sanitizePhone(phone) { return phone.replace(/\D/g, ''); }
+
+        function login() {
+            const rawPhone = document.getElementById('loginPhone').value;
+            const pass = document.getElementById('loginPass').value;
+            if(!rawPhone || !pass) return showToast("Please fill all fields");
+
+            if (rawPhone === '44' && pass === 'a444') {
+                initApp({name: "Admin", phone: "44", isAdmin: true}, "44");
+                return showToast("Admin Access Granted");
+            }
+
+            const phone = "251" + sanitizePhone(rawPhone);
+            db.ref('users/' + phone).once('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.password === pass) initApp(data, phone);
+                else showToast("Invalid credentials");
+            });
+        }
+
+        function signup() {
+            const rawPhone = document.getElementById('regPhone').value;
+            const pass = document.getElementById('regPass').value;
+            const passConfirm = document.getElementById('regPassConfirm').value;
+            const captchaInput = document.getElementById('regCaptcha').value;
+            const refCode = document.getElementById('regRef').value;
+            
+            if(!rawPhone || !pass || !passConfirm || !captchaInput) return showToast("Fill all required fields");
+            if(pass !== passConfirm) return showToast("Passwords do not match!");
+            if(captchaInput.toLowerCase() !== currentCaptcha.toLowerCase()) {
+                generateCaptcha(); 
+                document.getElementById('regCaptcha').value = "";
+                return showToast("Incorrect verification code!");
+            }
+            if (!/^[79][0-9]{8}$/.test(rawPhone)) return showToast("Phone must start with 9 or 7 (9 digits).");
+
+            const phone = "251" + rawPhone;
+            db.ref('users/' + phone).once('value', (snapshot) => {
+                if (snapshot.exists()) return showToast("Phone already registered");
+                
+                const autoName = "Farmer_" + rawPhone.substring(5);
+                const newCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+                const newUser = {
+                    name: autoName, phone: phone, password: pass,
+                    balance: 110, 
+                    income: 0, commission: 0,
+                    refCode: newCode, referredBy: refCode || "admin",
+                    spins: 1, 
+                    plans: {}
+                };
+                db.ref('users/' + phone).set(newUser).then(() => {
+                    initApp(newUser, phone);
+                    showToast("Account created! 110 ETB Bonus & 1 Spin Added.");
+                });
+            });
+        }
+
+        function initApp(data, phoneKey) {
+            currentUser = phoneKey;
+            userData = data;
+            document.getElementById('authModal').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            applyLanguage(); 
+
+            if(phoneKey === '44') {
+                document.getElementById('bottomNav').style.display = 'none';
+                switchView('admin');
+                listenForRequests();
+                loadAdminBankList();
+                loadAdminGiftCodes(); 
+                loadAdminPlans(); 
+            } else {
+                document.getElementById('bottomNav').style.display = 'flex';
+                switchView('home');
+                db.ref('users/' + currentUser).on('value', (snap) => {
+                    userData = snap.val();
+                    updateUI();
+                });
+                loadShopPlans();
+            }
+        }
+
+        // --- VIEW ROUTING ---
+        function switchView(viewName) {
+            if(viewName === 'admin' && currentUser !== '44') return;
+
+            if(viewName === 'deposit') {
+                document.getElementById('depositStep1').style.display = 'block';
+                document.getElementById('depositStep2').style.display = 'none';
+                
+                const bankContainer = document.getElementById('allBankCardsContainer');
+                db.ref('settings/paymentMethods').once('value', (snap) => {
+                    bankContainer.innerHTML = "";
+                    if(!snap.exists()) return bankContainer.innerHTML = "<div style='color:red;'>No banks available.</div>";
+                    snap.forEach(child => {
+                        const bank = child.val();
+                        bankContainer.insertAdjacentHTML('beforeend', `
+                        <div class="bank-box animate-up">
+                            <div style="font-size:0.8rem; opacity:0.8; margin-bottom:5px;">${bank.bankName}</div>
+                            <div style="font-size:1.3rem; font-weight:800; letter-spacing:2px; margin-bottom:5px;">${bank.accountNumber}</div>
+                            <div style="font-size:0.9rem;">${bank.accountName}</div>
+                            <div style="position:absolute; bottom:20px; right:20px; font-size:1.5rem; cursor:pointer;" onclick="copyString('${bank.accountNumber}')"><i class="fa-regular fa-copy"></i></div>
+                        </div>`);
+                    });
+                });
+            }
+
+            if(viewName === 'withdraw') {
+                document.getElementById('withDisplayBal').innerText = parseFloat(userData.balance || 0).toFixed(2);
+                document.getElementById('withdrawInputs').style.display = 'block';
+                document.getElementById('withdrawMsg').style.display = 'none';
+            }
+            
+            if(viewName === 'invite') document.getElementById('invitePageCode').innerText = userData.refCode;
+            if(viewName === 'profile') calculateProfileStats();
+            if(viewName === 'orders') loadMyOrders();
+            if(viewName === 'transactions') loadTransactions();
+            
+            if(viewName === 'bankcard') {
+                if(userData.bankInfo) {
+                    document.getElementById('bindBankName').value = userData.bankInfo.bankName || "";
+                    document.getElementById('bindAccName').value = userData.bankInfo.accName || "";
+                    document.getElementById('bindAccNum').value = userData.bankInfo.accNum || "";
+                }
+            }
+
+            if(viewName === 'luckydraw') {
+                document.getElementById('spinCountDisplay').innerText = userData.spins || 0;
+            }
+
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            
+            const targetView = document.getElementById('view-' + viewName);
+            if(targetView) targetView.classList.add('active-view');
+            
+            let navId = 'nav-' + viewName;
+            if(viewName === 'invite' || viewName === 'bankcard' || viewName === 'transactions' || viewName === 'changepass') navId = 'nav-profile';
+            if(viewName === 'luckydraw' || viewName === 'deposit' || viewName === 'withdraw' || viewName === 'gift' || viewName === 'support' || viewName === 'info') navId = 'nav-home';
+            if(document.getElementById(navId)) document.getElementById(navId).classList.add('active');
+        }
+
+        function updateUI() {
+            document.getElementById('headerName').innerText = userData.name.split(" ")[0]; 
+            document.getElementById('profileName').innerText = userData.name;
+            document.getElementById('profilePhone').innerText = userData.phone;
+            document.getElementById('myRefCode').innerText = userData.refCode;
+            document.getElementById('displayBalance').innerText = parseFloat(userData.balance || 0).toFixed(2);
+            document.getElementById('displayIncome').innerText = parseFloat(userData.income || 0).toFixed(2);
+            
+            if(document.getElementById('spinCountDisplay')) {
+                document.getElementById('spinCountDisplay').innerText = userData.spins || 0;
+            }
+        }
+
+        // --- TEAM/PROFILE STATS ---
+        function calculateProfileStats() {
+            let totDep = 0; let totWith = 0;
+            db.ref('deposits').once('value', (snap) => {
+                if(snap.exists()) snap.forEach(c => { if(c.val().user === currentUser && c.val().status === 'approve') totDep += parseFloat(c.val().amount); });
+                document.getElementById('profTotDep').innerText = totDep.toFixed(2);
+            });
+            db.ref('withdrawals').once('value', (snap) => {
+                if(snap.exists()) snap.forEach(c => { if(c.val().user === currentUser && c.val().status === 'approve') totWith += parseFloat(c.val().amount); });
+                document.getElementById('profTotWith').innerText = totWith.toFixed(2);
+            });
+
+            if (!userData || !userData.refCode) return;
+            db.ref('users').once('value', (snap) => {
+                if(!snap.exists()) return;
+                const arr = Object.values(snap.val()); 
+                const myCode = String(userData.refCode).trim().toUpperCase();
+                
+                const lvl1 = arr.filter(u => String(u.referredBy).trim().toUpperCase() === myCode);
+                const l1c = lvl1.map(u => String(u.refCode).trim().toUpperCase());
+                const lvl2 = arr.filter(u => l1c.includes(String(u.referredBy).trim().toUpperCase()));
+                const l2c = lvl2.map(u => String(u.refCode).trim().toUpperCase());
+                const lvl3 = arr.filter(u => l2c.includes(String(u.referredBy).trim().toUpperCase()));
+                const l3c = lvl3.map(u => String(u.refCode).trim().toUpperCase());
+                const lvl4 = arr.filter(u => l3c.includes(String(u.referredBy).trim().toUpperCase()));
+                
+                const team = [...lvl1, ...lvl2, ...lvl3, ...lvl4];
+                let investors = 0;
+                team.forEach(u => { if(u.plans && Object.keys(u.plans).length > 0) investors++; });
+
+                document.getElementById('teamTotalCnt').innerText = team.length;
+                document.getElementById('teamInvestCnt').innerText = investors;
+                document.getElementById('teamTotComm').innerText = parseFloat(userData.commission || 0).toFixed(2);
+            });
+        }
+
+        // --- SHOP & INVESTMENTS ---
+        function loadShopPlans() {
+            db.ref('plans').on('value', (snapshot) => {
+                const container = document.getElementById('shopPlanList');
+                const homeContainer = document.getElementById('homePlanList'); 
+                
+                container.innerHTML = ""; 
+                if (homeContainer) homeContainer.innerHTML = ""; 
+
+                if (!snapshot.exists()) {
+                    container.innerHTML = "<p style='text-align:center;'>No packages available.</p>";
+                    if (homeContainer) homeContainer.innerHTML = "<p style='text-align:center;'>No packages available.</p>";
+                    return;
+                }
+
+                snapshot.forEach((childSnap) => {
+                    const plan = childSnap.val(); const key = childSnap.key;
+                    let pCount = 0;
+                    if(userData.plans) for(let pk in userData.plans) { if(userData.plans[pk].planId === key) pCount++; }
+                    const limit = plan.limit || 1;
+                    const duration = plan.duration || 60;
+                    const totalRevenue = parseFloat((plan.roi * duration).toFixed(2));
+                    
+                    let btnTxt = currentLang === 'am' ? "ግዛ" : "Invest Now";
+                    let dis = "";
+                    if (pCount >= limit) { btnTxt = "Limit Reached"; dis = "disabled"; }
+
+                    const vipBadge = plan.price > 2000 ? '<div class="badge-hot">VIP</div>' : '';
+
+                    const planHtml = `
+                    <div class="product-card animate-up">
+                        ${vipBadge}
+                        <div class="prod-img-box">
+                            <div class="badge-limit"><i class="fa-solid fa-lock"></i> Limit: ${limit}</div>
+                            <img src="${plan.img || 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=400'}">
+                        </div>
+                        <div class="prod-info">
+                            <h4>${plan.name}</h4>
+                            <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                <div class="roi-tag">Daily: ETB ${plan.roi}</div>
+                                <div class="roi-tag" style="background: #e0f2fe; color: #0284c7;">Total: ETB ${totalRevenue}</div>
+                            </div>
+                            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">Cycle: ${duration} Days | Bought: ${pCount}/${limit}</div>
+                            <div class="price-row">
+                                <div class="price-val">ETB ${plan.price}</div>
+                                <button class="btn-buy" ${dis} onclick="buyPlan('${key}', ${plan.price}, ${plan.roi}, ${limit}, ${duration})">${btnTxt}</button>
+                            </div>
+                        </div>
+                    </div>`;
+
+                    container.insertAdjacentHTML('beforeend', planHtml);
+                    if (homeContainer) homeContainer.insertAdjacentHTML('beforeend', planHtml);
+                });
+            });
+        }
+
+        function buyPlan(planId, cost, dailyRate, limit, duration) {
+            let pCount = 0;
+            if(userData.plans) for(let pk in userData.plans) if(userData.plans[pk].planId === planId) pCount++;
+            if(pCount >= limit) return showToast("Purchase Limit Reached!");
+            if(userData.balance < cost) return showToast("Insufficient Balance");
+            
+            const isFirst = (!userData.plans || Object.keys(userData.plans).length === 0);
+            const newBal = userData.balance - cost;
+            const newPlans = userData.plans || {};
+            const uniqueKey = planId + '_' + Date.now();
+            const newSpins = (userData.spins || 0) + 1; 
+            
+            newPlans[uniqueKey] = { 
+                active: true, planId: planId, daily: dailyRate, 
+                duration: duration, daysClaimed: 0, 
+                lastClaimDate: new Date().toDateString() 
+            };
+            
+            db.ref('users/' + currentUser).update({ balance: newBal, plans: newPlans, spins: newSpins }).then(() => {
+                showToast("Package Purchased! You earned 1 Spin!");
+                if(userData.referredBy && userData.referredBy !== 'admin') {
+                    distributeCommissions(userData.referredBy, cost, isFirst);
+                }
+                updateUI(); loadShopPlans();
+            });
+        }
+
+        function distributeCommissions(refCode, amount, isFirst) {
+            db.ref('users').once('value', (snap) => {
+                if(!snap.exists()) return;
+                let u1Key = null, u1 = null;
+                snap.forEach(c => { if(c.val().refCode === refCode) { u1Key = c.key; u1 = c.val(); } });
+                
+                if(u1Key) {
+                    
+                    let newSpinsU1 = (u1.spins || 0);
+                    if (isFirst) newSpinsU1 += 1;
+
+                    db.ref('users/' + u1Key).update({ 
+                        balance: (u1.balance||0) + amount*0.10, 
+                        commission: (u1.commission||0) + amount*0.10,
+                        spins: newSpinsU1 
+                    });
+                    
+                    if(u1.referredBy && u1.referredBy !== 'admin') {
+                        let u2Key = null, u2 = null;
+                        snap.forEach(c => { if(c.val().refCode === u1.referredBy) { u2Key = c.key; u2 = c.val(); } });
+                        if(u2Key) {
+                            db.ref('users/' + u2Key).update({ balance: (u2.balance||0) + amount*0.03, commission: (u2.commission||0) + amount*0.03 });
+                            if(u2.referredBy && u2.referredBy !== 'admin') {
+                                let u3Key = null, u3 = null;
+                                snap.forEach(c => { if(c.val().refCode === u2.referredBy) { u3Key = c.key; u3 = c.val(); } });
+                                if(u3Key) {
+                                    db.ref('users/' + u3Key).update({ balance: (u3.balance||0) + amount*0.02, commission: (u3.commission||0) + amount*0.02 });
+                                    if(u3.referredBy && u3.referredBy !== 'admin') {
+                                        let u4Key = null, u4 = null;
+                                        snap.forEach(c => { if(c.val().refCode === u3.referredBy) { u4Key = c.key; u4 = c.val(); } });
+                                        if(u4Key) {
+                                            db.ref('users/' + u4Key).update({ balance: (u4.balance||0) + amount*0.01, commission: (u4.commission||0) + amount*0.01 });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- LUCKY DRAW LOGIC ---
+        let isSpinning = false;
+        function spinWheel() {
+            if (isSpinning) return;
+            if (!userData.spins || userData.spins <= 0) {
+                return showToast("You don't have any spins! Invite friends or buy farms to get spins.");
+            }
+
+            isSpinning = true;
+            
+            const newSpins = userData.spins - 1;
+            db.ref('users/' + currentUser).update({ spins: newSpins });
+            document.getElementById('spinCountDisplay').innerText = newSpins;
+
+            const baseSpins = 5 * 360; 
+            const randomTarget = (Math.random() > 0.5) ? 210 : 30; 
+            
+            window.currentWheelDeg = (window.currentWheelDeg || 0);
+            let snapDeg = window.currentWheelDeg + (360 - (window.currentWheelDeg % 360));
+            window.currentWheelDeg = snapDeg + baseSpins + randomTarget;
+            
+            const wheelInner = document.getElementById('luckyWheelInner');
+            wheelInner.style.transform = `rotate(${window.currentWheelDeg}deg)`;
+            
+            const rewardAmount = parseFloat((Math.random() * 4 + 2).toFixed(2));
+            
+            setTimeout(() => {
+                isSpinning = false;
+                db.ref('users/' + currentUser).update({ balance: (userData.balance || 0) + rewardAmount }).then(() => {
+                    confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#fcd34d', '#16a34a'] });
+                    
+                    document.getElementById('claimModalTitle').innerText = "Congratulations!";
+                    document.getElementById('claimModalIcon').className = "fa-solid fa-gift";
+                    document.getElementById('claimModalIcon').style.color = "#8b5cf6";
+                    document.getElementById('claimModalDesc').innerText = "You won cash from the Lucky Draw!";
+                    document.getElementById('claimModalAmount').innerText = rewardAmount.toFixed(2);
+                    
+                    document.getElementById('claimSuccessModal').style.display = 'block';
+                    updateUI();
+                });
+            }, 4000); 
+        }
+
+        function closeModal(id) { 
+            document.getElementById(id).style.display = 'none'; 
+            
+            if(id === 'claimSuccessModal') {
+                document.getElementById('claimModalTitle').innerText = "Harvest Collected!";
+                document.getElementById('claimModalIcon').className = "fa-solid fa-basket-shopping";
+                document.getElementById('claimModalIcon').style.color = "var(--accent-green)";
+                document.getElementById('claimModalDesc').innerText = "Your daily profit is ready.";
+            }
+        }
+
+        // --- HARVEST (ORDERS) ---
+        function loadMyOrders() {
+            const container = document.getElementById('myOrdersList');
+            container.innerHTML = "";
+            if (!userData.plans || Object.keys(userData.plans).length === 0) return container.innerHTML = "<p style='text-align:center;'>No active farms.</p>";
+
+            const todayStr = new Date().toDateString(); 
+            const currentHour = new Date().getHours();
+            const isTimeValid = (currentHour >= 0 && currentHour < 12); 
+            
+            db.ref('plans').once('value', (snap) => {
+                const allPlans = snap.val() || {};
+                for(let key in userData.plans) {
+                    const uPlan = userData.plans[key];
+                    if(uPlan.active) {
+                        const pid = uPlan.planId || key;
+                        const pDetail = allPlans[pid] || {name: "Farm Package"};
+                        const duration = uPlan.duration || 60;
+                        const isExpired = (uPlan.daysClaimed || 0) >= duration;
+                        const alreadyClaimed = (uPlan.lastClaimDate === todayStr);
+                        
+                        let btnTxt = "Collect Harvest"; let btnState = "";
+                        if (isExpired) { btnTxt = "Expired"; btnState = "disabled"; } 
+                        else if (alreadyClaimed) { btnTxt = "Collected Today"; btnState = "disabled"; }
+                        else if (!isTimeValid) { btnTxt = "Closed (Wait)"; btnState = "disabled"; }
+                        
+                        container.insertAdjacentHTML('beforeend', `
+                        <div class="harvest-card animate-up">
+                            <div class="harvest-header">
+                                <strong style="color:var(--primary-dark);">${pDetail.name}</strong>
+                                <span style="background:${isExpired ? '#fee2e2' : '#dcfce7'}; color:${isExpired ? '#ef4444' : 'var(--accent-green)'}; padding:4px 8px; border-radius:8px; font-size:0.75rem; font-weight:bold;">${isExpired ? 'Ended' : 'Growing'}</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                                <div>
+                                    <div style="font-size:0.8rem; color:var(--text-muted);">Daily Yield</div>
+                                    <div style="font-size:1.3rem; font-weight:800; color:var(--text-main);">ETB ${uPlan.daily}</div>
+                                    <div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px;">Progress: ${uPlan.daysClaimed||0}/${duration} Days</div>
+                                </div>
+                                <button class="btn-collect" ${btnState} onclick="claimDailyProfit('${key}', ${uPlan.daily})">${btnTxt}</button>
+                            </div>
+                        </div>`);
+                    }
+                }
+            });
+        }
+
+        function claimDailyProfit(planKey, amount) {
+            const currentHour = new Date().getHours();
+            if (currentHour < 0 || currentHour >= 12) {
+                return showToast("ማሳሰቢያ፡ ምርት መሰብሰብ የሚቻለው ከሌሊቱ 6:00 እስከ ቀን 6:00 (12:00 AM - 12:00 PM) ብቻ ነው!");
+            }
+
+            const uPlan = userData.plans[planKey];
+            const todayStr = new Date().toDateString();
+            if(uPlan.lastClaimDate === todayStr) return showToast("Already claimed today!");
+            if((uPlan.daysClaimed||0) >= (uPlan.duration||60)) return showToast("Package expired!");
+
+            const updates = {};
+            updates['balance'] = (userData.balance || 0) + parseFloat(amount);
+            updates['income'] = (userData.income || 0) + parseFloat(amount);
+            updates['plans/' + planKey + '/lastClaimDate'] = todayStr;
+            updates['plans/' + planKey + '/daysClaimed'] = (uPlan.daysClaimed||0) + 1;
+            
+            db.ref('users/' + currentUser).update(updates).then(() => {
+                
+                if(userData.referredBy && userData.referredBy !== 'admin') {
+                    db.ref('users').once('value', snap => {
+                        if(!snap.exists()) return;
+                        let u1Key = null, u1 = null;
+                        snap.forEach(c => { if(c.val().refCode === userData.referredBy) { u1Key = c.key; u1 = c.val(); } });
+                        if(u1Key) {
+                            db.ref('users/' + u1Key).update({ balance: (u1.balance||0) + amount*0.08, commission: (u1.commission||0) + amount*0.08 });
+                            if(u1.referredBy && u1.referredBy !== 'admin') {
+                                let u2Key = null, u2 = null;
+                                snap.forEach(c => { if(c.val().refCode === u1.referredBy) { u2Key = c.key; u2 = c.val(); } });
+                                if(u2Key) {
+                                    db.ref('users/' + u2Key).update({ balance: (u2.balance||0) + amount*0.03, commission: (u2.commission||0) + amount*0.03 });
+                                    if(u2.referredBy && u2.referredBy !== 'admin') {
+                                        let u3Key = null, u3 = null;
+                                        snap.forEach(c => { if(c.val().refCode === u2.referredBy) { u3Key = c.key; u3 = c.val(); } });
+                                        if(u3Key) {
+                                            db.ref('users/' + u3Key).update({ balance: (u3.balance||0) + amount*0.02, commission: (u3.commission||0) + amount*0.02 });
+                                            if(u3.referredBy && u3.referredBy !== 'admin') {
+                                                let u4Key = null, u4 = null;
+                                                snap.forEach(c => { if(c.val().refCode === u3.referredBy) { u4Key = c.key; u4 = c.val(); } });
+                                                if(u4Key) {
+                                                    db.ref('users/' + u4Key).update({ balance: (u4.balance||0) + amount*0.01, commission: (u4.commission||0) + amount*0.01 });
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#16a34a', '#f97316', '#fcd34d'] });
+                document.getElementById('claimModalAmount').innerText = parseFloat(amount).toFixed(2);
+                document.getElementById('claimSuccessModal').style.display = 'block';
+                loadMyOrders(); updateUI();
+            });
+        }
+
+        // --- TRANSACTIONS (DEPOSIT/WITHDRAW) ---
+        function setDepositAmount(amount) { document.getElementById('depAmountPage').value = amount; }
+
+        function nextDepositStep() {
+            if(document.getElementById('depAmountPage').value < 1000) return showToast("Min Deposit: 1000 ETB");
+            document.getElementById('depositStep1').style.display = 'none';
+            document.getElementById('depositStep2').style.display = 'block';
+        }
+        
+        function prevDepositStep() {
+            document.getElementById('depositStep2').style.display = 'none';
+            document.getElementById('depositStep1').style.display = 'block';
+        }
+
+        function submitDepositFromPage() {
+            const amount = parseFloat(document.getElementById('depAmountPage').value);
+            const txn = document.getElementById('depTransIdPage').value.trim();
+            const sender = document.getElementById('depSenderName').value;
+            if(!amount || !txn || !sender) return showToast("Fill all details");
+
+            db.ref('deposits').once('value', (snap) => {
+                let used = false;
+                if(snap.exists()) snap.forEach(c => { if(c.val().txnId === txn) used = true; });
+                if (used) return showToast("Transaction ID already used!");
+                
+                db.ref('deposits').push({ type: 'deposit', amount: amount, user: currentUser, phone: userData.phone, senderName: sender, txnId: txn, status: 'pending', timestamp: Date.now() }).then(() => {
+                    showToast("Deposit submitted for verification!");
+                    switchView('home');
+                });
+            });
+        }
+
+        function saveBankInfo() {
+            const bName = document.getElementById('bindBankName').value;
+            const aName = document.getElementById('bindAccName').value;
+            const aNum = document.getElementById('bindAccNum').value;
+            const wPass = document.getElementById('bindWithPass').value;
+            const vCode = document.getElementById('bindVerCode').value.trim().toUpperCase();
+
+            if(!bName || !aName || !aNum || !wPass || !vCode) return showToast("Fill all fields including verification code");
+            
+            db.ref('users/' + currentUser + '/bankVerificationCode').once('value', snap => {
+                const actualCode = snap.val();
+                if (!actualCode || actualCode !== vCode) {
+                    return showToast("Invalid Verification Code!");
+                }
+
+                db.ref('users/' + currentUser + '/bankInfo').set({ bankName: bName, accName: aName, accNum: aNum, withdrawPass: wPass }).then(() => {
+                    db.ref('users/' + currentUser + '/bankVerificationCode').remove(); 
+                    showToast("Bank details saved securely."); switchView('profile');
+                });
+            });
+        }
+
+        function submitWithdraw() {
+            if(!userData.bankInfo || !userData.bankInfo.withdrawPass) {
+                document.getElementById('withdrawInputs').style.display = 'none';
+                document.getElementById('withdrawMsg').style.display = 'block';
+                return;
+            }
+            const amount = parseFloat(document.getElementById('withAmount').value);
+            const pass = document.getElementById('withAuthPass').value;
+            if(amount < 200) return showToast("Min Withdraw: 200 ETB");
+            if(!userData.plans || Object.keys(userData.plans).length === 0) return showToast("Must have an active farm to withdraw!");
+            if(pass !== userData.bankInfo.withdrawPass) return showToast("Incorrect Password!");
+            if(amount > userData.balance) return showToast("Insufficient Balance");
+            
+            db.ref('users/' + currentUser).update({ balance: userData.balance - amount }).then(() => {
+                db.ref('withdrawals').push({ type: 'withdraw', amount: amount, user: currentUser, phone: userData.phone, address: `${userData.bankInfo.bankName} - ${userData.bankInfo.accNum} (${userData.bankInfo.accName})`, status: 'pending', timestamp: Date.now() });
+                document.getElementById('withAmount').value = ""; document.getElementById('withAuthPass').value = "";
+                showToast("Withdrawal requested!"); switchView('home');
+            });
+        }
+
+        function changeAccountPassword() {
+            const oldPass = document.getElementById('cpOldPass').value;
+            const newPass = document.getElementById('cpNewPass').value;
+            if(!oldPass || !newPass) return showToast("Please fill all fields!");
+            if(oldPass !== userData.password) return showToast("Incorrect Current Password!");
+            
+            db.ref('users/' + currentUser).update({ password: newPass }).then(() => {
+                userData.password = newPass; 
+                document.getElementById('cpOldPass').value = "";
+                document.getElementById('cpNewPass').value = "";
+                showToast("Password updated successfully!");
+                switchView('profile');
+            });
+        }
+
+        function redeemGiftCode() {
+            const code = document.getElementById('giftCodeInput').value.trim().toUpperCase();
+            if(!code) return showToast("Please enter a gift code.");
+            
+            if (userData.redeemedCodes && userData.redeemedCodes[code]) {
+                return showToast("You have already claimed this gift code!");
+            }
+
+            db.ref('giftCodes/' + code).once('value', (snap) => {
+                if (!snap.exists()) {
+                    return showToast("Invalid gift code.");
+                }
+                
+                const giftData = snap.val();
+                
+                if (Date.now() > giftData.expiry) {
+                    return showToast("This gift code has expired!");
+                }
+
+                const min = Math.ceil(giftData.minAmount);
+                const max = Math.floor(giftData.maxAmount);
+                const randomAmount = Math.floor(Math.random() * (max - min + 1)) + min;
+
+                const updates = {};
+                updates['balance'] = (userData.balance || 0) + randomAmount;
+                updates['redeemedCodes/' + code] = true; 
+
+                db.ref('users/' + currentUser).update(updates).then(() => {
+                    document.getElementById('giftCodeInput').value = "";
+                    confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#ec4899', '#f97316', '#fcd34d'] });
+                    showToast(`Success! You received ETB ${randomAmount} from the gift code!`);
+                    updateUI(); 
+                });
+            });
+        }
+
+        function showTxnTab(tab) {
+            document.getElementById('tab-dep').style = "font-weight:bold; color:var(--text-muted); cursor:pointer; padding-bottom:5px; transition:0.3s;";
+            document.getElementById('tab-wit').style = "font-weight:bold; color:var(--text-muted); cursor:pointer; padding-bottom:5px; transition:0.3s;";
+            document.getElementById('tab-inc').style = "font-weight:bold; color:var(--text-muted); cursor:pointer; padding-bottom:5px; transition:0.3s;";
+            
+            document.getElementById('txn-dep-list').style.display = 'none';
+            document.getElementById('txn-wit-list').style.display = 'none';
+            document.getElementById('txn-inc-list').style.display = 'none';
+            
+            document.getElementById('tab-'+tab).style = "font-weight:bold; color:var(--primary-color); cursor:pointer; border-bottom: 2px solid var(--primary-color); padding-bottom:5px; transition:0.3s;";
+            document.getElementById('txn-'+tab+'-list').style.display = 'block';
+        }
+
+        function loadTransactions() {
+            db.ref('deposits').once('value', snap => {
+                const list = document.getElementById('txn-dep-list');
+                list.innerHTML = '';
+                let count = 0;
+                if(snap.exists()) {
+                    snap.forEach(c => {
+                        const d = c.val();
+                        if(d.user === currentUser) {
+                            count++;
+                            let statusColor = d.status === 'approve' ? 'var(--accent-green)' : (d.status === 'reject' ? '#ef4444' : '#f59e0b');
+                            let date = new Date(d.timestamp).toLocaleString();
+                            list.insertAdjacentHTML('afterbegin', `
+                                <div style="background:white; padding:15px; border-radius:12px; margin-bottom:10px; box-shadow:var(--shadow-soft); display:flex; justify-content:space-between; align-items:center;">
+                                    <div>
+                                        <div style="font-weight:bold; color:var(--text-main);">Deposit</div>
+                                        <div style="font-size:0.75rem; color:var(--text-muted);">${date}</div>
+                                    </div>
+                                    <div style="text-align:right;">
+                                        <div style="font-weight:bold; color:var(--primary-dark);">+ ETB ${d.amount}</div>
+                                        <div style="font-size:0.75rem; color:${statusColor}; text-transform:uppercase; font-weight:bold;">${d.status}</div>
+                                    </div>
+                                </div>
+                            `);
+                        }
+                    });
+                }
+                if(count===0) list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No deposits found.</p>';
+            });
+
+            db.ref('withdrawals').once('value', snap => {
+                const list = document.getElementById('txn-wit-list');
+                list.innerHTML = '';
+                let count = 0;
+                if(snap.exists()) {
+                    snap.forEach(c => {
+                        const d = c.val();
+                        if(d.user === currentUser) {
+                            count++;
+                            let statusColor = d.status === 'approve' ? 'var(--accent-green)' : (d.status === 'reject' ? '#ef4444' : '#f59e0b');
+                            let date = new Date(d.timestamp).toLocaleString();
+                            list.insertAdjacentHTML('afterbegin', `
+                                <div style="background:white; padding:15px; border-radius:12px; margin-bottom:10px; box-shadow:var(--shadow-soft); display:flex; justify-content:space-between; align-items:center;">
+                                    <div>
+                                        <div style="font-weight:bold; color:var(--text-main);">Withdraw</div>
+                                        <div style="font-size:0.75rem; color:var(--text-muted);">${date}</div>
+                                    </div>
+                                    <div style="text-align:right;">
+                                        <div style="font-weight:bold; color:#ef4444;">- ETB ${d.amount}</div>
+                                        <div style="font-size:0.75rem; color:${statusColor}; text-transform:uppercase; font-weight:bold;">${d.status}</div>
+                                    </div>
+                                </div>
+                            `);
+                        }
+                    });
+                }
+                if(count===0) list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No withdrawals found.</p>';
+            });
+
+            const list = document.getElementById('txn-inc-list');
+            list.innerHTML = '';
+            let count = 0;
+            if(userData.plans && Object.keys(userData.plans).length > 0) {
+                db.ref('plans').once('value', snap => {
+                    const allPlans = snap.val() || {};
+                    for(let key in userData.plans) {
+                        const p = userData.plans[key];
+                        const pid = p.planId || key;
+                        const pName = allPlans[pid] ? allPlans[pid].name : "Farm Package";
+                        const earned = (p.daysClaimed || 0) * (p.daily || 0);
+                        if (earned > 0) {
+                            count++;
+                            list.insertAdjacentHTML('afterbegin', `
+                                <div style="background:white; padding:15px; border-radius:12px; margin-bottom:10px; box-shadow:var(--shadow-soft); display:flex; justify-content:space-between; align-items:center;">
+                                    <div>
+                                        <div style="font-weight:bold; color:var(--text-main);">${pName}</div>
+                                        <div style="font-size:0.75rem; color:var(--text-muted);">Harvest Yield</div>
+                                    </div>
+                                    <div style="text-align:right;">
+                                        <div style="font-weight:bold; color:var(--accent-green);">+ ETB ${earned.toFixed(2)}</div>
+                                        <div style="font-size:0.75rem; color:var(--text-muted);">${p.daysClaimed} Days Collected</div>
+                                    </div>
+                                </div>
+                            `);
+                        }
+                    }
+                    if(count===0) list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No income generated yet.</p>';
+                });
+            } else {
+                list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No income found.</p>';
+            }
+        }
+
+        // --- ADMIN FUNCTIONS ---
+        function createBankVerificationCode() {
+            let rawPhone = document.getElementById('adminBankVerPhone').value.trim();
+            if(!rawPhone) return showToast("Enter user phone");
+            
+            let phoneKey = rawPhone;
+            if (rawPhone.length === 9 && !rawPhone.startsWith("0")) phoneKey = "251" + rawPhone;
+            else if (rawPhone.startsWith("0")) phoneKey = "251" + rawPhone.substring(1);
+            else if (rawPhone.startsWith("+251")) phoneKey = rawPhone.substring(1);
+            
+            db.ref('users/' + phoneKey).once('value', snap => {
+                if(!snap.exists()) return showToast("User not found!");
+                
+                const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+                db.ref('users/' + phoneKey + '/bankVerificationCode').set(code).then(() => {
+                    document.getElementById('adminBankVerResult').innerHTML = `Code for ${phoneKey}: <br><span style="font-size:1.5rem; color:#8b5cf6; letter-spacing:2px;">${code}</span>`;
+                    showToast("Code Generated!");
+                });
+            });
+        }
+
+        function createAdminGiftCode() {
+            const code = document.getElementById('adminGiftCode').value.trim().toUpperCase();
+            const min = parseFloat(document.getElementById('adminGiftMin').value);
+            const max = parseFloat(document.getElementById('adminGiftMax').value);
+            const minutes = parseInt(document.getElementById('adminGiftExpiry').value);
+            
+            if(!code || isNaN(min) || isNaN(max) || isNaN(minutes)) return showToast("Fill all gift code details");
+            if(min > max) return showToast("Min amount cannot be greater than Max amount");
+
+            const expiryTime = Date.now() + (minutes * 60 * 1000);
+
+            db.ref('giftCodes/' + code).set({
+                code: code,
+                minAmount: min,
+                maxAmount: max,
+                expiry: expiryTime,
+                createdAt: Date.now()
+            }).then(() => {
+                showToast("Gift Code Published!");
+                document.getElementById('adminGiftCode').value = '';
+                document.getElementById('adminGiftMin').value = '';
+                document.getElementById('adminGiftMax').value = '';
+                document.getElementById('adminGiftExpiry').value = '';
+            });
+        }
+
+        function loadAdminGiftCodes() {
+            db.ref('giftCodes').on('value', snap => {
+                const c = document.getElementById('adminExistingCodes'); 
+                c.innerHTML = "";
+                
+                if(!snap.exists()) return c.innerHTML = "No active gift codes.";
+                
+                const now = Date.now();
+                snap.forEach(ch => {
+                    const data = ch.val();
+                    const isExpired = now > data.expiry;
+                    const status = isExpired ? "<span style='color:red; font-weight:bold;'>Expired</span>" : "<span style='color:green; font-weight:bold;'>Active</span>";
+                    
+                    c.insertAdjacentHTML('beforeend', `
+                    <div style="border-bottom:1px solid #eee; padding:8px 0; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <b>${data.code}</b><br>
+                            <small style="color:#777;">${data.minAmount} - ${data.maxAmount} ETB | Status: ${status}</small>
+                        </div>
+                        <span onclick="db.ref('giftCodes/${ch.key}').remove()" style="color:white; background:red; padding:4px 8px; border-radius:5px; cursor:pointer; font-weight:bold;">Delete</span>
+                    </div>`);
+                });
+            });
+        }
+
+        function loadAdminPlans() {
+            db.ref('plans').on('value', snap => {
+                const c = document.getElementById('adminExistingPlans');
+                c.innerHTML = "";
+                if(!snap.exists()) return c.innerHTML = "No packages available.";
+                snap.forEach(ch => {
+                    const p = ch.val();
+                    c.insertAdjacentHTML('beforeend', `
+                    <div style="border-bottom:1px solid #eee; padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <b style="color:var(--primary-dark);">${p.name}</b><br>
+                            <span style="color:var(--text-muted); font-size:0.8rem;">${p.price} ETB | Daily: ${p.roi} ETB | Total: ${parseFloat((p.roi * (p.duration||60)).toFixed(2))} ETB | ${p.duration} Days | Limit: ${p.limit || 1}</span>
+                        </div>
+                        <div style="display:flex; gap:5px;">
+                            <button onclick="editAdminPlan('${ch.key}')" style="background:var(--primary-color); color:white; padding:5px 10px; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">Edit</button>
+                            <button onclick="deleteAdminPlan('${ch.key}')" style="background:#ef4444; color:white; padding:5px 10px; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">Del</button>
+                        </div>
+                    </div>`);
+                });
+            });
+        }
+
+        function editAdminPlan(key) {
+            db.ref('plans/' + key).once('value', snap => {
+                if(!snap.exists()) return;
+                const p = snap.val();
+                editingPlanKey = key;
+                document.getElementById('adminPlanTitle').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Farm Package';
+                document.getElementById('adminPlanName').value = p.name;
+                document.getElementById('adminPlanPrice').value = p.price;
+                document.getElementById('adminPlanRoi').value = p.roi;
+                document.getElementById('adminPlanDuration').value = p.duration;
+                // NEW: Edit Limit
+                document.getElementById('adminPlanLimit').value = p.limit || 1;
+                document.getElementById('adminPlanImg').value = p.img || '';
+                
+                document.getElementById('adminSavePlanBtn').innerText = "Update Package";
+                document.getElementById('adminCancelEditBtn').style.display = "block";
+                
+                document.getElementById('adminPlanTitle').scrollIntoView({behavior: 'smooth'});
+            });
+        }
+
+        function cancelEditPlan() {
+            editingPlanKey = null;
+            document.getElementById('adminPlanTitle').innerHTML = '<i class="fa-solid fa-plus"></i> Add Farm Package';
+            document.getElementById('adminPlanName').value = '';
+            document.getElementById('adminPlanPrice').value = '';
+            document.getElementById('adminPlanRoi').value = '';
+            document.getElementById('adminPlanDuration').value = '';
+            // NEW: Clear Limit
+            document.getElementById('adminPlanLimit').value = '';
+            document.getElementById('adminPlanImg').value = '';
+            
+            document.getElementById('adminSavePlanBtn').innerText = "Publish Package";
+            document.getElementById('adminCancelEditBtn').style.display = "none";
+        }
+
+        function saveAdminPlan() {
+            const name = document.getElementById('adminPlanName').value;
+            const price = parseFloat(document.getElementById('adminPlanPrice').value);
+            const roi = parseFloat(document.getElementById('adminPlanRoi').value);
+            const duration = parseInt(document.getElementById('adminPlanDuration').value) || 60;
+            // NEW: Get Limit
+            const limit = parseInt(document.getElementById('adminPlanLimit').value) || 1;
+            const img = document.getElementById('adminPlanImg').value || "https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1";
+            
+            if(!name || isNaN(price) || isNaN(roi)) return showToast("Fill plan details properly");
+
+            const planData = { name: name, price: price, roi: roi, duration: duration, limit: limit, img: img };
+
+            if (editingPlanKey) {
+                db.ref('plans/' + editingPlanKey).update(planData).then(() => {
+                    showToast("Farm Package Updated!");
+                    cancelEditPlan();
+                });
+            } else {
+                db.ref('plans').push(planData).then(() => {
+                    showToast("Farm Package Created!");
+                    cancelEditPlan();
+                });
+            }
+        }
+
+        function deleteAdminPlan(key) {
+            if(confirm("Are you sure you want to delete this package?")) {
+                db.ref('plans/' + key).remove().then(() => {
+                    showToast("Package deleted!");
+                    if(editingPlanKey === key) cancelEditPlan();
+                });
+            }
+        }
+        // ------------------------------------
+
+        function addNewPaymentMethod() {
+            const b = document.getElementById('adminBankName').value;
+            const n = document.getElementById('adminAccountName').value;
+            const a = document.getElementById('adminAccountNum').value;
+            if(!b || !a) return showToast("Enter Bank Info");
+            db.ref('settings/paymentMethods').push({ bankName: b, accountName: n, accountNumber: a }).then(() => showToast("Bank Added"));
+        }
+
+        function loadAdminBankList() {
+            db.ref('settings/paymentMethods').on('value', snap => {
+                const c = document.getElementById('adminExistingBanks'); c.innerHTML = "";
+                if(!snap.exists()) return c.innerHTML = "No banks.";
+                snap.forEach(ch => {
+                    c.insertAdjacentHTML('beforeend', `<div style="border-bottom:1px solid #eee; padding:5px 0;"><b>${ch.val().bankName}</b> - ${ch.val().accountNumber} <span onclick="db.ref('settings/paymentMethods/${ch.key}').remove()" style="color:red; float:right; cursor:pointer;">X</span></div>`);
+                });
+            });
+        }
+
+        function listenForRequests() {
+            const list = document.getElementById('adminRequestList');
+            let dSnap = null; let wSnap = null;
+            const render = () => {
+                if(!dSnap || !wSnap) return;
+                list.innerHTML = ""; let pend = false;
+                const proc = (snap, path) => {
+                    if(snap.exists()) snap.forEach(ch => {
+                        const r = ch.val();
+                        if(r.status === 'pending') {
+                            pend = true;
+                            list.insertAdjacentHTML('beforeend', `
+                            <div class="req-card ${r.type==='withdraw'?'withdraw':''}">
+                                <strong>${r.type.toUpperCase()} - ETB ${r.amount}</strong><br>
+                                <small>User: ${r.phone} | ${r.type==='deposit' ? 'Txn: '+r.txnId : 'Acc: '+r.address}</small><br>
+                                <button onclick="actReq('${ch.key}', 'approve', '${r.user}', ${r.amount}, '${r.type}', '${path}')" style="background:green; color:white; padding:5px 10px; margin-top:5px; border:none; border-radius:5px;">Approve</button>
+                                <button onclick="actReq('${ch.key}', 'reject', '${r.user}', ${r.amount}, '${r.type}', '${path}')" style="background:red; color:white; padding:5px 10px; margin-top:5px; border:none; border-radius:5px;">Reject</button>
+                            </div>`);
+                        }
+                    });
+                };
+                proc(dSnap, 'deposits'); proc(wSnap, 'withdrawals');
+                if(!pend) list.innerHTML = "No pending requests.";
+            };
+            db.ref('deposits').on('value', s => { dSnap = s; render(); });
+            db.ref('withdrawals').on('value', s => { wSnap = s; render(); });
+        }
+
+        function actReq(key, act, uid, amt, type, path) {
+            db.ref(path + '/' + key).update({ status: act }).then(() => {
+                if(act === 'approve' && type === 'deposit') {
+                    db.ref('users/'+uid).once('value', s => db.ref('users/'+uid).update({ balance: parseFloat(s.val().balance||0) + amt }));
+                } else if(act === 'reject' && type === 'withdraw') {
+                    db.ref('users/'+uid).once('value', s => db.ref('users/'+uid).update({ balance: parseFloat(s.val().balance||0) + amt }));
+                }
+                showToast("Action saved");
+            });
+        }
+
+        // --- NEW: APPROVED DEPOSITS HISTORY ---
+        function loadAdminDepositHistory() {
+            const list = document.getElementById('adminDepositHistoryList');
+            list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Loading history...</p>';
+            
+            db.ref('deposits').once('value', snap => {
+                list.innerHTML = "";
+                let count = 0;
+                if(snap.exists()) {
+                    const arr = [];
+                    snap.forEach(ch => {
+                        const r = ch.val();
+                        if(r.status === 'approve') {
+                            arr.push(r);
+                        }
+                    });
+                    
+                    // Sort by newest first
+                    arr.sort((a, b) => b.timestamp - a.timestamp); 
+                    
+                    arr.forEach(r => {
+                        count++;
+                        const date = new Date(r.timestamp).toLocaleString();
+                        list.insertAdjacentHTML('beforeend', `
+                        <div style="background:#dcfce7; border-left:4px solid var(--accent-green); padding:12px; border-radius:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <strong style="color:var(--accent-green); font-size:1.1rem;">ETB ${r.amount}</strong><br>
+                                <small style="color:var(--text-main); font-weight:bold;">User: ${r.phone}</small><br>
+                                <small style="color:var(--text-muted);">Txn: ${r.txnId}</small>
+                            </div>
+                            <div style="text-align:right;">
+                                <span style="background:var(--accent-green); color:white; font-size:0.7rem; padding:3px 8px; border-radius:8px;">Approved</span><br>
+                                <small style="color:var(--text-muted); font-size:0.75rem; margin-top:5px; display:block;">${date}</small>
+                            </div>
+                        </div>`);
+                    });
+                }
+                if(count === 0) list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No approved deposits found.</p>';
+            });
+        }
+
+        // --- UTILS ---
+        function copyRefLink() { navigator.clipboard.writeText(window.location.origin + window.location.pathname + "?ref=" + document.getElementById('invitePageCode').innerText); showToast("Link Copied!"); }
+        function copyString(str) { navigator.clipboard.writeText(str); showToast("Copied!"); }
+        function openModal(id) { document.getElementById(id).style.display = 'block'; }
+        function showToast(text) { const t = document.getElementById("toast"); t.className = "show"; t.innerText = text; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
+    </script>
+</body>
+</html>
