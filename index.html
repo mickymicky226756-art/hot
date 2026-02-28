@@ -278,8 +278,16 @@
         .nav-item.active i { transform: translateY(-3px); color: var(--primary-dark); }
 
         /* --- Modals (General) --- */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 2000; }
-        .modal-content { background: white; width: 90%; max-width: 420px; margin: auto; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 30px; border-radius: 30px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        .modal { 
+            display: none; align-items: center; justify-content: center; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 2000; 
+        }
+        .modal-content { 
+            background: white; width: 90%; max-width: 420px; padding: 30px; 
+            border-radius: 30px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
+            position: relative; 
+        }
         .close { position: absolute; top: 20px; right: 25px; font-size: 1.5rem; color: #a1a1aa; cursor: pointer; }
 
         /* --- FULL SCREEN AUTH SPECIFICS --- */
@@ -1425,7 +1433,7 @@
                     document.getElementById('claimModalDesc').innerText = "You won cash from the Lucky Draw!";
                     document.getElementById('claimModalAmount').innerText = rewardAmount.toFixed(2);
                     
-                    document.getElementById('claimSuccessModal').style.display = 'block';
+                    document.getElementById('claimSuccessModal').style.display = 'flex';
                     updateUI();
                 });
             }, 4000); 
@@ -1541,7 +1549,7 @@
                 
                 confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#16a34a', '#f97316', '#fcd34d'] });
                 document.getElementById('claimModalAmount').innerText = parseFloat(amount).toFixed(2);
-                document.getElementById('claimSuccessModal').style.display = 'block';
+                document.getElementById('claimSuccessModal').style.display = 'flex';
                 loadMyOrders(); updateUI();
             });
         }
@@ -2044,7 +2052,7 @@
         // --- UTILS ---
         function copyRefLink() { navigator.clipboard.writeText(window.location.origin + window.location.pathname + "?ref=" + document.getElementById('invitePageCode').innerText); showToast("Link Copied!"); }
         function copyString(str) { navigator.clipboard.writeText(str); showToast("Copied!"); }
-        function openModal(id) { document.getElementById(id).style.display = 'block'; }
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function showToast(text) { const t = document.getElementById("toast"); t.className = "show"; t.innerText = text; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
     </script>
 </body>
