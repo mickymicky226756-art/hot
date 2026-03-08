@@ -437,9 +437,6 @@
                 <a href="hot.apk" download class="download-btn">
                     <i class="fa-solid fa-download"></i> App
                 </a>
-                <div class="user-pill" onclick="switchView('profile')">
-                    <i class="fa-solid fa-user-circle"></i> <span id="headerName">User</span>
-                </div>
             </div>
         </header>
 
@@ -735,14 +732,24 @@
 
         <section id="view-profile" class="view-section animate-up">
             <div class="page-header" style="padding-bottom: 20px;">
-                <div style="width:80px; height:80px; background:white; color:var(--primary-color); border-radius:50%; font-size:2.5rem; display:flex; align-items:center; justify-content:center; margin: 0 auto 10px; box-shadow:var(--shadow-soft);">
-                    <i class="fa-solid fa-user-astronaut"></i>
-                </div>
-                <h2 id="profileName">User Name</h2>
-                <p id="profilePhone">09XXXXXXXX</p>
-                
-                <div style="margin-top:15px; background:white; display:inline-block; padding:8px 20px; border-radius:50px; font-weight:700; color:var(--primary-dark); box-shadow:var(--shadow-soft); cursor:pointer;" onclick="copyRefLink()">
-                    Code: <span id="myRefCode">...</span> <i class="fa-regular fa-copy" style="margin-left:5px;"></i>
+                <h2 style="margin-bottom: 15px;">My Profile</h2>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; text-align: left;">
+                    <div style="background:white; padding:15px; border-radius:16px; box-shadow:var(--shadow-soft);">
+                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;"><i class="fa-solid fa-wallet" style="color:var(--primary-color);"></i> Balance</div>
+                        <div style="font-size:1.2rem; font-weight:800; color:var(--primary-dark); margin-top:5px;">ETB <span id="profBalance">0.00</span></div>
+                    </div>
+                    <div style="background:white; padding:15px; border-radius:16px; box-shadow:var(--shadow-soft);">
+                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;"><i class="fa-solid fa-chart-line" style="color:var(--accent-green);"></i> Daily Income</div>
+                        <div style="font-size:1.2rem; font-weight:800; color:var(--accent-green); margin-top:5px;">ETB <span id="profDailyIncome">0.00</span></div>
+                    </div>
+                    <div style="background:white; padding:15px; border-radius:16px; box-shadow:var(--shadow-soft);">
+                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;"><i class="fa-solid fa-users" style="color:#3b82f6;"></i> Total Team</div>
+                        <div style="font-size:1.2rem; font-weight:800; color:#3b82f6; margin-top:5px;" id="profTotalTeam">0</div>
+                    </div>
+                    <div style="background:white; padding:15px; border-radius:16px; box-shadow:var(--shadow-soft);">
+                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;"><i class="fa-solid fa-user-check" style="color:#ec4899;"></i> Investor Team</div>
+                        <div style="font-size:1.2rem; font-weight:800; color:#ec4899; margin-top:5px;" id="profInvestorTeam">0</div>
+                    </div>
                 </div>
             </div>
 
@@ -1255,10 +1262,10 @@
         }
 
         function updateUI() {
-            document.getElementById('headerName').innerText = userData.name.split(" ")[0]; 
-            document.getElementById('profileName').innerText = userData.name;
-            document.getElementById('profilePhone').innerText = userData.phone;
-            document.getElementById('myRefCode').innerText = userData.refCode;
+            // Added check to prevent error since the headerName HTML element was removed
+            if (document.getElementById('headerName')) {
+                document.getElementById('headerName').innerText = userData.name.split(" ")[0]; 
+            }
             
             // These still work safely even though they are hidden now
             if (document.getElementById('displayBalance')) {
@@ -1266,6 +1273,14 @@
             }
             if (document.getElementById('displayIncome')) {
                 document.getElementById('displayIncome').innerText = parseFloat(userData.income || 0).toFixed(2);
+            }
+
+            // Update New Profile Cards
+            if (document.getElementById('profBalance')) {
+                document.getElementById('profBalance').innerText = parseFloat(userData.balance || 0).toFixed(2);
+            }
+            if (document.getElementById('profDailyIncome')) {
+                document.getElementById('profDailyIncome').innerText = parseFloat(userData.income || 0).toFixed(2);
             }
             
             if(document.getElementById('spinCountDisplay')) {
@@ -1306,6 +1321,14 @@
                 document.getElementById('teamTotalCnt').innerText = team.length;
                 document.getElementById('teamInvestCnt').innerText = investors;
                 document.getElementById('teamTotComm').innerText = parseFloat(userData.commission || 0).toFixed(2);
+                
+                // Update New Profile Cards
+                if(document.getElementById('profTotalTeam')) {
+                    document.getElementById('profTotalTeam').innerText = team.length;
+                }
+                if(document.getElementById('profInvestorTeam')) {
+                    document.getElementById('profInvestorTeam').innerText = investors;
+                }
             });
         }
 
