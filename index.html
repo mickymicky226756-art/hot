@@ -256,6 +256,35 @@
         .nav-item.active { color: var(--primary-color); }
         .nav-item.active i { transform: translateY(-3px); color: var(--primary-dark); }
 
+        /* --- Floating Customer Service Button --- */
+        .floating-cs-btn {
+            position: fixed;
+            bottom: 100px; 
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+            cursor: pointer;
+            z-index: 1500;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: floatAnimation 3s ease-in-out infinite;
+        }
+        .floating-cs-btn:active {
+            transform: scale(0.90);
+        }
+        @keyframes floatAnimation {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0); }
+        }
+
         /* --- Modals (General) --- */
         .modal { 
             display: none; align-items: center; justify-content: center; 
@@ -419,7 +448,7 @@
     <div id="claimSuccessModal" class="modal">
         <div class="modal-content animate-up">
             <i class="fa-solid fa-basket-shopping" style="font-size: 4rem; color: var(--accent-green); margin-bottom: 15px;" id="claimModalIcon"></i>
-            <h2 style="color:var(--text-main); font-weight:800;" id="claimModalTitle">Harvest Collected!</h2>
+            <h2 style="color:var(--text-main); font-weight:800;" id="claimModalTitle">Harvest taken!</h2>
             <p id="claimModalDesc" style="color:var(--text-muted); margin: 10px 0;">Your daily profit is ready.</p>
             <div style="font-size: 3rem; font-weight: 800; color: var(--primary-color); margin: 15px 0;">ETB <span id="claimModalAmount">0.00</span></div>
             <button class="btn-full" onclick="closeModal('claimSuccessModal')" style="background: var(--accent-green);">Awesome!</button>
@@ -468,7 +497,7 @@
             <div class="quick-actions">
                 <div class="action-circle" onclick="switchView('deposit')">
                     <div class="icon-box"><i class="fa-solid fa-wallet"></i></div>
-                    <span data-lang="deposit">Deposit</span>
+                    <span data-lang="deposit">recharge</span>
                 </div>
                 <div class="action-circle" onclick="switchView('withdraw')">
                     <div class="icon-box" style="color: #3b82f6;"><i class="fa-solid fa-money-bill-transfer"></i></div>
@@ -614,12 +643,12 @@
                     <div class="quick-amounts">
                         <button class="amt-btn" onclick="setDepositAmount(1000)">1000</button>
                         <button class="amt-btn" onclick="setDepositAmount(3000)">3000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(5000)">5000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(7000)">7000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(9000)">9000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(11000)">11000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(13000)">13000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(15000)">15000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(5000)">6000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(7000)">11000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(9000)">18000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(11000)">30000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(13000)">75000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(15000)">115000</button>
                     </div>
 
                     <button class="btn-full" onclick="nextDepositStep()">Next Step <i class="fa-solid fa-arrow-right"></i></button>
@@ -661,7 +690,7 @@
                 </div>
 
                 <div style="background:#fff7ed; border:1px solid #ffedd5; color:#c2410c; padding:12px; border-radius:12px; font-size:0.85rem; font-weight:600; margin-bottom:20px;">
-                    <i class="fa-solid fa-circle-info"></i> Fee: 18% | Min Withdraw: 200 ETB
+                    <i class="fa-solid fa-circle-info"></i> Fee: 18% | Min Withdraw: 250 ETB
                 </div>
 
                 <div id="withdrawInputs">
@@ -691,10 +720,10 @@
                 <p>Choose an option below to connect with us.</p>
             </div>
             <div class="content-box" style="text-align: center;">
-                <button class="btn-full" style="background: #0088cc; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/your_channel_link', '_blank')">
+                <button class="btn-full" style="background: #0088cc; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/hotfruitfarming', '_blank')">
                     <i class="fa-brands fa-telegram" style="font-size: 1.2rem;"></i> Telegram Channel
                 </button>
-                <button class="btn-full" style="background: #0088cc; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/your_group_link', '_blank')">
+                <button class="btn-full" style="background: #0088cc; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/HotFruitFarm', '_blank')">
                     <i class="fa-solid fa-users" style="font-size: 1.2rem;"></i> Telegram Group
                 </button>
                 <button class="btn-full" style="background: var(--primary-color); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/Shalu42', '_blank')">
@@ -722,7 +751,7 @@
             </div>
             <div class="content-box">
                 <div style="background:#fffbeb; border:1px solid #fef3c7; color:#d97706; padding:12px; border-radius:12px; font-size:0.85rem; font-weight:600; margin-bottom:20px; text-align:center;">
-                    <i class="fa-solid fa-clock"></i> ማሳሰቢያ፡ ምርት መሰብሰቢያ ሰዓት ከሌሊቱ 6:00 እስከ ቀን 6:00 (12:00 AM - 12:00 PM) ብቻ ነው
+                    <i class="fa-solid fa-clock"></i> ማሳሰቢያ፡ ምርት መሰብሰቢያ ሰዓት ከጧት 12:00 እስከ ሌሊቱ 6:00 (6:00 AM - 12:00 AM) ብቻ ነው
                 </div>
                 <div id="myOrdersList">
                     <p style="text-align:center; color:var(--text-muted);">Loading active farms...</p>
@@ -873,7 +902,7 @@
             <div class="content-box">
                 <div style="background:#fff7ed; border:2px dashed var(--primary-color); border-radius:20px; padding:30px; text-align:center; margin-bottom:25px;">
                     <div style="font-size:0.9rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Your Referral Code</div>
-                    <div id="invitePageCode" style="font-size:2.5rem; font-weight:800; color:var(--primary-dark); letter-spacing:2px; margin:10px 0;">...</div>
+                    <div id="invitePageCode" style="font-size:1.2rem; word-break:break-all; font-weight:800; color:var(--primary-dark); letter-spacing:2px; margin:10px 0;">...</div>
                     <button class="btn-full" style="padding:12px; font-size:1rem;" onclick="copyRefLink()"><i class="fa-solid fa-link"></i> Copy Invite Link</button>
                 </div>
 
@@ -888,6 +917,27 @@
                         <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Active Investors</div>
                     </div>
                 </div>
+
+                <h4 style="margin:20px 0 15px; font-size: 1rem; color: var(--text-main);">Active Investors per Level</h4>
+                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;">
+                    <div style="background:white; padding:10px; border-radius:12px; box-shadow:var(--shadow-soft); text-align:center;">
+                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-dark);" id="lvl1InvestCnt">0</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">Level 1</div>
+                    </div>
+                    <div style="background:white; padding:10px; border-radius:12px; box-shadow:var(--shadow-soft); text-align:center;">
+                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-dark);" id="lvl2InvestCnt">0</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">Level 2</div>
+                    </div>
+                    <div style="background:white; padding:10px; border-radius:12px; box-shadow:var(--shadow-soft); text-align:center;">
+                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-dark);" id="lvl3InvestCnt">0</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">Level 3</div>
+                    </div>
+                    <div style="background:white; padding:10px; border-radius:12px; box-shadow:var(--shadow-soft); text-align:center;">
+                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-dark);" id="lvl4InvestCnt">0</div>
+                        <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">Level 4</div>
+                    </div>
+                </div>
+
                 <div style="background:white; padding:20px; border-radius:16px; box-shadow:var(--shadow-soft); text-align:center; margin-top:15px;">
                     <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Total Team Commission</div>
                     <div style="font-size:1.8rem; font-weight:800; color:var(--primary-dark);">ETB <span id="teamTotComm">0.00</span></div>
@@ -896,7 +946,7 @@
                 <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:16px; padding:15px; margin-top:20px; font-size:0.85rem; color:#1e3a8a;">
                     <h4 style="margin-bottom:10px; color:#1d4ed8;"><i class="fa-solid fa-circle-info"></i> Commission Rules</h4>
                     <ul style="list-style:none; padding-left:0; line-height:1.6;">
-                        <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 1:</b> 10% on Purchase, 8% on Daily Income</li>
+                        <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 1:</b> 15% on Purchase, 8% on Daily Income</li>
                         <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 2:</b> 3% on Purchase, 3% on Daily Income</li>
                         <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 3:</b> 2% on Purchase, 2% on Daily Income</li>
                         <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 4:</b> 1% on Purchase, 1% on Daily Income</li>
@@ -986,6 +1036,10 @@
             <div class="nav-item" onclick="switchView('profile')" id="nav-profile">
                 <i class="fa-solid fa-user"></i><span data-lang="navProfile">Profile</span>
             </div>
+        </div>
+
+        <div class="floating-cs-btn" onclick="switchView('support')">
+            <i class="fa-solid fa-headset"></i>
         </div>
 
     </div>
@@ -1160,7 +1214,9 @@
                 if (snapshot.exists()) return showToast("Phone already registered");
                 
                 const autoName = "Farmer_" + rawPhone.substring(5);
-                const newCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+                let newCode = "";
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                for(let i=0; i<25; i++) newCode += chars.charAt(Math.floor(Math.random() * chars.length));
                 const newUser = {
                     name: autoName, phone: phone, password: pass,
                     balance: 110, 
@@ -1185,6 +1241,7 @@
 
             if(phoneKey === '44') {
                 document.getElementById('bottomNav').style.display = 'none';
+                document.querySelector('.floating-cs-btn').style.display = 'none'; // Hide CS button for admin
                 switchView('admin');
                 listenForRequests();
                 loadAdminBankList();
@@ -1262,12 +1319,10 @@
         }
 
         function updateUI() {
-            // Added check to prevent error since the headerName HTML element was removed
             if (document.getElementById('headerName')) {
                 document.getElementById('headerName').innerText = userData.name.split(" ")[0]; 
             }
             
-            // These still work safely even though they are hidden now
             if (document.getElementById('displayBalance')) {
                 document.getElementById('displayBalance').innerText = parseFloat(userData.balance || 0).toFixed(2);
             }
@@ -1275,7 +1330,6 @@
                 document.getElementById('displayIncome').innerText = parseFloat(userData.income || 0).toFixed(2);
             }
 
-            // Update New Profile Cards
             if (document.getElementById('profBalance')) {
                 document.getElementById('profBalance').innerText = parseFloat(userData.balance || 0).toFixed(2);
             }
@@ -1314,15 +1368,25 @@
                 const l3c = lvl3.map(u => String(u.refCode).trim().toUpperCase());
                 const lvl4 = arr.filter(u => l3c.includes(String(u.referredBy).trim().toUpperCase()));
                 
+                let inv1 = 0, inv2 = 0, inv3 = 0, inv4 = 0;
+                lvl1.forEach(u => { if(u.plans && Object.keys(u.plans).length > 0) inv1++; });
+                lvl2.forEach(u => { if(u.plans && Object.keys(u.plans).length > 0) inv2++; });
+                lvl3.forEach(u => { if(u.plans && Object.keys(u.plans).length > 0) inv3++; });
+                lvl4.forEach(u => { if(u.plans && Object.keys(u.plans).length > 0) inv4++; });
+
                 const team = [...lvl1, ...lvl2, ...lvl3, ...lvl4];
-                let investors = 0;
-                team.forEach(u => { if(u.plans && Object.keys(u.plans).length > 0) investors++; });
+                let investors = inv1 + inv2 + inv3 + inv4;
 
                 document.getElementById('teamTotalCnt').innerText = team.length;
                 document.getElementById('teamInvestCnt').innerText = investors;
+                
+                if(document.getElementById('lvl1InvestCnt')) document.getElementById('lvl1InvestCnt').innerText = inv1;
+                if(document.getElementById('lvl2InvestCnt')) document.getElementById('lvl2InvestCnt').innerText = inv2;
+                if(document.getElementById('lvl3InvestCnt')) document.getElementById('lvl3InvestCnt').innerText = inv3;
+                if(document.getElementById('lvl4InvestCnt')) document.getElementById('lvl4InvestCnt').innerText = inv4;
+
                 document.getElementById('teamTotComm').innerText = parseFloat(userData.commission || 0).toFixed(2);
                 
-                // Update New Profile Cards
                 if(document.getElementById('profTotalTeam')) {
                     document.getElementById('profTotalTeam').innerText = team.length;
                 }
@@ -1427,8 +1491,8 @@
                     if (isFirst) newSpinsU1 += 1;
 
                     db.ref('users/' + u1Key).update({ 
-                        balance: (u1.balance||0) + amount*0.10, 
-                        commission: (u1.commission||0) + amount*0.10,
+                        balance: (u1.balance||0) + amount*0.15, 
+                        commission: (u1.commission||0) + amount*0.15,
                         spins: newSpinsU1 
                     });
                     
@@ -1519,7 +1583,7 @@
 
             const todayStr = new Date().toDateString(); 
             const currentHour = new Date().getHours();
-            const isTimeValid = (currentHour >= 0 && currentHour < 12); 
+            const isTimeValid = (currentHour >= 6); 
             
             db.ref('plans').once('value', (snap) => {
                 const allPlans = snap.val() || {};
@@ -1559,8 +1623,8 @@
 
         function claimDailyProfit(planKey, amount) {
             const currentHour = new Date().getHours();
-            if (currentHour < 0 || currentHour >= 12) {
-                return showToast("ማሳሰቢያ፡ ምርት መሰብሰብ የሚቻለው ከሌሊቱ 6:00 እስከ ቀን 6:00 (12:00 AM - 12:00 PM) ብቻ ነው!");
+            if (currentHour < 6) {
+                return showToast("ማሳሰቢያ፡ ምርት መሰብሰብ የሚቻለው ከጧት 12:00 እስከ ሌሊቱ 6:00 (6:00 AM - 12:00 AM) ብቻ ነው!");
             }
 
             const uPlan = userData.plans[planKey];
@@ -1677,7 +1741,7 @@
             }
             const amount = parseFloat(document.getElementById('withAmount').value);
             const pass = document.getElementById('withAuthPass').value;
-            if(amount < 200) return showToast("Min Withdraw: 200 ETB");
+            if(amount < 250) return showToast("Min Withdraw: 250 ETB");
             if(!userData.plans || Object.keys(userData.plans).length === 0) return showToast("Must have an active farm to withdraw!");
             if(pass !== userData.bankInfo.withdrawPass) return showToast("Incorrect Password!");
             if(amount > userData.balance) return showToast("Insufficient Balance");
