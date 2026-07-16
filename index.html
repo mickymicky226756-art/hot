@@ -1359,13 +1359,23 @@
                     const plan = childSnap.val(); const key = childSnap.key;
                     let pCount = 0;
                     if(userData.plans) for(let pk in userData.plans) { if(userData.plans[pk].planId === key) pCount++; }
-                    const limit = plan.limit || 1;
+                    
+                    const limit = (plan.limit !== undefined && plan.limit !== null && plan.limit !== "") ? parseInt(plan.limit) : 1;
                     const duration = plan.duration || 60;
                     const totalRevenue = parseFloat((plan.roi * duration).toFixed(2));
                     
                     let btnTxt = currentLang === 'am' ? "ግዛ" : "Invest Now";
                     let dis = "";
-                    if (pCount >= limit) { btnTxt = "Limit Reached"; dis = "disabled"; }
+                    let limitText = `Limit: ${limit}`;
+
+                    if (limit === 0) {
+                        btnTxt = currentLang === 'am' ? "በቅርብ ቀን" : "Coming Soon";
+                        dis = "disabled";
+                        limitText = currentLang === 'am' ? "በቅርብ ቀን" : "Coming Soon";
+                    } else if (pCount >= limit) { 
+                        btnTxt = "Limit Reached"; 
+                        dis = "disabled"; 
+                    }
 
                     const vipBadge = plan.price > 2000 ? '<div class="badge-hot">VIP</div>' : '';
 
@@ -1373,7 +1383,7 @@
                     <div class="product-card animate-up">
                         ${vipBadge}
                         <div class="prod-img-box">
-                            <div class="badge-limit"><i class="fa-solid fa-lock"></i> Limit: ${limit}</div>
+                            <div class="badge-limit"><i class="fa-solid fa-lock"></i> ${limitText}</div>
                             <img src="${plan.img || 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=400'}">
                         </div>
                         <div class="prod-info">
@@ -1382,7 +1392,7 @@
                                 <div class="roi-tag">Daily: ETB ${plan.roi}</div>
                                 <div class="roi-tag" style="background: #e0f2fe; color: #0284c7;">Total: ETB ${totalRevenue}</div>
                             </div>
-                            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">Cycle: ${duration} Days | Bought: ${pCount}/${limit}</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">Cycle: ${duration} Days | Bought: ${pCount}/${limit === 0 ? '-' : limit}</div>
                             <div class="price-row">
                                 <div class="price-val">ETB ${plan.price}</div>
                                 <button class="btn-buy" ${dis} onclick="buyPlan('${key}', ${plan.price}, ${plan.roi}, ${limit}, ${duration})">${btnTxt}</button>
@@ -1397,6 +1407,7 @@
         }
 
         function buyPlan(planId, cost, dailyRate, limit, duration) {
+            if (limit === 0) return showToast("This package is coming soon!");
             let pCount = 0;
             if(userData.plans) for(let pk in userData.plans) if(userData.plans[pk].planId === planId) pCount++;
             if(pCount >= limit) return showToast("Purchase Limit Reached!");
