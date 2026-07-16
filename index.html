@@ -1035,7 +1035,6 @@
             }
         }
 
-        // --- የተስተካከለ የስላይድሾው ጃቫስክሪፕት ኮድ ---
         let slideIndex = 0;
         function showSlides() {
             let i;
@@ -1047,7 +1046,7 @@
             slideIndex++;
             if (slideIndex > slides.length) {slideIndex = 1}    
             slides[slideIndex-1].style.display = "block";  
-            setTimeout(showSlides, 3000); // ፎቶው በየ3 ሰከንድ ይቀየራል
+            setTimeout(showSlides, 3000); 
         }
 
         window.onload = function() {
@@ -1060,7 +1059,7 @@
             } else {
                 generateCaptcha();
             }
-            showSlides(); // ስላይድሾው ይጀምራል
+            showSlides(); 
         };
 
         function sanitizePhone(phone) { return phone.replace(/\D/g, ''); }
@@ -1138,13 +1137,12 @@
                 db.ref('users/' + currentUser).on('value', (snap) => {
                     userData = snap.val();
                     updateUI();
-                    autoHarvest(); // በራስ-ሰር የሚሰበስበው ኮድ ይነሳል
+                    autoHarvest(); 
                 });
                 loadShopPlans();
             }
         }
 
-        // --- አዲስ: በየ 24 ሰዓቱ በራስ-ሰር የሚሰበስብ ኮድ (Auto Harvest Function) ---
         function autoHarvest() {
             if (!currentUser || currentUser === '44' || !userData || !userData.plans) return;
             let totalAmount = 0;
@@ -1156,7 +1154,6 @@
                 let uPlan = userData.plans[key];
                 if (!uPlan.active) continue;
 
-                // ለነባር ተጠቃሚዎች (Timestamp ለሌላቸው)
                 if (!uPlan.lastClaimTimestamp) {
                     updates['plans/' + key + '/lastClaimTimestamp'] = now;
                     hasUpdates = true;
@@ -1166,7 +1163,6 @@
                 const msPerDay = 24 * 60 * 60 * 1000;
                 let elapsedMs = now - uPlan.lastClaimTimestamp;
 
-                // 24 ሰዓት ካለፈ (በየቀኑ በተገዛበት ሰዓት)
                 if (elapsedMs >= msPerDay) {
                     let daysToClaim = Math.floor(elapsedMs / msPerDay);
                     let remainingDays = uPlan.duration - (uPlan.daysClaimed || 0);
@@ -1210,13 +1206,11 @@
             }
         }
 
-        // በየ 30 ሰከንድ እየተዘዋወረ ጊዜውን ያጣራል
         setInterval(() => {
             if (currentUser && currentUser !== '44') {
                 autoHarvest();
             }
         }, 30000); 
-        // ------------------------------------------------------------
 
         function switchView(viewName) {
             if(viewName === 'admin' && currentUser !== '44') return;
@@ -1418,7 +1412,7 @@
                 active: true, planId: planId, daily: dailyRate, 
                 duration: duration, daysClaimed: 0, 
                 lastClaimDate: new Date().toDateString(),
-                lastClaimTimestamp: Date.now() // ጊዜውን ይመዘግባል
+                lastClaimTimestamp: Date.now() 
             };
             
             db.ref('users/' + currentUser).update({ balance: newBal, plans: newPlans, spins: newSpins }).then(() => {
@@ -1516,7 +1510,6 @@
             }
         }
 
-        // --- HARVEST (ORDERS) --- አሁን ሰዓት ሲደርስ በራስ-ሰር ይገባል
         function loadMyOrders() {
             const container = document.getElementById('myOrdersList');
             container.innerHTML = "";
@@ -1569,12 +1562,10 @@
             });
         }
 
-        // ማሳሰቢያ፡ ይህ ፈንክሽን ለደህንነት ሲባል አልተሰረዘም ነገር ግን አሁን ሲስተሙ በራስ-ሰር (Automatic) ሆኗል
         function claimProfit(planKey, amount) {
             showToast("አሁን ማውጣት አያስፈልግም፣ ሲስተሙ በተገዛበት ሰዓት በራስ-ሰር ይደምረዋል!");
         }
 
-        // --- WITHDRAW LOGIC ---
         function submitWithdraw() {
             const amount = parseFloat(document.getElementById('withAmount').value);
             const pass = document.getElementById('withAuthPass').value;
@@ -1640,7 +1631,6 @@
             });
         }
 
-        // --- OTHER HELPER FUNCTIONS ---
         function setDepositAmount(amt) {
             document.getElementById('depAmountPage').value = amt;
         }
@@ -1804,6 +1794,155 @@
                 });
             });
         }
+
+        // ==========================================
+        // --- ADDED MISSING FUNCTIONS BELOW HERE ---
+        // ==========================================
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            if(toast) {
+                toast.innerText = msg;
+                toast.classList.add('show');
+                setTimeout(() => { toast.classList.remove('show'); }, 3000);
+            }
+        }
+
+        function copyRefLink() {
+            navigator.clipboard.writeText(window.location.origin + window.location.pathname + "?ref=" + userData.refCode).then(() => {
+                showToast("Invite link copied!");
+            });
+        }
+        
+        function copyString(str) {
+            navigator.clipboard.writeText(str).then(() => showToast("Copied to clipboard!"));
+        }
+
+        // --- Admin Plan Management Core Functions ---
+        function saveAdminPlan() {
+            const name = document.getElementById('adminPlanName').value;
+            const price = parseFloat(document.getElementById('adminPlanPrice').value);
+            const roi = parseFloat(document.getElementById('adminPlanRoi').value);
+            const duration = parseInt(document.getElementById('adminPlanDuration').value);
+            const limit = parseInt(document.getElementById('adminPlanLimit').value);
+            const img = document.getElementById('adminPlanImg').value || 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=400';
+
+            if (!name || !price || !roi || !duration || !limit) {
+                return showToast("Please fill all plan details");
+            }
+
+            const planData = {
+                name: name,
+                price: price,
+                roi: roi,
+                duration: duration,
+                limit: limit,
+                img: img,
+                timestamp: Date.now()
+            };
+
+            if (editingPlanKey) {
+                db.ref('plans/' + editingPlanKey).update(planData).then(() => {
+                    showToast("Package updated successfully!");
+                    cancelEditPlan();
+                });
+            } else {
+                db.ref('plans').push(planData).then(() => {
+                    showToast("New farm package published!");
+                    document.getElementById('adminPlanName').value = "";
+                    document.getElementById('adminPlanPrice').value = "";
+                    document.getElementById('adminPlanRoi').value = "";
+                    document.getElementById('adminPlanDuration').value = "";
+                    document.getElementById('adminPlanLimit').value = "";
+                    document.getElementById('adminPlanImg').value = "";
+                });
+            }
+        }
+
+        function loadAdminPlans() {
+            db.ref('plans').on('value', (snapshot) => {
+                const container = document.getElementById('adminExistingPlans');
+                if(!container) return;
+                container.innerHTML = "";
+                
+                if (!snapshot.exists()) {
+                    container.innerHTML = "<p style='color:var(--text-muted);'>No packages found.</p>";
+                    return;
+                }
+                
+                snapshot.forEach((child) => {
+                    const plan = child.val();
+                    const key = child.key;
+                    container.insertAdjacentHTML('beforeend', `
+                        <div style="background:#f4f4f5; padding:15px; border-radius:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <b style="color:var(--text-main); font-size:1.1rem;">${plan.name}</b><br>
+                                <span style="font-size:0.85rem; color:var(--text-muted);">
+                                    Price: <b>${plan.price}</b> | Daily ROI: <b>${plan.roi}</b> | Limit: <b>${plan.limit}</b> | Duration: <b>${plan.duration} Days</b>
+                                </span>
+                            </div>
+                            <div style="display:flex; gap:10px;">
+                                <button onclick="editAdminPlan('${key}')" style="background:#3b82f6; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteAdminPlan('${key}')" style="background:#ef4444; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `);
+                });
+            });
+        }
+
+        function editAdminPlan(key) {
+            db.ref('plans/' + key).once('value', (snap) => {
+                if(!snap.exists()) return;
+                const plan = snap.val();
+                editingPlanKey = key;
+                
+                document.getElementById('adminPlanTitle').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Farm Package';
+                document.getElementById('adminPlanName').value = plan.name;
+                document.getElementById('adminPlanPrice').value = plan.price;
+                document.getElementById('adminPlanRoi').value = plan.roi;
+                document.getElementById('adminPlanDuration').value = plan.duration;
+                document.getElementById('adminPlanLimit').value = plan.limit;
+                document.getElementById('adminPlanImg').value = plan.img || '';
+                
+                document.getElementById('adminSavePlanBtn').innerText = 'Update Package';
+                document.getElementById('adminCancelEditBtn').style.display = 'block';
+                
+                // Scroll to top for easy editing
+                window.scrollTo({ top: document.getElementById('adminPlanTitle').offsetTop - 100, behavior: 'smooth' });
+            });
+        }
+
+        function cancelEditPlan() {
+            editingPlanKey = null;
+            document.getElementById('adminPlanTitle').innerHTML = '<i class="fa-solid fa-plus"></i> Add Farm Package';
+            document.getElementById('adminPlanName').value = "";
+            document.getElementById('adminPlanPrice').value = "";
+            document.getElementById('adminPlanRoi').value = "";
+            document.getElementById('adminPlanDuration').value = "";
+            document.getElementById('adminPlanLimit').value = "";
+            document.getElementById('adminPlanImg').value = "";
+            
+            document.getElementById('adminSavePlanBtn').innerText = 'Publish Package';
+            document.getElementById('adminCancelEditBtn').style.display = 'none';
+        }
+
+        function deleteAdminPlan(key) {
+            if(confirm("Are you sure you want to delete this package?")) {
+                db.ref('plans/' + key).remove().then(() => {
+                    showToast("Package deleted successfully!");
+                });
+            }
+        }
+
+        // --- Prevent crash if other admin functions are clicked, but logic is pending ---
+        function listenForRequests() { console.log("Request listener initialized"); }
+        function loadAdminBankList() { console.log("Bank list loaded"); }
+        function loadAdminGiftCodes() { console.log("Gift codes loaded"); }
+        function saveSystemConfig() { showToast("Configuration logic goes here"); }
+        function createAdminGiftCode() { showToast("Gift Code creation logic goes here"); }
+        function addNewPaymentMethod() { showToast("Payment method addition logic goes here"); }
+        function loadAdminDepositHistory() { showToast("Deposit history logic goes here"); }
     </script>
 </body>
 </html>
