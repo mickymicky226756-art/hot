@@ -36,7 +36,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
         body {
-            /* Beautiful Orchard/Farm Background */
             background: url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1080&q=80') no-repeat center center fixed;
             background-size: cover;
             color: var(--text-main);
@@ -45,7 +44,6 @@
             overflow-x: hidden;
         }
 
-        /* Dark Overlay to make content pop */
         body::before {
             content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(135deg, rgba(250,250,249,0.85) 0%, rgba(255,237,213,0.95) 100%);
@@ -101,9 +99,7 @@
             transition: 0.3s;
         }
         
-        .info-btn:active {
-            transform: scale(0.95);
-        }
+        .info-btn:active { transform: scale(0.95); }
 
         .download-btn {
             background: var(--primary-color);
@@ -122,25 +118,8 @@
             transition: 0.3s;
         }
         
-        .download-btn:active {
-            transform: scale(0.95);
-        }
+        .download-btn:active { transform: scale(0.95); }
         
-        .user-pill {
-            background: white;
-            color: var(--primary-dark);
-            padding: 8px 16px;
-            border-radius: var(--radius-pill);
-            font-size: 0.9rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: var(--shadow-soft);
-            cursor: pointer;
-            border: 2px solid var(--primary-light);
-        }
-
         /* --- Views --- */
         .view-section { display: none; padding-top: 80px; }
         .view-section.active-view { display: block; }
@@ -169,10 +148,7 @@
         .action-circle span { font-size: 0.75rem; font-weight: 600; color: var(--text-main); }
 
         /* --- Page Layouts --- */
-        .page-header {
-            text-align: center; padding: 20px 20px 40px;
-            position: relative;
-        }
+        .page-header { text-align: center; padding: 20px 20px 40px; position: relative; }
         .page-header h2 { font-size: 1.8rem; color: var(--primary-dark); font-weight: 800; }
         .page-header p { color: var(--text-muted); font-size: 0.9rem; }
         
@@ -258,32 +234,15 @@
 
         /* --- Floating Customer Service Button --- */
         .floating-cs-btn {
-            position: fixed;
-            bottom: 100px; 
-            right: 20px;
-            background: var(--primary-color);
-            color: white;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
-            cursor: pointer;
-            z-index: 1500;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: fixed; bottom: 100px; right: 20px;
+            background: var(--primary-color); color: white; width: 55px; height: 55px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+            cursor: pointer; z-index: 1500; transition: transform 0.3s ease, box-shadow 0.3s ease;
             animation: floatAnimation 3s ease-in-out infinite;
         }
-        .floating-cs-btn:active {
-            transform: scale(0.90);
-        }
-        @keyframes floatAnimation {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-            100% { transform: translateY(0); }
-        }
+        .floating-cs-btn:active { transform: scale(0.90); }
+        @keyframes floatAnimation { 0% { transform: translateY(0); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
 
         /* --- Modals (General) --- */
         .modal { 
@@ -303,54 +262,30 @@
             background: url('https://th.bing.com/th/id/OIP.kpoPdCdMgV8Gih6OyfYLSwHaE7?w=259&h=180&c=7&r=0&o=7&pid=1.7&rm=3') center/cover fixed; 
             display: flex; align-items: center; justify-content: center; 
         }
-        #authModal::before { 
-            content: ''; position: absolute; top:0; left:0; width:100%; height:100%; 
-            background: rgba(0,0,0,0.4); 
-        }
+        #authModal::before { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.4); }
         #authModal .modal-content { 
-            position: relative;
-            width: 100%; 
-            max-width: 100%; 
-            height: auto;
+            position: relative; width: 100%; max-width: 100%; height: auto;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            background: transparent; 
-            border: none; 
-            box-shadow: none; 
-            padding: 40px 15px; 
-            box-sizing: border-box;
-            color: white;
+            background: transparent; border: none; box-shadow: none; padding: 40px 15px; box-sizing: border-box; color: white;
         }
         #loginForm, #signupForm { width: 100%; max-width: 100%; text-align: center; }
-        .auth-logo { width: 85px; margin-bottom: 15px; }
 
         .phone-group, #authModal .input-group input { 
-            background: rgba(255, 255, 255, 0.85); 
-            border: 2px solid transparent;
-            border-radius: 16px; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.85); border: 2px solid transparent;
+            border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
         .phone-group { display: flex; align-items: center; padding: 0 15px; margin-bottom: 15px; }
-        
         .phone-group:focus-within, #authModal .input-group input:focus { 
-            border-color: var(--primary-color); 
-            background: white; 
-            transform: translateY(-4px);
+            border-color: var(--primary-color); background: white; transform: translateY(-4px);
             box-shadow: 0 15px 25px rgba(249, 115, 22, 0.2);
         }
-        
         .phone-group span { font-weight: bold; color: var(--text-main); border-right: 2px solid #e4e4e7; padding-right: 10px; margin-right: 10px; }
         .phone-group input { background: transparent; border: none; padding: 16px 0; text-align: left; }
         .phone-group input:focus { box-shadow: none; transform: none; background: transparent; }
         
-        #authModal .btn-full {
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        #authModal .btn-full:active {
-            transform: scale(0.95);
-        }
+        #authModal .btn-full { border-radius: 16px; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        #authModal .btn-full:active { transform: scale(0.95); }
 
         /* --- Admin --- */
         .admin-box { background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow-soft); border: 1px solid #eee; }
@@ -369,40 +304,14 @@
         .wheel { width: 100%; height: 100%; border-radius: 50%; border: 4px solid white; box-shadow: var(--shadow-float); overflow: hidden; position: relative; }
         .wheel-inner { width: 100%; height: 100%; border-radius: 50%; background: conic-gradient( #f97316 0deg 60deg, #3b82f6 60deg 120deg, #16a34a 120deg 180deg, #8b5cf6 180deg 240deg, #ec4899 240deg 300deg, #eab308 300deg 360deg ); position: relative; transition: transform 4s cubic-bezier(0.17, 0.67, 0.1, 1); }
         .wheel-item { position: absolute; width: 100%; height: 100%; text-align: center; color: white; font-weight: 800; font-size: 0.85rem; padding-top: 15px; box-sizing: border-box; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); transform-origin: center; }
-        .item-1 { transform: rotate(30deg); }
-        .item-2 { transform: rotate(90deg); }
-        .item-3 { transform: rotate(150deg); }
-        .item-4 { transform: rotate(210deg); }
-        .item-5 { transform: rotate(270deg); }
-        .item-6 { transform: rotate(330deg); }
+        .item-1 { transform: rotate(30deg); } .item-2 { transform: rotate(90deg); } .item-3 { transform: rotate(150deg); } .item-4 { transform: rotate(210deg); } .item-5 { transform: rotate(270deg); } .item-6 { transform: rotate(330deg); }
 
         /* --- Slideshow Styles --- */
-        .slideshow-container {
-            position: relative;
-            margin: 0 20px 25px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow-float);
-            height: 180px;
-        }
-        .mySlides {
-            display: none;
-            height: 100%;
-        }
-        .mySlides img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .fade {
-            animation-name: slideFade;
-            animation-duration: 1.5s;
-        }
-        @keyframes slideFade {
-            from {opacity: .4} 
-            to {opacity: 1}
-        }
-
+        .slideshow-container { position: relative; margin: 0 20px 25px; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-float); height: 180px; }
+        .mySlides { display: none; height: 100%; }
+        .mySlides img { width: 100%; height: 100%; object-fit: cover; }
+        .fade { animation-name: slideFade; animation-duration: 1.5s; }
+        @keyframes slideFade { from {opacity: .4} to {opacity: 1} }
     </style>
 </head>
 <body>
@@ -431,10 +340,8 @@
                     <span>+251</span>
                     <input type="tel" id="regPhone" placeholder="9xxxxxxxx" maxlength="9">
                 </div>
-                
                 <div class="input-group"><input type="password" id="regPass" placeholder="Create Password"></div>
                 <div class="input-group"><input type="password" id="regPassConfirm" placeholder="Confirm Password"></div>
-                
                 <div class="input-group"><input type="text" id="regRef" placeholder="Invite Code (Optional)"></div>
 
                 <button class="btn-full" onclick="signup()">Start Farming</button>
@@ -460,64 +367,32 @@
         <header>
             <div class="logo"><i class="fa-solid fa-leaf"></i> Hot</div>
             <div class="header-actions">
-                <a href="#" class="info-btn" onclick="switchView('info')">
-                    <i class="fa-solid fa-circle-info"></i> Info
-                </a>
-                <a href="hot.apk" download class="download-btn">
-                    <i class="fa-solid fa-download"></i> App
-                </a>
+                <a href="#" class="info-btn" onclick="switchView('info')"><i class="fa-solid fa-circle-info"></i> Info</a>
+                <a href="hot.apk" download class="download-btn"><i class="fa-solid fa-download"></i> App</a>
             </div>
         </header>
 
         <section id="view-home" class="view-section active-view animate-up">
-            
             <div style="display: none;">
                 <span id="displayBalance">0.00</span>
                 <span id="displayIncome">0.00</span>
             </div>
 
             <div class="slideshow-container">
-                <div class="mySlides fade">
-                    <img src="https://img.freepik.com/premium-photo/portrait-happy-male-farmer-harvest-orange-fruits-orange-tree-field_8595-20080.jpg" alt="Farm 1">
-                </div>
-                <div class="mySlides fade">
-                    <img src="https://static.vecteezy.com/system/resources/thumbnails/045/372/893/small_2x/farmer-holding-tropical-fruits-photo.jpg" alt="Farm 2">
-                </div>
-                <div class="mySlides fade">
-                    <img src="https://thumbs.dreamstime.com/b/successful-peruvian-female-farmer-harvesting-ripe-peaches-fruit-garden-sunny-summer-day-peruvian-female-farmer-harvesting-271797535.jpg" alt="Farm 3">
-                </div>
-                <div class="mySlides fade">
-                    <img src="https://img.freepik.com/premium-photo/cheerful-farmer-harvesting-juicy-nutritious-organic-fruit-season-eat-happy-woman-from-holding-basket-freshly-picked-apples-from-tree-sustainable-orchard-farm-outside-sunny-day_590464-73717.jpg?w=1060" alt="Farm 4">
-                </div>
-                <div class="mySlides fade">
-                    <img src="https://img.freepik.com/premium-photo/farmer-picking-fresh-fruits-vegetables-from-field-farmer-is-smiling_73899-34232.jpg" alt="Farm 5">
-                </div>
+                <div class="mySlides fade"><img src="https://img.freepik.com/premium-photo/portrait-happy-male-farmer-harvest-orange-fruits-orange-tree-field_8595-20080.jpg" alt="Farm 1"></div>
+                <div class="mySlides fade"><img src="https://static.vecteezy.com/system/resources/thumbnails/045/372/893/small_2x/farmer-holding-tropical-fruits-photo.jpg" alt="Farm 2"></div>
+                <div class="mySlides fade"><img src="https://thumbs.dreamstime.com/b/successful-peruvian-female-farmer-harvesting-ripe-peaches-fruit-garden-sunny-summer-day-peruvian-female-farmer-harvesting-271797535.jpg" alt="Farm 3"></div>
+                <div class="mySlides fade"><img src="https://img.freepik.com/premium-photo/cheerful-farmer-harvesting-juicy-nutritious-organic-fruit-season-eat-happy-woman-from-holding-basket-freshly-picked-apples-from-tree-sustainable-orchard-farm-outside-sunny-day_590464-73717.jpg?w=1060" alt="Farm 4"></div>
             </div>
 
             <div class="quick-actions">
-                <div class="action-circle" onclick="switchView('deposit')">
+                <div class="action-circle" onclick="switchView('deposit')" style="width: 45%;">
                     <div class="icon-box"><i class="fa-solid fa-wallet"></i></div>
                     <span data-lang="deposit">recharge</span>
                 </div>
-                <div class="action-circle" onclick="switchView('withdraw')">
+                <div class="action-circle" onclick="switchView('withdraw')" style="width: 45%;">
                     <div class="icon-box" style="color: #3b82f6;"><i class="fa-solid fa-money-bill-transfer"></i></div>
                     <span data-lang="withdraw">Withdraw</span>
-                </div>
-                <div class="action-circle" onclick="switchView('gift')">
-                    <div class="icon-box" style="color: #ec4899;"><i class="fa-solid fa-gift"></i></div>
-                    <span data-lang="gift">Gift</span>
-                </div>
-                <div class="action-circle" onclick="switchView('luckydraw')">
-                    <div class="icon-box" style="color: #8b5cf6;"><i class="fa-solid fa-dharmachakra"></i></div>
-                    <span data-lang="lucky">Lucky Draw</span>
-                </div>
-                <div class="action-circle" onclick="switchView('support')">
-                    <div class="icon-box" style="color: #06b6d4;"><i class="fa-brands fa-telegram"></i></div>
-                    <span data-lang="service">Support</span>
-                </div>
-                <div class="action-circle" onclick="switchView('invite')">
-                    <div class="icon-box" style="color: #eab308;"><i class="fa-solid fa-users"></i></div>
-                    <span data-lang="invite">Invite</span>
                 </div>
             </div>
 
@@ -526,9 +401,7 @@
                     <h3 style="color:var(--text-main); font-weight:700; font-size:1.2rem;" data-lang="navShop">Available Farms</h3>
                     <span style="color:var(--primary-color); font-size:0.85rem; font-weight:600; cursor:pointer;" onclick="switchView('shop')">See All <i class="fa-solid fa-arrow-right" style="margin-left: 3px;"></i></span>
                 </div>
-                <div class="farm-grid" id="homePlanList">
-                    <p style="text-align:center; color:var(--text-muted);">Loading packages...</p>
-                </div>
+                <div class="farm-grid" id="homePlanList"><p style="text-align:center; color:var(--text-muted);">Loading packages...</p></div>
             </div>
         </section>
 
@@ -539,16 +412,10 @@
                 <p>Learn more about our platform.</p>
             </div>
             <div class="content-box">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <i class="fa-solid fa-leaf" style="font-size: 4rem; color: var(--accent-green);"></i>
-                </div>
+                <div style="text-align: center; margin-bottom: 20px;"><i class="fa-solid fa-leaf" style="font-size: 4rem; color: var(--accent-green);"></i></div>
                 <div style="background: #fff; padding: 25px 20px; border-radius: 20px; box-shadow: var(--shadow-soft); line-height: 1.8;">
                     <h3 style="color: var(--primary-dark); margin-bottom: 15px; font-weight: 800; font-size: 1.3rem; text-align: center;">እንኳን ወደ Hot Fruit Farming በደህና መጡ!</h3>
-                    
-                    <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 15px;">
-                        <strong>Hot Fruit Farming</strong> ዘመናዊ እና ትርፋማ የሆነ የፍራፍሬ እርሻ ኢንቨስትመንት መድረክ ነው! አላማችን ማንኛውም ሰው በትንሽ ካፒታል በመጀመር፣ በአጭር ጊዜ ውስጥ አስተማማኝ እና የተረጋጋ ትርፍ የሚያገኝበትን መንገድ ማመቻቸት ነው።
-                    </p>
-                    
+                    <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 15px;"><strong>Hot Fruit Farming</strong> ዘመናዊ እና ትርፋማ የሆነ የፍራፍሬ እርሻ ኢንቨስትመንት መድረክ ነው! አላማችን ማንኛውም ሰው በትንሽ ካፒታል በመጀመር፣ በአጭር ጊዜ ውስጥ አስተማማኝ እና የተረጋጋ ትርፍ የሚያገኝበትን መንገድ ማመቻቸት ነው።</p>
                     <p style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 15px;">
                         <strong style="font-size: 1.1rem; color: var(--primary-color);">ለምን እኛን መረጡ?</strong><br>
                         <i class="fa-solid fa-check" style="color: var(--accent-green); margin-right: 5px;"></i> <b>አስተማማኝ ትርፍ፡</b> የእርስዎ ኢንቨስትመንት በቀጥታ ትርፋማ በሆኑ የፍራፍሬ እርሻዎች ላይ ስለሚውል በየቀኑ ገቢ ያገኛሉ።<br>
@@ -556,11 +423,8 @@
                         <i class="fa-solid fa-check" style="color: var(--accent-green); margin-right: 5px;"></i> <b>ፈጣን ክፍያ (Withdrawal)፡</b> ያገኙትን ትርፍ ያለምንም መዘግየት ወዲያውኑ ወደ ባንክዎ ማውጣት ይችላሉ።<br>
                         <i class="fa-solid fa-check" style="color: var(--accent-green); margin-right: 5px;"></i> <b>የጉርሻ ሲስተም፡</b> ጓደኞችዎን ሲጋብዙ እና እርሻ ሲገዙ ተጨማሪ የኮሚሽን እና የ Lucky Draw (የእጣ) ማዞሪያ ያገኛሉ።
                     </p>
-
                     <div style="background: var(--accent-green-light); padding: 15px; border-radius: 12px; text-align: center; margin-top: 20px;">
-                        <p style="font-size: 0.95rem; font-weight: bold; color: var(--accent-green); margin: 0;">
-                            አሁኑኑ ኢንቨስት በማድረግ የፋይናንስ ነፃነትዎን ያረጋግጡ፤ አብረን እናድጋለን!
-                        </p>
+                        <p style="font-size: 0.95rem; font-weight: bold; color: var(--accent-green); margin: 0;">አሁኑኑ ኢንቨስት በማድረግ የፋይናንስ ነፃነትዎን ያረጋግጡ፤ አብረን እናድጋለን!</p>
                     </div>
                 </div>
             </div>
@@ -577,7 +441,6 @@
                     <div style="font-size: 1.2rem; font-weight: 800; color: var(--primary-dark); margin-bottom: 25px;">
                         Available Spins: <span id="spinCountDisplay" style="background:var(--primary-color); color:white; padding: 5px 15px; border-radius:12px; font-size: 1.5rem; margin-left: 10px;">0</span>
                     </div>
-
                     <div class="wheel-wrapper">
                         <i class="fa-solid fa-location-arrow wheel-pointer"></i>
                         <div class="wheel">
@@ -591,9 +454,7 @@
                             </div>
                         </div>
                     </div>
-
                     <button class="btn-full" style="background:#8b5cf6; margin-top:30px; box-shadow:0 8px 20px rgba(139, 92, 246, 0.3);" onclick="spinWheel()">Spin Now</button>
-                    
                     <div style="background:#fff7ed; border:1px solid #ffedd5; color:#c2410c; padding:15px; border-radius:16px; font-size:0.85rem; font-weight:600; margin-top:25px; line-height: 1.6; text-align: left;">
                         <h4 style="margin-bottom:8px; color:var(--primary-dark);"><i class="fa-solid fa-circle-question"></i> How to get more spins?</h4>
                         <ul style="padding-left: 15px; color: var(--text-main);">
@@ -608,7 +469,7 @@
 
         <section id="view-gift" class="view-section animate-up">
             <div class="page-header">
-                <button class="back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+                <button class="back-btn" onclick="switchView('profile')"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2>Gift Code</h2>
                 <p>Redeem your special gift code here.</p>
             </div>
@@ -634,34 +495,27 @@
             <div class="content-box">
                 <div id="depositStep1">
                     <h4 style="margin-bottom:15px; color:var(--text-main);">Step 1: Enter Deposit Amount</h4>
-                    
                     <div class="input-group" style="margin-top:20px; margin-bottom: 10px;">
-                        <label>Amount to Send (Min: 1000 ETB)</label>
+                        <label id="depMinLabel">Amount to Send (Min: 1200 ETB)</label>
                         <input type="number" id="depAmountPage" placeholder="Enter Amount">
                     </div>
-
                     <div class="quick-amounts">
-                        <button class="amt-btn" onclick="setDepositAmount(1000)">1000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(1200)">1200</button>
                         <button class="amt-btn" onclick="setDepositAmount(3000)">3000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(5000)">6000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(7000)">11000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(9000)">18000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(11000)">30000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(13000)">75000</button>
-                        <button class="amt-btn" onclick="setDepositAmount(15000)">115000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(6000)">6000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(10000)">10000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(25000)">25000</button>
+                        <button class="amt-btn" onclick="setDepositAmount(40000)">40000</button>
                     </div>
-
                     <button class="btn-full" onclick="nextDepositStep()">Next Step <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
 
                 <div id="depositStep2" style="display:none;">
                     <h4 style="margin-bottom:15px; color:var(--text-muted);">Step 2: Select Bank & Transfer</h4>
                     <div id="allBankCardsContainer">Loading banks...</div>
-
                     <div style="background:var(--accent-green-light); color:var(--accent-green); padding:15px; border-radius:16px; margin-bottom:20px; font-weight:600; font-size:0.9rem; margin-top: 20px;">
                         <i class="fa-solid fa-shield-check"></i> After transferring the exact amount, submit your details below.
                     </div>
-                    
                     <div class="input-group">
                         <label>Sender Full Name</label>
                         <input type="text" id="depSenderName" placeholder="As written on bank">
@@ -670,7 +524,6 @@
                         <label>Transaction Ref / ID</label>
                         <input type="text" id="depTransIdPage" placeholder="Enter reference code">
                     </div>
-                    
                     <button class="btn-full" onclick="submitDepositFromPage()">Confirm Payment</button>
                     <button style="width:100%; background:none; border:none; color:var(--text-muted); font-weight:bold; margin-top:15px; cursor:pointer;" onclick="prevDepositStep()">Back</button>
                 </div>
@@ -689,8 +542,10 @@
                     <h2 style="font-size:2.5rem; color:var(--primary-dark); font-weight:800;">ETB <span id="withDisplayBal">0.00</span></h2>
                 </div>
 
-                <div style="background:#fff7ed; border:1px solid #ffedd5; color:#c2410c; padding:12px; border-radius:12px; font-size:0.85rem; font-weight:600; margin-bottom:20px;">
-                    <i class="fa-solid fa-circle-info"></i> Fee: 18% | Min Withdraw: 250 ETB
+                <div id="withFeeInfo" style="background:#fff7ed; border:1px solid #ffedd5; color:#c2410c; padding:12px; border-radius:12px; font-size:0.85rem; font-weight:600; margin-bottom:20px;">
+                    <i class="fa-solid fa-circle-info"></i> Fee: 20% | Min Withdraw: 500 ETB<br>
+                    <i class="fa-solid fa-clock" style="margin-top:5px;"></i> ማውጣት የሚቻለው፡ ከጧት 4:00 እስከ ከሰዓት 10:00 (10:00 AM - 4:00 PM)<br>
+                    <i class="fa-solid fa-rotate-left" style="margin-top:5px;"></i> በቀን 2 ጊዜ ብቻ (Max 2 withdrawals per day)
                 </div>
 
                 <div id="withdrawInputs">
@@ -715,20 +570,14 @@
 
         <section id="view-support" class="view-section animate-up">
             <div class="page-header">
-                <button class="back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+                <button class="back-btn" onclick="switchView('profile')"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2>Support Center</h2>
                 <p>Choose an option below to connect with us.</p>
             </div>
             <div class="content-box" style="text-align: center;">
-                <button class="btn-full" style="background: #0088cc; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/hotfruitfarming', '_blank')">
-                    <i class="fa-brands fa-telegram" style="font-size: 1.2rem;"></i> Telegram Channel
-                </button>
-                <button class="btn-full" style="background: #0088cc; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/HotFruitFarm', '_blank')">
-                    <i class="fa-solid fa-users" style="font-size: 1.2rem;"></i> Telegram Group
-                </button>
-                <button class="btn-full" style="background: var(--primary-color); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/Shalu42', '_blank')">
-                    <i class="fa-solid fa-headset" style="font-size: 1.2rem;"></i> Customer Service
-                </button>
+                <button class="btn-full" style="background: #0088cc; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/hotfruitfarming', '_blank')"><i class="fa-brands fa-telegram" style="font-size: 1.2rem;"></i> Telegram Channel</button>
+                <button class="btn-full" style="background: #0088cc; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/HotFruitFarm', '_blank')"><i class="fa-solid fa-users" style="font-size: 1.2rem;"></i> Telegram Group</button>
+                <button class="btn-full" style="background: var(--primary-color); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;" onclick="window.open('https://t.me/Shalu42', '_blank')"><i class="fa-solid fa-headset" style="font-size: 1.2rem;"></i> Customer Service</button>
             </div>
         </section>
 
@@ -738,24 +587,20 @@
                 <p>Invest in farms and earn daily.</p>
             </div>
             <div class="content-box" style="background: transparent; box-shadow:none; padding-top:0;">
-                <div class="farm-grid" id="shopPlanList">
-                    <p style="text-align:center; color:var(--text-muted);">Loading packages...</p>
-                </div>
+                <div class="farm-grid" id="shopPlanList"><p style="text-align:center; color:var(--text-muted);">Loading packages...</p></div>
             </div>
         </section>
 
         <section id="view-orders" class="view-section animate-up">
             <div class="page-header">
                 <h2>My Harvest</h2>
-                <p>Collect your daily profits here.</p>
+                <p>see your daily profits here.</p>
             </div>
             <div class="content-box">
                 <div style="background:#fffbeb; border:1px solid #fef3c7; color:#d97706; padding:12px; border-radius:12px; font-size:0.85rem; font-weight:600; margin-bottom:20px; text-align:center;">
-                    <i class="fa-solid fa-clock"></i> ማሳሰቢያ፡ ምርት መሰብሰቢያ ሰዓት ከጧት 12:00 እስከ ሌሊቱ 6:00 (6:00 AM - 12:00 AM) ብቻ ነው
+                    <i class="fa-solid fa-clock"></i> it is automatically harvested every day
                 </div>
-                <div id="myOrdersList">
-                    <p style="text-align:center; color:var(--text-muted);">Loading active farms...</p>
-                </div>
+                <div id="myOrdersList"><p style="text-align:center; color:var(--text-muted);">Loading active farms...</p></div>
             </div>
         </section>
 
@@ -809,6 +654,18 @@
                         <span style="font-weight:600;"><i class="fa-solid fa-seedling" style="width:25px; color:var(--accent-green);"></i> My Farms</span>
                         <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
                     </div>
+                    <div style="padding:18px 20px; border-bottom:1px solid #f4f4f5; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="switchView('gift')">
+                        <span style="font-weight:600;"><i class="fa-solid fa-gift" style="width:25px; color:#ec4899;"></i> Gift Code</span>
+                        <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
+                    </div>
+                    <div style="padding:18px 20px; border-bottom:1px solid #f4f4f5; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="switchView('support')">
+                        <span style="font-weight:600;"><i class="fa-brands fa-telegram" style="width:25px; color:#06b6d4;"></i> Support Center</span>
+                        <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
+                    </div>
+                    <div style="padding:18px 20px; border-bottom:1px solid #f4f4f5; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="switchView('invite')">
+                        <span style="font-weight:600;"><i class="fa-solid fa-users" style="width:25px; color:#eab308;"></i> Invite Friends</span>
+                        <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
+                    </div>
                     <div style="padding:18px 20px; border-bottom:1px solid #f4f4f5; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="switchView('changepass')">
                         <span style="font-weight:600;"><i class="fa-solid fa-lock" style="width:25px; color:#f59e0b;"></i> Change Password</span>
                         <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
@@ -831,14 +688,8 @@
                 <p>Secure your account.</p>
             </div>
             <div class="content-box">
-                <div class="input-group">
-                    <label>Current Password</label>
-                    <input type="password" id="cpOldPass" placeholder="Enter your old password">
-                </div>
-                <div class="input-group">
-                    <label>New Password</label>
-                    <input type="password" id="cpNewPass" placeholder="Enter new password">
-                </div>
+                <div class="input-group"><label>Current Password</label><input type="password" id="cpOldPass" placeholder="Enter your old password"></div>
+                <div class="input-group"><label>New Password</label><input type="password" id="cpNewPass" placeholder="Enter new password"></div>
                 <button class="btn-full" onclick="changeAccountPassword()">Update Password</button>
             </div>
         </section>
@@ -855,7 +706,6 @@
                     <div id="tab-wit" onclick="showTxnTab('wit')" style="font-weight:bold; color:var(--text-muted); cursor:pointer; padding-bottom:5px; transition:0.3s;">Withdraw</div>
                     <div id="tab-inc" onclick="showTxnTab('inc')" style="font-weight:bold; color:var(--text-muted); cursor:pointer; padding-bottom:5px; transition:0.3s;">Income</div>
                 </div>
-                
                 <div id="txn-dep-list">Loading deposits...</div>
                 <div id="txn-wit-list" style="display:none;">Loading withdrawals...</div>
                 <div id="txn-inc-list" style="display:none;">Loading income...</div>
@@ -869,89 +719,81 @@
                 <p>Secure your withdrawal method.</p>
             </div>
             <div class="content-box">
-                <div class="input-group">
-                    <label>Bank Name (e.g. CBE, Telebirr)</label>
-                    <input type="text" id="bindBankName" placeholder="Bank Name">
-                </div>
-                <div class="input-group">
-                    <label>Account Holder Name</label>
-                    <input type="text" id="bindAccName" placeholder="Full Name">
-                </div>
-                <div class="input-group">
-                    <label>Account Number</label>
-                    <input type="number" id="bindAccNum" placeholder="Account Number">
-                </div>
-                <div class="input-group" style="margin-top:25px;">
-                    <label style="color:var(--primary-color);">Set Withdrawal Password</label>
-                    <input type="password" id="bindWithPass" placeholder="Create a secure code">
-                </div>
-                <div class="input-group" style="margin-top:15px;">
-                    <label style="color:var(--primary-color);">Admin Verification Code</label>
-                    <input type="text" id="bindVerCode" placeholder="Enter code from admin" style="text-transform:uppercase;">
-                </div>
+                <div class="input-group"><label>Bank Name (e.g. CBE, Telebirr)</label><input type="text" id="bindBankName" placeholder="Bank Name"></div>
+                <div class="input-group"><label>Account Holder Name</label><input type="text" id="bindAccName" placeholder="Full Name"></div>
+                <div class="input-group"><label>Account Number</label><input type="number" id="bindAccNum" placeholder="Account Number"></div>
+                <div class="input-group" style="margin-top:25px;"><label style="color:var(--primary-color);">Set Withdrawal Password</label><input type="password" id="bindWithPass" placeholder="Create a secure code"></div>
                 <button class="btn-full" onclick="saveBankInfo()">Save Bank Details</button>
             </div>
         </section>
 
         <section id="view-invite" class="view-section animate-up">
             <div class="page-header">
-                <button class="back-btn" onclick="switchView('home')"><i class="fa-solid fa-arrow-left"></i></button>
+                <button class="back-btn" onclick="switchView('profile')"><i class="fa-solid fa-arrow-left"></i></button>
                 <h2>Build Your Team</h2>
-                <p>Earn massive commissions.</p>
+                <p>Grow together, earn forever.</p>
             </div>
-            <div class="content-box">
-                <div style="background:#fff7ed; border:2px dashed var(--primary-color); border-radius:20px; padding:30px; text-align:center; margin-bottom:25px;">
-                    <div style="font-size:0.9rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Your Referral Code</div>
-                    <div id="invitePageCode" style="font-size:1.2rem; word-break:break-all; font-weight:800; color:var(--primary-dark); letter-spacing:2px; margin:10px 0;">...</div>
-                    <button class="btn-full" style="padding:12px; font-size:1rem;" onclick="copyRefLink()"><i class="fa-solid fa-link"></i> Copy Invite Link</button>
+            <div class="content-box" style="background: transparent; box-shadow: none; padding-top: 0;">
+                <div style="background: linear-gradient(135deg, var(--primary-dark), var(--primary-color)); border-radius: 24px; padding: 25px 20px; color: white; text-align: center; margin-bottom: 25px; box-shadow: 0 15px 30px rgba(249,115,22,0.3); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -20px; right: -20px; font-size: 8rem; opacity: 0.1;"><i class="fa-solid fa-users"></i></div>
+                    <p style="font-size: 0.9rem; font-weight: 500; margin-bottom: 5px; opacity: 0.9;">Your Exclusive Invite Code</p>
+                    <div id="invitePageCode" style="font-size: 1.8rem; font-weight: 800; letter-spacing: 3px; margin-bottom: 15px; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 12px; backdrop-filter: blur(5px);">...</div>
+                    <button onclick="copyRefLink()" style="background: white; color: var(--primary-dark); border: none; padding: 12px 25px; border-radius: 50px; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; transition: transform 0.2s;"><i class="fa-solid fa-copy"></i> Copy Link to Share</button>
                 </div>
 
-                <h4 style="margin-bottom:15px;">Team Statistics</h4>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                    <div style="background:white; padding:15px; border-radius:16px; box-shadow:var(--shadow-soft); text-align:center;">
-                        <div style="font-size:1.5rem; font-weight:800; color:var(--primary-color);" id="teamTotalCnt">0</div>
-                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Total Members</div>
+                <div style="background: white; border-radius: 24px; padding: 20px; box-shadow: var(--shadow-soft); margin-bottom: 20px;">
+                    <div style="text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed #e4e4e7;">
+                        <p style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;"><i class="fa-solid fa-sack-dollar" style="color: #f59e0b;"></i> Total Team Revenue</p>
+                        <h3 style="font-size: 2.2rem; color: var(--primary-dark); font-weight: 800; margin-top: 5px;">ETB <span id="teamTotComm">0.00</span></h3>
                     </div>
-                    <div style="background:white; padding:15px; border-radius:16px; box-shadow:var(--shadow-soft); text-align:center;">
-                        <div style="font-size:1.5rem; font-weight:800; color:var(--accent-green);" id="teamInvestCnt">0</div>
-                        <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Active Investors</div>
-                    </div>
-                </div>
-
-                <h4 style="margin:20px 0 15px; font-size: 1rem; color: var(--text-main);">Active Investors per Level</h4>
-                <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;">
-                    <div style="background:white; padding:10px; border-radius:12px; box-shadow:var(--shadow-soft); text-align:center;">
-                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-dark);" id="lvl1InvestCnt">0</div>
-                        <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">Level 1</div>
-                    </div>
-                    <div style="background:white; padding:10px; border-radius:12px; box-shadow:var(--shadow-soft); text-align:center;">
-                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-dark);" id="lvl2InvestCnt">0</div>
-                        <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">Level 2</div>
-                    </div>
-                    <div style="background:white; padding:10px; border-radius:12px; box-shadow:var(--shadow-soft); text-align:center;">
-                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-dark);" id="lvl3InvestCnt">0</div>
-                        <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">Level 3</div>
-                    </div>
-                    <div style="background:white; padding:10px; border-radius:12px; box-shadow:var(--shadow-soft); text-align:center;">
-                        <div style="font-size:1.1rem; font-weight:800; color:var(--primary-dark);" id="lvl4InvestCnt">0</div>
-                        <div style="font-size:0.7rem; color:var(--text-muted); font-weight:600;">Level 4</div>
+                    <div style="display: flex; justify-content: space-around; text-align: center;">
+                        <div>
+                            <div id="teamTotalCnt" style="font-size: 1.8rem; font-weight: 800; color: #3b82f6;">0</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Total Network</div>
+                        </div>
+                        <div style="width: 1px; background: #e4e4e7;"></div>
+                        <div>
+                            <div id="teamInvestCnt" style="font-size: 1.8rem; font-weight: 800; color: var(--accent-green);">0</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Active Farmers</div>
+                        </div>
                     </div>
                 </div>
 
-                <div style="background:white; padding:20px; border-radius:16px; box-shadow:var(--shadow-soft); text-align:center; margin-top:15px;">
-                    <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">Total Team Commission</div>
-                    <div style="font-size:1.8rem; font-weight:800; color:var(--primary-dark);">ETB <span id="teamTotComm">0.00</span></div>
+                <h4 style="font-size: 1.1rem; color: var(--text-main); margin: 25px 0 15px; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-layer-group" style="color: var(--primary-color);"></i> Network Levels</h4>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="background: white; border-radius: 16px; padding: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-soft); border-left: 4px solid #f97316;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 40px; height: 40px; border-radius: 12px; background: #ffedd5; color: #f97316; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 1.1rem;">L1</div>
+                            <div><div style="font-weight: 700; color: var(--text-main);">Direct Referrals</div><div style="font-size: 0.7rem; color: var(--text-muted);">25% Reward</div></div>
+                        </div>
+                        <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main);" id="lvl1InvestCnt">0</div>
+                    </div>
+                    <div style="background: white; border-radius: 16px; padding: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-soft); border-left: 4px solid #3b82f6;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 40px; height: 40px; border-radius: 12px; background: #eff6ff; color: #3b82f6; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 1.1rem;">L2</div>
+                            <div><div style="font-weight: 700; color: var(--text-main);">Level 2 Network</div><div style="font-size: 0.7rem; color: var(--text-muted);">3% Reward</div></div>
+                        </div>
+                        <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main);" id="lvl2InvestCnt">0</div>
+                    </div>
+                    <div style="background: white; border-radius: 16px; padding: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-soft); border-left: 4px solid #10b981;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div style="width: 40px; height: 40px; border-radius: 12px; background: #dcfce7; color: #10b981; display: flex; justify-content: center; align-items: center; font-weight: 800; font-size: 1.1rem;">L3</div>
+                            <div><div style="font-weight: 700; color: var(--text-main);">Level 3 Network</div><div style="font-size: 0.7rem; color: var(--text-muted);">2% Reward</div></div>
+                        </div>
+                        <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main);" id="lvl3InvestCnt">0</div>
+                    </div>
                 </div>
 
-                <div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:16px; padding:15px; margin-top:20px; font-size:0.85rem; color:#1e3a8a;">
-                    <h4 style="margin-bottom:10px; color:#1d4ed8;"><i class="fa-solid fa-circle-info"></i> Commission Rules</h4>
-                    <ul style="list-style:none; padding-left:0; line-height:1.6;">
-                        <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 1:</b> 15% on Purchase, 8% on Daily Income</li>
-                        <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 2:</b> 3% on Purchase, 3% on Daily Income</li>
-                        <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 3:</b> 2% on Purchase, 2% on Daily Income</li>
-                        <li><i class="fa-solid fa-check" style="color:var(--accent-green);"></i> <b>Level 4:</b> 1% on Purchase, 1% on Daily Income</li>
-                    </ul>
-                    <p style="margin-top:8px; font-weight:600; font-size:0.8rem;">* Commissions are added instantly to your balance without deducting from your team's earnings.</p>
+                <div style="background: #27272a; border-radius: 20px; padding: 20px; margin-top: 25px; color: white;">
+                    <h4 style="margin-bottom: 15px; color: #fcd34d; font-size: 1rem;"><i class="fa-solid fa-star"></i> How You Earn</h4>
+                    <div style="font-size: 0.85rem; line-height: 1.6; color: #e4e4e7;">
+                        <p style="margin-bottom: 10px;">When your friends invest in a farm, you instantly earn a percentage of their purchase!</p>
+                        <ul style="list-style: none; padding-left: 0; margin-top: 10px; opacity: 0.9;">
+                            <li style="margin-bottom: 5px;"><span style="color: #f97316; font-weight: bold;">L1:</span> 25% Purchase</li>
+                            <li style="margin-bottom: 5px;"><span style="color: #3b82f6; font-weight: bold;">L2:</span> 3% Purchase</li>
+                            <li style="margin-bottom: 5px;"><span style="color: #10b981; font-weight: bold;">L3:</span> 2% Purchase</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
@@ -962,7 +804,15 @@
                 <p>System Management</p>
             </div>
             <div class="content-box">
-                
+                <div class="admin-box" style="border-left:4px solid #10b981;">
+                    <h4><i class="fa-solid fa-gears" style="color:#10b981;"></i> System Configuration</h4>
+                    <div class="input-group"><label>Min Deposit (ETB)</label><input type="number" id="cfgMinDeposit" placeholder="e.g. 1000"></div>
+                    <div class="input-group"><label>Min Withdraw (ETB)</label><input type="number" id="cfgMinWithdraw" placeholder="e.g. 250"></div>
+                    <div class="input-group"><label>Registration Bonus (ETB)</label><input type="number" id="cfgRegBonus" placeholder="e.g. 110"></div>
+                    <div class="input-group"><label>Withdrawal Fee (%)</label><input type="number" id="cfgWithFee" placeholder="e.g. 18"></div>
+                    <button class="btn-full" style="background:#10b981; box-shadow:0 8px 20px rgba(16, 185, 129, 0.3);" onclick="saveSystemConfig()">Save Config</button>
+                </div>
+
                 <div class="admin-box" style="border-left:4px solid #ec4899;">
                     <h4><i class="fa-solid fa-gift" style="color:#ec4899;"></i> Generate Gift Code</h4>
                     <div class="input-group"><input type="text" id="adminGiftCode" placeholder="Code Name (e.g. BONUS2024)" style="text-transform:uppercase;"></div>
@@ -975,28 +825,16 @@
                     <div id="adminExistingCodes" style="margin-top:15px; font-size:0.85rem;"></div>
                 </div>
 
-                <div class="admin-box" style="border-left:4px solid #8b5cf6;">
-                    <h4><i class="fa-solid fa-shield-halved" style="color:#8b5cf6;"></i> Generate Bank Ver. Code</h4>
-                    <div class="input-group">
-                        <input type="number" id="adminBankVerPhone" placeholder="User Phone (e.g. 912345678)">
-                    </div>
-                    <button class="btn-full" style="background:#8b5cf6; box-shadow:0 8px 20px rgba(139, 92, 246, 0.3);" onclick="createBankVerificationCode()">Generate Code</button>
-                    <div id="adminBankVerResult" style="margin-top:15px; font-weight:bold; color:var(--primary-dark); font-size:1.2rem; text-align:center;"></div>
-                </div>
-
                 <div class="admin-box">
                     <h4 id="adminPlanTitle"><i class="fa-solid fa-plus"></i> Add Farm Package</h4>
                     <div class="input-group"><input type="text" id="adminPlanName" placeholder="Package Name (e.g. Apple Farm)"></div>
                     <div class="input-group"><input type="number" id="adminPlanPrice" placeholder="Price (ETB)"></div>
                     <div class="input-group"><input type="number" id="adminPlanRoi" placeholder="Daily Profit (ETB)"></div>
                     <div class="input-group"><input type="number" id="adminPlanDuration" placeholder="Duration (Days)"></div>
-                    
                     <div class="input-group"><input type="number" id="adminPlanLimit" placeholder="Purchase Limit (e.g. 1)"></div>
-                    
                     <div class="input-group"><input type="text" id="adminPlanImg" placeholder="Image URL"></div>
                     <button class="btn-full" id="adminSavePlanBtn" onclick="saveAdminPlan()">Publish Package</button>
                     <button class="btn-full" id="adminCancelEditBtn" style="display:none; background:#a1a1aa; margin-top:10px;" onclick="cancelEditPlan()">Cancel Edit</button>
-                    
                     <h4 style="margin:20px 0 10px;">Existing Packages</h4>
                     <div id="adminExistingPlans" style="font-size:0.85rem;">Loading packages...</div>
                 </div>
@@ -1058,14 +896,14 @@
     <script>
         // --- NEW FIREBASE CONFIG ---
         const firebaseConfig = {
-            apiKey: "AIzaSyDm521gjURmAXB3l6VflxMLqDziZxcBCmw",
-            authDomain: "wwhh-12b9d.firebaseapp.com",
-            databaseURL: "https://wwhh-12b9d-default-rtdb.firebaseio.com",
-            projectId: "wwhh-12b9d",
-            storageBucket: "wwhh-12b9d.firebasestorage.app",
-            messagingSenderId: "408482669779",
-            appId: "1:408482669779:web:b91d7e49df8d6c0b472026",
-            measurementId: "G-GQ7YXT1XF4"
+          apiKey: "AIzaSyBodX7NA2I0rQibuE-OLjvZRRtRqIuhyDo",
+          authDomain: "feta-games-733c9.firebaseapp.com",
+          databaseURL: "https://feta-games-733c9-default-rtdb.firebaseio.com",
+          projectId: "feta-games-733c9",
+          storageBucket: "feta-games-733c9.firebasestorage.app",
+          messagingSenderId: "994472370940",
+          appId: "1:994472370940:web:1b93357552e50104ad6d79",
+          measurementId: "G-7188NZND0D"
         };
         
         firebase.initializeApp(firebaseConfig);
@@ -1076,7 +914,39 @@
         let currentCaptcha = "";
         let editingPlanKey = null; 
         
-        // --- LANGUAGE SYSTEM ---
+        let appConfig = {
+            minDeposit: 1000,
+            minWithdraw: 250,
+            registrationBonus: 110,
+            withdrawalFee: 18
+        };
+
+        db.ref('settings/config').on('value', (snap) => {
+            if (snap.exists()) {
+                appConfig = Object.assign(appConfig, snap.val());
+            }
+            updateDynamicConfigUI();
+        });
+
+        function updateDynamicConfigUI() {
+            const depLabel = document.getElementById('depMinLabel');
+            if (depLabel) {
+                depLabel.innerText = `Amount to Send (Min: ${appConfig.minDeposit} ETB)`;
+            }
+            const withFeeInfo = document.getElementById('withFeeInfo');
+            if (withFeeInfo) {
+                withFeeInfo.innerHTML = `<i class="fa-solid fa-circle-info"></i> Fee: ${appConfig.withdrawalFee}% | Min Withdraw: ${appConfig.minWithdraw} ETB<br><i class="fa-solid fa-clock" style="margin-top:5px;"></i> ማውጣት የሚቻለው፡ ከጧት 4:00 እስከ ከሰዓት 10:00 (10:00 AM - 4:00 PM)<br><i class="fa-solid fa-rotate-left" style="margin-top:5px;"></i> በቀን 2 ጊዜ ብቻ (Max 2 withdrawals per day)`;
+            }
+            const cfgMinDeposit = document.getElementById('cfgMinDeposit');
+            const cfgMinWithdraw = document.getElementById('cfgMinWithdraw');
+            const cfgRegBonus = document.getElementById('cfgRegBonus');
+            const cfgWithFee = document.getElementById('cfgWithFee');
+            if (cfgMinDeposit && document.activeElement !== cfgMinDeposit) cfgMinDeposit.value = appConfig.minDeposit;
+            if (cfgMinWithdraw && document.activeElement !== cfgMinWithdraw) cfgMinWithdraw.value = appConfig.minWithdraw;
+            if (cfgRegBonus && document.activeElement !== cfgRegBonus) cfgRegBonus.value = appConfig.registrationBonus;
+            if (cfgWithFee && document.activeElement !== cfgWithFee) cfgWithFee.value = appConfig.withdrawalFee;
+        }
+
         const translations = {
             en: {
                 balance: "Total Funds", income: "Harvest Income",
@@ -1108,7 +978,6 @@
             });
         }
 
-        // --- CAPTCHA GENERATION ---
         function generateCaptcha() {
             const canvas = document.getElementById('captchaCanvas');
             if(!canvas) return;
@@ -1153,7 +1022,6 @@
             }
         }
 
-        // --- AUTHENTICATION ---
         function toggleAuth(mode) {
             if(mode === 'signup') {
                 document.getElementById('loginForm').style.display = 'none';
@@ -1167,6 +1035,21 @@
             }
         }
 
+        // --- የተስተካከለ የስላይድሾው ጃቫስክሪፕት ኮድ ---
+        let slideIndex = 0;
+        function showSlides() {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            if (slides.length === 0) return;
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}    
+            slides[slideIndex-1].style.display = "block";  
+            setTimeout(showSlides, 3000); // ፎቶው በየ3 ሰከንድ ይቀየራል
+        }
+
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const refCode = urlParams.get('ref');
@@ -1177,6 +1060,7 @@
             } else {
                 generateCaptcha();
             }
+            showSlides(); // ስላይድሾው ይጀምራል
         };
 
         function sanitizePhone(phone) { return phone.replace(/\D/g, ''); }
@@ -1217,9 +1101,10 @@
                 let newCode = "";
                 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
                 for(let i=0; i<25; i++) newCode += chars.charAt(Math.floor(Math.random() * chars.length));
+                
                 const newUser = {
                     name: autoName, phone: phone, password: pass,
-                    balance: 110, 
+                    balance: appConfig.registrationBonus, 
                     income: 0, commission: 0,
                     refCode: newCode, referredBy: refCode || "admin",
                     spins: 1, 
@@ -1227,7 +1112,7 @@
                 };
                 db.ref('users/' + phone).set(newUser).then(() => {
                     initApp(newUser, phone);
-                    showToast("Account created! 110 ETB Bonus & 1 Spin Added.");
+                    showToast(`Account created! ${appConfig.registrationBonus} ETB Bonus & 1 Spin Added.`);
                 });
             });
         }
@@ -1241,7 +1126,7 @@
 
             if(phoneKey === '44') {
                 document.getElementById('bottomNav').style.display = 'none';
-                document.querySelector('.floating-cs-btn').style.display = 'none'; // Hide CS button for admin
+                document.querySelector('.floating-cs-btn').style.display = 'none';
                 switchView('admin');
                 listenForRequests();
                 loadAdminBankList();
@@ -1253,12 +1138,86 @@
                 db.ref('users/' + currentUser).on('value', (snap) => {
                     userData = snap.val();
                     updateUI();
+                    autoHarvest(); // በራስ-ሰር የሚሰበስበው ኮድ ይነሳል
                 });
                 loadShopPlans();
             }
         }
 
-        // --- VIEW ROUTING ---
+        // --- አዲስ: በየ 24 ሰዓቱ በራስ-ሰር የሚሰበስብ ኮድ (Auto Harvest Function) ---
+        function autoHarvest() {
+            if (!currentUser || currentUser === '44' || !userData || !userData.plans) return;
+            let totalAmount = 0;
+            let updates = {};
+            let hasUpdates = false;
+            let now = Date.now();
+
+            for (let key in userData.plans) {
+                let uPlan = userData.plans[key];
+                if (!uPlan.active) continue;
+
+                // ለነባር ተጠቃሚዎች (Timestamp ለሌላቸው)
+                if (!uPlan.lastClaimTimestamp) {
+                    updates['plans/' + key + '/lastClaimTimestamp'] = now;
+                    hasUpdates = true;
+                    continue;
+                }
+
+                const msPerDay = 24 * 60 * 60 * 1000;
+                let elapsedMs = now - uPlan.lastClaimTimestamp;
+
+                // 24 ሰዓት ካለፈ (በየቀኑ በተገዛበት ሰዓት)
+                if (elapsedMs >= msPerDay) {
+                    let daysToClaim = Math.floor(elapsedMs / msPerDay);
+                    let remainingDays = uPlan.duration - (uPlan.daysClaimed || 0);
+
+                    if (daysToClaim > remainingDays) {
+                        daysToClaim = remainingDays;
+                    }
+
+                    if (daysToClaim > 0) {
+                        let amountToAdd = uPlan.daily * daysToClaim;
+                        totalAmount += amountToAdd;
+
+                        let newDaysClaimed = (uPlan.daysClaimed || 0) + daysToClaim;
+                        let updatedPlan = {
+                            ...uPlan,
+                            daysClaimed: newDaysClaimed,
+                            lastClaimDate: new Date(now).toDateString(),
+                            lastClaimTimestamp: uPlan.lastClaimTimestamp + (daysToClaim * msPerDay),
+                            active: (newDaysClaimed < uPlan.duration)
+                        };
+                        updates['plans/' + key] = updatedPlan;
+                        hasUpdates = true;
+                    }
+                }
+            }
+
+            if (totalAmount > 0) {
+                updates['balance'] = (userData.balance || 0) + totalAmount;
+                updates['income'] = (userData.income || 0) + totalAmount;
+            }
+
+            if (hasUpdates) {
+                db.ref('users/' + currentUser).update(updates).then(() => {
+                    if (totalAmount > 0) {
+                        showToast(`የእርሻዎ ትርፍ ${totalAmount.toFixed(2)} ETB በራስ-ሰር ገቢ ሆኗል!`);
+                    }
+                    if(document.getElementById('view-orders').classList.contains('active-view')){
+                        loadMyOrders();
+                    }
+                });
+            }
+        }
+
+        // በየ 30 ሰከንድ እየተዘዋወረ ጊዜውን ያጣራል
+        setInterval(() => {
+            if (currentUser && currentUser !== '44') {
+                autoHarvest();
+            }
+        }, 30000); 
+        // ------------------------------------------------------------
+
         function switchView(viewName) {
             if(viewName === 'admin' && currentUser !== '44') return;
 
@@ -1313,8 +1272,8 @@
             if(targetView) targetView.classList.add('active-view');
             
             let navId = 'nav-' + viewName;
-            if(viewName === 'invite' || viewName === 'bankcard' || viewName === 'transactions' || viewName === 'changepass') navId = 'nav-profile';
-            if(viewName === 'luckydraw' || viewName === 'deposit' || viewName === 'withdraw' || viewName === 'gift' || viewName === 'support' || viewName === 'info') navId = 'nav-home';
+            if(viewName === 'invite' || viewName === 'bankcard' || viewName === 'transactions' || viewName === 'changepass' || viewName === 'gift' || viewName === 'support') navId = 'nav-profile';
+            if(viewName === 'luckydraw' || viewName === 'deposit' || viewName === 'withdraw' || viewName === 'info') navId = 'nav-home';
             if(document.getElementById(navId)) document.getElementById(navId).classList.add('active');
         }
 
@@ -1322,27 +1281,23 @@
             if (document.getElementById('headerName')) {
                 document.getElementById('headerName').innerText = userData.name.split(" ")[0]; 
             }
-            
             if (document.getElementById('displayBalance')) {
                 document.getElementById('displayBalance').innerText = parseFloat(userData.balance || 0).toFixed(2);
             }
             if (document.getElementById('displayIncome')) {
                 document.getElementById('displayIncome').innerText = parseFloat(userData.income || 0).toFixed(2);
             }
-
             if (document.getElementById('profBalance')) {
                 document.getElementById('profBalance').innerText = parseFloat(userData.balance || 0).toFixed(2);
             }
             if (document.getElementById('profDailyIncome')) {
                 document.getElementById('profDailyIncome').innerText = parseFloat(userData.income || 0).toFixed(2);
             }
-            
             if(document.getElementById('spinCountDisplay')) {
                 document.getElementById('spinCountDisplay').innerText = userData.spins || 0;
             }
         }
 
-        // --- TEAM/PROFILE STATS ---
         function calculateProfileStats() {
             let totDep = 0; let totWith = 0;
             db.ref('deposits').once('value', (snap) => {
@@ -1365,17 +1320,14 @@
                 const lvl2 = arr.filter(u => l1c.includes(String(u.referredBy).trim().toUpperCase()));
                 const l2c = lvl2.map(u => String(u.refCode).trim().toUpperCase());
                 const lvl3 = arr.filter(u => l2c.includes(String(u.referredBy).trim().toUpperCase()));
-                const l3c = lvl3.map(u => String(u.refCode).trim().toUpperCase());
-                const lvl4 = arr.filter(u => l3c.includes(String(u.referredBy).trim().toUpperCase()));
                 
-                let inv1 = 0, inv2 = 0, inv3 = 0, inv4 = 0;
+                let inv1 = 0, inv2 = 0, inv3 = 0;
                 lvl1.forEach(u => { if(u.plans && Object.keys(u.plans).length > 0) inv1++; });
                 lvl2.forEach(u => { if(u.plans && Object.keys(u.plans).length > 0) inv2++; });
                 lvl3.forEach(u => { if(u.plans && Object.keys(u.plans).length > 0) inv3++; });
-                lvl4.forEach(u => { if(u.plans && Object.keys(u.plans).length > 0) inv4++; });
 
-                const team = [...lvl1, ...lvl2, ...lvl3, ...lvl4];
-                let investors = inv1 + inv2 + inv3 + inv4;
+                const team = [...lvl1, ...lvl2, ...lvl3];
+                let investors = inv1 + inv2 + inv3;
 
                 document.getElementById('teamTotalCnt').innerText = team.length;
                 document.getElementById('teamInvestCnt').innerText = investors;
@@ -1383,7 +1335,6 @@
                 if(document.getElementById('lvl1InvestCnt')) document.getElementById('lvl1InvestCnt').innerText = inv1;
                 if(document.getElementById('lvl2InvestCnt')) document.getElementById('lvl2InvestCnt').innerText = inv2;
                 if(document.getElementById('lvl3InvestCnt')) document.getElementById('lvl3InvestCnt').innerText = inv3;
-                if(document.getElementById('lvl4InvestCnt')) document.getElementById('lvl4InvestCnt').innerText = inv4;
 
                 document.getElementById('teamTotComm').innerText = parseFloat(userData.commission || 0).toFixed(2);
                 
@@ -1396,7 +1347,6 @@
             });
         }
 
-        // --- SHOP & INVESTMENTS ---
         function loadShopPlans() {
             db.ref('plans').on('value', (snapshot) => {
                 const container = document.getElementById('shopPlanList');
@@ -1467,7 +1417,8 @@
             newPlans[uniqueKey] = { 
                 active: true, planId: planId, daily: dailyRate, 
                 duration: duration, daysClaimed: 0, 
-                lastClaimDate: new Date().toDateString() 
+                lastClaimDate: new Date().toDateString(),
+                lastClaimTimestamp: Date.now() // ጊዜውን ይመዘግባል
             };
             
             db.ref('users/' + currentUser).update({ balance: newBal, plans: newPlans, spins: newSpins }).then(() => {
@@ -1486,13 +1437,12 @@
                 snap.forEach(c => { if(c.val().refCode === refCode) { u1Key = c.key; u1 = c.val(); } });
                 
                 if(u1Key) {
-                    
                     let newSpinsU1 = (u1.spins || 0);
                     if (isFirst) newSpinsU1 += 1;
 
                     db.ref('users/' + u1Key).update({ 
-                        balance: (u1.balance||0) + amount*0.15, 
-                        commission: (u1.commission||0) + amount*0.15,
+                        balance: (u1.balance||0) + amount*0.25, 
+                        commission: (u1.commission||0) + amount*0.25,
                         spins: newSpinsU1 
                     });
                     
@@ -1501,18 +1451,11 @@
                         snap.forEach(c => { if(c.val().refCode === u1.referredBy) { u2Key = c.key; u2 = c.val(); } });
                         if(u2Key) {
                             db.ref('users/' + u2Key).update({ balance: (u2.balance||0) + amount*0.03, commission: (u2.commission||0) + amount*0.03 });
-                            if(u2.referredBy && u2.referredBy !== 'admin') {
+                            if(u1.referredBy && u1.referredBy !== 'admin') {
                                 let u3Key = null, u3 = null;
                                 snap.forEach(c => { if(c.val().refCode === u2.referredBy) { u3Key = c.key; u3 = c.val(); } });
                                 if(u3Key) {
                                     db.ref('users/' + u3Key).update({ balance: (u3.balance||0) + amount*0.02, commission: (u3.commission||0) + amount*0.02 });
-                                    if(u3.referredBy && u3.referredBy !== 'admin') {
-                                        let u4Key = null, u4 = null;
-                                        snap.forEach(c => { if(c.val().refCode === u3.referredBy) { u4Key = c.key; u4 = c.val(); } });
-                                        if(u4Key) {
-                                            db.ref('users/' + u4Key).update({ balance: (u4.balance||0) + amount*0.01, commission: (u4.commission||0) + amount*0.01 });
-                                        }
-                                    }
                                 }
                             }
                         }
@@ -1521,7 +1464,6 @@
             });
         }
 
-        // --- LUCKY DRAW LOGIC ---
         let isSpinning = false;
         function spinWheel() {
             if (isSpinning) return;
@@ -1566,7 +1508,6 @@
 
         function closeModal(id) { 
             document.getElementById(id).style.display = 'none'; 
-            
             if(id === 'claimSuccessModal') {
                 document.getElementById('claimModalTitle').innerText = "Harvest Collected!";
                 document.getElementById('claimModalIcon').className = "fa-solid fa-basket-shopping";
@@ -1575,15 +1516,14 @@
             }
         }
 
-        // --- HARVEST (ORDERS) ---
+        // --- HARVEST (ORDERS) --- አሁን ሰዓት ሲደርስ በራስ-ሰር ይገባል
         function loadMyOrders() {
             const container = document.getElementById('myOrdersList');
             container.innerHTML = "";
             if (!userData.plans || Object.keys(userData.plans).length === 0) return container.innerHTML = "<p style='text-align:center;'>No active farms.</p>";
 
-            const todayStr = new Date().toDateString(); 
-            const currentHour = new Date().getHours();
-            const isTimeValid = (currentHour >= 6); 
+            const now = Date.now();
+            const msPerDay = 24 * 60 * 60 * 1000;
             
             db.ref('plans').once('value', (snap) => {
                 const allPlans = snap.val() || {};
@@ -1594,120 +1534,149 @@
                         const pDetail = allPlans[pid] || {name: "Farm Package"};
                         const duration = uPlan.duration || 60;
                         const isExpired = (uPlan.daysClaimed || 0) >= duration;
-                        const alreadyClaimed = (uPlan.lastClaimDate === todayStr);
                         
-                        let btnTxt = "Collect Harvest"; let btnState = "";
-                        if (isExpired) { btnTxt = "Expired"; btnState = "disabled"; } 
-                        else if (alreadyClaimed) { btnTxt = "Collected Today"; btnState = "disabled"; }
-                        else if (!isTimeValid) { btnTxt = "Closed (Wait)"; btnState = "disabled"; }
+                        const lastTs = uPlan.lastClaimTimestamp || now;
+                        const msLeft = (lastTs + msPerDay) - now;
                         
-                        container.insertAdjacentHTML('beforeend', `
+                        let btnText = "";
+                        let btnDisabled = "disabled";
+                        
+                        if (isExpired) {
+                            btnText = currentLang === 'am' ? "ጊዜው ያለፈበት" : "Expired";
+                        } else if (msLeft > 0 && uPlan.lastClaimTimestamp) {
+                            let hoursLeft = Math.floor(msLeft / (1000 * 60 * 60));
+                            let minsLeft = Math.floor((msLeft % (1000 * 60 * 60)) / (1000 * 60));
+                            btnText = currentLang === 'am' ? `በ ${hoursLeft}ሰ ${minsLeft}ደ ውስጥ በራስ-ሰር ይገባል` : `Auto adds in ${hoursLeft}h ${minsLeft}m`;
+                        } else {
+                            btnText = currentLang === 'am' ? "በራስ-ሰር ገቢ እየሆነ ነው..." : "Auto claiming...";
+                        }
+
+                        const cardHtml = `
                         <div class="harvest-card animate-up">
                             <div class="harvest-header">
-                                <strong style="color:var(--primary-dark);">${pDetail.name}</strong>
-                                <span style="background:${isExpired ? '#fee2e2' : '#dcfce7'}; color:${isExpired ? '#ef4444' : 'var(--accent-green)'}; padding:4px 8px; border-radius:8px; font-size:0.75rem; font-weight:bold;">${isExpired ? 'Ended' : 'Growing'}</span>
+                                <span style="font-weight:700; color:var(--text-main); font-size:1.1rem;"><i class="fa-solid fa-leaf" style="color:var(--accent-green);"></i> ${pDetail.name}</span>
+                                <span class="roi-tag">Daily: ETB ${uPlan.daily}</span>
                             </div>
-                            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-                                <div>
-                                    <div style="font-size:0.8rem; color:var(--text-muted);">Daily Yield</div>
-                                    <div style="font-size:1.3rem; font-weight:800; color:var(--text-main);">ETB ${uPlan.daily}</div>
-                                    <div style="font-size:0.75rem; color:var(--text-muted); margin-top:5px;">Progress: ${uPlan.daysClaimed||0}/${duration} Days</div>
-                                </div>
-                                <button class="btn-collect" ${btnState} onclick="claimDailyProfit('${key}', ${uPlan.daily})">${btnTxt}</button>
+                            <div style="font-size:0.85rem; color:var(--text-muted); display:flex; justify-content:space-between; margin: 10px 0;">
+                                <span>Progress: <b style="color:var(--text-main);">${uPlan.daysClaimed || 0} / ${duration} Days</b></span>
+                                <span>Status: <b style="color:${isExpired ? '#ef4444' : 'var(--accent-green)'}">${isExpired ? 'Completed' : 'Active'}</b></span>
                             </div>
-                        </div>`);
+                            <button class="btn-collect" ${btnDisabled}>${btnText}</button>
+                        </div>`;
+                        container.insertAdjacentHTML('beforeend', cardHtml);
                     }
                 }
             });
         }
 
-        function claimDailyProfit(planKey, amount) {
-            const currentHour = new Date().getHours();
-            if (currentHour < 6) {
-                return showToast("ማሳሰቢያ፡ ምርት መሰብሰብ የሚቻለው ከጧት 12:00 እስከ ሌሊቱ 6:00 (6:00 AM - 12:00 AM) ብቻ ነው!");
+        // ማሳሰቢያ፡ ይህ ፈንክሽን ለደህንነት ሲባል አልተሰረዘም ነገር ግን አሁን ሲስተሙ በራስ-ሰር (Automatic) ሆኗል
+        function claimProfit(planKey, amount) {
+            showToast("አሁን ማውጣት አያስፈልግም፣ ሲስተሙ በተገዛበት ሰዓት በራስ-ሰር ይደምረዋል!");
+        }
+
+        // --- WITHDRAW LOGIC ---
+        function submitWithdraw() {
+            const amount = parseFloat(document.getElementById('withAmount').value);
+            const pass = document.getElementById('withAuthPass').value;
+            
+            if (!amount || !pass) return showToast("Please enter amount and password");
+            if (amount < appConfig.minWithdraw) return showToast(`Minimum withdrawal is ${appConfig.minWithdraw} ETB`);
+            if (amount > (userData.balance || 0)) return showToast("Insufficient balance");
+            
+            if (!userData.bankInfo || userData.bankInfo.withPass !== pass) {
+                return showToast("Incorrect withdrawal password!");
             }
 
-            const uPlan = userData.plans[planKey];
-            const todayStr = new Date().toDateString();
-            if(uPlan.lastClaimDate === todayStr) return showToast("Already claimed today!");
-            if((uPlan.daysClaimed||0) >= (uPlan.duration||60)) return showToast("Package expired!");
+            const currentHour = new Date().getHours();
+            if (currentHour < 10 || currentHour >= 16) {
+                return showToast("ማውጣት የሚቻለው ከጧት 4:00 እስከ ከሰዓት 10:00 (10:00 AM - 4:00 PM) ብቻ ነው!");
+            }
 
-            const updates = {};
-            updates['balance'] = (userData.balance || 0) + parseFloat(amount);
-            updates['income'] = (userData.income || 0) + parseFloat(amount);
-            updates['plans/' + planKey + '/lastClaimDate'] = todayStr;
-            updates['plans/' + planKey + '/daysClaimed'] = (uPlan.daysClaimed||0) + 1;
+            const todayStr = new Date().toDateString();
+            let todayWithdrawCount = 0;
             
-            db.ref('users/' + currentUser).update(updates).then(() => {
-                
-                if(userData.referredBy && userData.referredBy !== 'admin') {
-                    db.ref('users').once('value', snap => {
-                        if(!snap.exists()) return;
-                        let u1Key = null, u1 = null;
-                        snap.forEach(c => { if(c.val().refCode === userData.referredBy) { u1Key = c.key; u1 = c.val(); } });
-                        if(u1Key) {
-                            db.ref('users/' + u1Key).update({ balance: (u1.balance||0) + amount*0.08, commission: (u1.commission||0) + amount*0.08 });
-                            if(u1.referredBy && u1.referredBy !== 'admin') {
-                                let u2Key = null, u2 = null;
-                                snap.forEach(c => { if(c.val().refCode === u1.referredBy) { u2Key = c.key; u2 = c.val(); } });
-                                if(u2Key) {
-                                    db.ref('users/' + u2Key).update({ balance: (u2.balance||0) + amount*0.03, commission: (u2.commission||0) + amount*0.03 });
-                                    if(u2.referredBy && u2.referredBy !== 'admin') {
-                                        let u3Key = null, u3 = null;
-                                        snap.forEach(c => { if(c.val().refCode === u2.referredBy) { u3Key = c.key; u3 = c.val(); } });
-                                        if(u3Key) {
-                                            db.ref('users/' + u3Key).update({ balance: (u3.balance||0) + amount*0.02, commission: (u3.commission||0) + amount*0.02 });
-                                            if(u3.referredBy && u3.referredBy !== 'admin') {
-                                                let u4Key = null, u4 = null;
-                                                snap.forEach(c => { if(c.val().refCode === u3.referredBy) { u4Key = c.key; u4 = c.val(); } });
-                                                if(u4Key) {
-                                                    db.ref('users/' + u4Key).update({ balance: (u4.balance||0) + amount*0.01, commission: (u4.commission||0) + amount*0.01 });
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+            db.ref('withdrawals').once('value', (snap) => {
+                if (snap.exists()) {
+                    snap.forEach((child) => {
+                        const w = child.val();
+                        if (w.user === currentUser && w.date === todayStr && w.status !== 'reject') {
+                            todayWithdrawCount++;
                         }
                     });
                 }
                 
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#16a34a', '#f97316', '#fcd34d'] });
-                document.getElementById('claimModalAmount').innerText = parseFloat(amount).toFixed(2);
-                document.getElementById('claimSuccessModal').style.display = 'flex';
-                loadMyOrders(); updateUI();
+                if (todayWithdrawCount >= 2) {
+                    return showToast("በቀን ማውጣት የሚቻለው 2 ጊዜ ብቻ ነው! (Max 2 withdrawals per day reached)");
+                }
+
+                const fee = amount * (appConfig.withdrawalFee / 100);
+                const netAmount = amount - fee;
+                const newBal = userData.balance - amount;
+                
+                db.ref('users/' + currentUser).update({ balance: newBal }).then(() => {
+                    const reqId = 'REQ_' + Date.now();
+                    const withdrawData = {
+                        id: reqId,
+                        user: currentUser,
+                        userName: userData.name,
+                        amount: amount,
+                        netAmount: netAmount,
+                        fee: fee,
+                        bankName: userData.bankInfo.bankName,
+                        accName: userData.bankInfo.accName,
+                        accNum: userData.bankInfo.accNum,
+                        status: 'pending',
+                        date: todayStr,
+                        timestamp: Date.now()
+                    };
+                    
+                    db.ref('withdrawals/' + reqId).set(withdrawData).then(() => {
+                        showToast("Withdrawal request submitted successfully!");
+                        document.getElementById('withAmount').value = "";
+                        document.getElementById('withAuthPass').value = "";
+                        switchView('profile');
+                    });
+                });
             });
         }
 
-        // --- TRANSACTIONS (DEPOSIT/WITHDRAW) ---
-        function setDepositAmount(amount) { document.getElementById('depAmountPage').value = amount; }
+        // --- OTHER HELPER FUNCTIONS ---
+        function setDepositAmount(amt) {
+            document.getElementById('depAmountPage').value = amt;
+        }
 
         function nextDepositStep() {
-            if(document.getElementById('depAmountPage').value < 1000) return showToast("Min Deposit: 1000 ETB");
+            const amt = parseFloat(document.getElementById('depAmountPage').value);
+            if (!amt || amt < appConfig.minDeposit) return showToast(`Minimum deposit is ${appConfig.minDeposit} ETB`);
             document.getElementById('depositStep1').style.display = 'none';
             document.getElementById('depositStep2').style.display = 'block';
         }
-        
+
         function prevDepositStep() {
             document.getElementById('depositStep2').style.display = 'none';
             document.getElementById('depositStep1').style.display = 'block';
         }
 
         function submitDepositFromPage() {
-            const amount = parseFloat(document.getElementById('depAmountPage').value);
-            const txn = document.getElementById('depTransIdPage').value.trim();
+            const amt = parseFloat(document.getElementById('depAmountPage').value);
             const sender = document.getElementById('depSenderName').value;
-            if(!amount || !txn || !sender) return showToast("Fill all details");
-
-            db.ref('deposits').once('value', (snap) => {
-                let used = false;
-                if(snap.exists()) snap.forEach(c => { if(c.val().txnId === txn) used = true; });
-                if (used) return showToast("Transaction ID already used!");
-                
-                db.ref('deposits').push({ type: 'deposit', amount: amount, user: currentUser, phone: userData.phone, senderName: sender, txnId: txn, status: 'pending', timestamp: Date.now() }).then(() => {
-                    showToast("Deposit submitted for verification!");
-                    switchView('home');
-                });
+            const txId = document.getElementById('depTransIdPage').value;
+            
+            if (!amt || !sender || !txId) return showToast("Please fill all payment details");
+            
+            const reqId = 'DEP_' + Date.now();
+            const depositData = {
+                id: reqId, user: currentUser, userName: userData.name,
+                amount: amt, senderName: sender, transId: txId,
+                status: 'pending', date: new Date().toDateString(), timestamp: Date.now()
+            };
+            
+            db.ref('deposits/' + reqId).set(depositData).then(() => {
+                showToast("Deposit request submitted! Waiting for admin approval.");
+                document.getElementById('depAmountPage').value = "";
+                document.getElementById('depSenderName').value = "";
+                document.getElementById('depTransIdPage').value = "";
+                switchView('profile');
             });
         }
 
@@ -1716,491 +1685,125 @@
             const aName = document.getElementById('bindAccName').value;
             const aNum = document.getElementById('bindAccNum').value;
             const wPass = document.getElementById('bindWithPass').value;
-            const vCode = document.getElementById('bindVerCode').value.trim().toUpperCase();
-
-            if(!bName || !aName || !aNum || !wPass || !vCode) return showToast("Fill all fields including verification code");
             
-            db.ref('users/' + currentUser + '/bankVerificationCode').once('value', snap => {
-                const actualCode = snap.val();
-                if (!actualCode || actualCode !== vCode) {
-                    return showToast("Invalid Verification Code!");
-                }
-
-                db.ref('users/' + currentUser + '/bankInfo').set({ bankName: bName, accName: aName, accNum: aNum, withdrawPass: wPass }).then(() => {
-                    db.ref('users/' + currentUser + '/bankVerificationCode').remove(); 
-                    showToast("Bank details saved securely."); switchView('profile');
-                });
+            if (!bName || !aName || !aNum || !wPass) return showToast("Please fill all fields");
+            
+            const bankData = { bankName: bName, accName: aName, accNum: aNum, withPass: wPass };
+            db.ref('users/' + currentUser + '/bankInfo').set(bankData).then(() => {
+                showToast("Bank details bound successfully!");
+                switchView('profile');
             });
         }
 
-        function submitWithdraw() {
-            if(!userData.bankInfo || !userData.bankInfo.withdrawPass) {
-                document.getElementById('withdrawInputs').style.display = 'none';
-                document.getElementById('withdrawMsg').style.display = 'block';
-                return;
-            }
-            const amount = parseFloat(document.getElementById('withAmount').value);
-            const pass = document.getElementById('withAuthPass').value;
-            if(amount < 250) return showToast("Min Withdraw: 250 ETB");
-            if(!userData.plans || Object.keys(userData.plans).length === 0) return showToast("Must have an active farm to withdraw!");
-            if(pass !== userData.bankInfo.withdrawPass) return showToast("Incorrect Password!");
-            if(amount > userData.balance) return showToast("Insufficient Balance");
-            
-            db.ref('users/' + currentUser).update({ balance: userData.balance - amount }).then(() => {
-                db.ref('withdrawals').push({ type: 'withdraw', amount: amount, user: currentUser, phone: userData.phone, address: `${userData.bankInfo.bankName} - ${userData.bankInfo.accNum} (${userData.bankInfo.accName})`, status: 'pending', timestamp: Date.now() });
-                document.getElementById('withAmount').value = ""; document.getElementById('withAuthPass').value = "";
-                showToast("Withdrawal requested!"); switchView('home');
+        function showTxnTab(type) {
+            document.querySelectorAll('[id^="tab-"]').forEach(el => {
+                el.style.color = "var(--text-muted)";
+                el.style.borderBottom = "none";
             });
+            document.querySelectorAll('[id^="txn-"]').forEach(el => el.style.display = "none");
+            
+            const activeTab = document.getElementById('tab-' + type);
+            if (activeTab) {
+                activeTab.style.color = "var(--primary-color)";
+                activeTab.style.borderBottom = "2px solid var(--primary-color)";
+            }
+            const activeList = document.getElementById('txn-' + type + '-list');
+            if (activeList) activeList.style.display = "block";
+        }
+
+        function loadTransactions() {
+            const depList = document.getElementById('txn-dep-list');
+            const witList = document.getElementById('txn-wit-list');
+            const incList = document.getElementById('txn-inc-list');
+            
+            if (depList) depList.innerHTML = "<p style='text-align:center;'>Loading...</p>";
+            if (witList) witList.innerHTML = "<p style='text-align:center;'>Loading...</p>";
+            if (incList) incList.innerHTML = "<p style='text-align:center;'>Loading...</p>";
+
+            db.ref('deposits').once('value', snap => {
+                if (depList) depList.innerHTML = "";
+                let found = false;
+                if (snap.exists()) {
+                    snap.forEach(c => {
+                        const d = c.val();
+                        if (d.user === currentUser) {
+                            found = true;
+                            const color = d.status === 'approve' ? 'var(--accent-green)' : (d.status === 'reject' ? '#ef4444' : '#f59e0b');
+                            depList.insertAdjacentHTML('afterbegin', `
+                            <div style="background:white; padding:12px; border-radius:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-soft);">
+                                <div><b style="color:var(--primary-dark);">+ ETB ${d.amount}</b><br><small style="color:var(--text-muted);">${d.date}</small></div>
+                                <span style="color:${color}; font-weight:bold; font-size:0.85rem; text-transform:capitalize;">${d.status}</span>
+                            </div>`);
+                        }
+                    });
+                }
+                if (!found && depList) depList.innerHTML = "<p style='text-align:center; color:var(--text-muted);'>No deposits yet.</p>";
+            });
+
+            db.ref('withdrawals').once('value', snap => {
+                if (witList) witList.innerHTML = "";
+                let found = false;
+                if (snap.exists()) {
+                    snap.forEach(c => {
+                        const w = c.val();
+                        if (w.user === currentUser) {
+                            found = true;
+                            const color = w.status === 'approve' ? 'var(--accent-green)' : (w.status === 'reject' ? '#ef4444' : '#f59e0b');
+                            witList.insertAdjacentHTML('afterbegin', `
+                            <div style="background:white; padding:12px; border-radius:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-soft);">
+                                <div><b style="color:#3b82f6;">- ETB ${w.amount}</b><br><small style="color:var(--text-muted);">${w.date}</small></div>
+                                <span style="color:${color}; font-weight:bold; font-size:0.85rem; text-transform:capitalize;">${w.status}</span>
+                            </div>`);
+                        }
+                    });
+                }
+                if (!found && witList) witList.innerHTML = "<p style='text-align:center; color:var(--text-muted);'>No withdrawals yet.</p>";
+            });
+            
+            if (incList) {
+                incList.innerHTML = `
+                <div style="background:white; padding:15px; border-radius:12px; margin-bottom:10px; text-align:center; box-shadow:var(--shadow-soft);">
+                    <b style="color:var(--accent-green); font-size:1.2rem;">ETB ${parseFloat(userData.income || 0).toFixed(2)}</b>
+                    <p style="color:var(--text-muted); font-size:0.85rem; margin-top:5px;">Total Harvest Earnings Accumulated</p>
+                </div>`;
+            }
         }
 
         function changeAccountPassword() {
-            const oldPass = document.getElementById('cpOldPass').value;
-            const newPass = document.getElementById('cpNewPass').value;
-            if(!oldPass || !newPass) return showToast("Please fill all fields!");
-            if(oldPass !== userData.password) return showToast("Incorrect Current Password!");
+            const oldP = document.getElementById('cpOldPass').value;
+            const newP = document.getElementById('cpNewPass').value;
+            if (!oldP || !newP) return showToast("Please fill both password fields");
+            if (userData.password !== oldP) return showToast("Current password is incorrect");
             
-            db.ref('users/' + currentUser).update({ password: newPass }).then(() => {
-                userData.password = newPass; 
+            db.ref('users/' + currentUser).update({ password: newP }).then(() => {
+                showToast("Password updated successfully!");
                 document.getElementById('cpOldPass').value = "";
                 document.getElementById('cpNewPass').value = "";
-                showToast("Password updated successfully!");
                 switchView('profile');
             });
         }
 
         function redeemGiftCode() {
-            const code = document.getElementById('giftCodeInput').value.trim().toUpperCase();
-            if(!code) return showToast("Please enter a gift code.");
+            const codeInput = document.getElementById('giftCodeInput').value.trim().toUpperCase();
+            if (!codeInput) return showToast("Please enter a gift code");
             
-            if (userData.redeemedCodes && userData.redeemedCodes[code]) {
-                return showToast("You have already claimed this gift code!");
-            }
-
-            db.ref('giftCodes/' + code).once('value', (snap) => {
-                if (!snap.exists()) {
-                    return showToast("Invalid gift code.");
-                }
+            db.ref('giftCodes/' + codeInput).once('value', (snap) => {
+                if (!snap.exists()) return showToast("Invalid or expired gift code.");
+                const codeData = snap.val();
+                if (codeData.status !== 'active') return showToast("Code already used or expired.");
                 
-                const giftData = snap.val();
+                const reward = parseFloat(codeData.amount || 0);
+                const newBal = (userData.balance || 0) + reward;
                 
-                if (Date.now() > giftData.expiry) {
-                    return showToast("This gift code has expired!");
-                }
-
-                const min = Math.ceil(giftData.minAmount);
-                const max = Math.floor(giftData.maxAmount);
-                const randomAmount = Math.floor(Math.random() * (max - min + 1)) + min;
-
-                const updates = {};
-                updates['balance'] = (userData.balance || 0) + randomAmount;
-                updates['redeemedCodes/' + code] = true; 
-
-                db.ref('users/' + currentUser).update(updates).then(() => {
-                    document.getElementById('giftCodeInput').value = "";
-                    confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#ec4899', '#f97316', '#fcd34d'] });
-                    showToast(`Success! You received ETB ${randomAmount} from the gift code!`);
-                    updateUI(); 
-                });
-            });
-        }
-
-        function showTxnTab(tab) {
-            document.getElementById('tab-dep').style = "font-weight:bold; color:var(--text-muted); cursor:pointer; padding-bottom:5px; transition:0.3s;";
-            document.getElementById('tab-wit').style = "font-weight:bold; color:var(--text-muted); cursor:pointer; padding-bottom:5px; transition:0.3s;";
-            document.getElementById('tab-inc').style = "font-weight:bold; color:var(--text-muted); cursor:pointer; padding-bottom:5px; transition:0.3s;";
-            
-            document.getElementById('txn-dep-list').style.display = 'none';
-            document.getElementById('txn-wit-list').style.display = 'none';
-            document.getElementById('txn-inc-list').style.display = 'none';
-            
-            document.getElementById('tab-'+tab).style = "font-weight:bold; color:var(--primary-color); cursor:pointer; border-bottom: 2px solid var(--primary-color); padding-bottom:5px; transition:0.3s;";
-            document.getElementById('txn-'+tab+'-list').style.display = 'block';
-        }
-
-        function loadTransactions() {
-            db.ref('deposits').once('value', snap => {
-                const list = document.getElementById('txn-dep-list');
-                list.innerHTML = '';
-                let count = 0;
-                if(snap.exists()) {
-                    snap.forEach(c => {
-                        const d = c.val();
-                        if(d.user === currentUser) {
-                            count++;
-                            let statusColor = d.status === 'approve' ? 'var(--accent-green)' : (d.status === 'reject' ? '#ef4444' : '#f59e0b');
-                            let date = new Date(d.timestamp).toLocaleString();
-                            list.insertAdjacentHTML('afterbegin', `
-                                <div style="background:white; padding:15px; border-radius:12px; margin-bottom:10px; box-shadow:var(--shadow-soft); display:flex; justify-content:space-between; align-items:center;">
-                                    <div>
-                                        <div style="font-weight:bold; color:var(--text-main);">Deposit</div>
-                                        <div style="font-size:0.75rem; color:var(--text-muted);">${date}</div>
-                                    </div>
-                                    <div style="text-align:right;">
-                                        <div style="font-weight:bold; color:var(--primary-dark);">+ ETB ${d.amount}</div>
-                                        <div style="font-size:0.75rem; color:${statusColor}; text-transform:uppercase; font-weight:bold;">${d.status}</div>
-                                    </div>
-                                </div>
-                            `);
-                        }
+                db.ref('users/' + currentUser).update({ balance: newBal }).then(() => {
+                    db.ref('giftCodes/' + codeInput).update({ status: 'used', usedBy: currentUser }).then(() => {
+                        showToast(`Success! You received ${reward} ETB.`);
+                        document.getElementById('giftCodeInput').value = "";
+                        updateUI();
                     });
-                }
-                if(count===0) list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No deposits found.</p>';
-            });
-
-            db.ref('withdrawals').once('value', snap => {
-                const list = document.getElementById('txn-wit-list');
-                list.innerHTML = '';
-                let count = 0;
-                if(snap.exists()) {
-                    snap.forEach(c => {
-                        const d = c.val();
-                        if(d.user === currentUser) {
-                            count++;
-                            let statusColor = d.status === 'approve' ? 'var(--accent-green)' : (d.status === 'reject' ? '#ef4444' : '#f59e0b');
-                            let date = new Date(d.timestamp).toLocaleString();
-                            list.insertAdjacentHTML('afterbegin', `
-                                <div style="background:white; padding:15px; border-radius:12px; margin-bottom:10px; box-shadow:var(--shadow-soft); display:flex; justify-content:space-between; align-items:center;">
-                                    <div>
-                                        <div style="font-weight:bold; color:var(--text-main);">Withdraw</div>
-                                        <div style="font-size:0.75rem; color:var(--text-muted);">${date}</div>
-                                    </div>
-                                    <div style="text-align:right;">
-                                        <div style="font-weight:bold; color:#ef4444;">- ETB ${d.amount}</div>
-                                        <div style="font-size:0.75rem; color:${statusColor}; text-transform:uppercase; font-weight:bold;">${d.status}</div>
-                                    </div>
-                                </div>
-                            `);
-                        }
-                    });
-                }
-                if(count===0) list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No withdrawals found.</p>';
-            });
-
-            const list = document.getElementById('txn-inc-list');
-            list.innerHTML = '';
-            let count = 0;
-            if(userData.plans && Object.keys(userData.plans).length > 0) {
-                db.ref('plans').once('value', snap => {
-                    const allPlans = snap.val() || {};
-                    for(let key in userData.plans) {
-                        const p = userData.plans[key];
-                        const pid = p.planId || key;
-                        const pName = allPlans[pid] ? allPlans[pid].name : "Farm Package";
-                        const earned = (p.daysClaimed || 0) * (p.daily || 0);
-                        if (earned > 0) {
-                            count++;
-                            list.insertAdjacentHTML('afterbegin', `
-                                <div style="background:white; padding:15px; border-radius:12px; margin-bottom:10px; box-shadow:var(--shadow-soft); display:flex; justify-content:space-between; align-items:center;">
-                                    <div>
-                                        <div style="font-weight:bold; color:var(--text-main);">${pName}</div>
-                                        <div style="font-size:0.75rem; color:var(--text-muted);">Harvest Yield</div>
-                                    </div>
-                                    <div style="text-align:right;">
-                                        <div style="font-weight:bold; color:var(--accent-green);">+ ETB ${earned.toFixed(2)}</div>
-                                        <div style="font-size:0.75rem; color:var(--text-muted);">${p.daysClaimed} Days Collected</div>
-                                    </div>
-                                </div>
-                            `);
-                        }
-                    }
-                    if(count===0) list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No income generated yet.</p>';
-                });
-            } else {
-                list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No income found.</p>';
-            }
-        }
-
-        // --- ADMIN FUNCTIONS ---
-        function createBankVerificationCode() {
-            let rawPhone = document.getElementById('adminBankVerPhone').value.trim();
-            if(!rawPhone) return showToast("Enter user phone");
-            
-            let phoneKey = rawPhone;
-            if (rawPhone.length === 9 && !rawPhone.startsWith("0")) phoneKey = "251" + rawPhone;
-            else if (rawPhone.startsWith("0")) phoneKey = "251" + rawPhone.substring(1);
-            else if (rawPhone.startsWith("+251")) phoneKey = rawPhone.substring(1);
-            
-            db.ref('users/' + phoneKey).once('value', snap => {
-                if(!snap.exists()) return showToast("User not found!");
-                
-                const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-                db.ref('users/' + phoneKey + '/bankVerificationCode').set(code).then(() => {
-                    document.getElementById('adminBankVerResult').innerHTML = `Code for ${phoneKey}: <br><span style="font-size:1.5rem; color:#8b5cf6; letter-spacing:2px;">${code}</span>`;
-                    showToast("Code Generated!");
                 });
             });
         }
-
-        function createAdminGiftCode() {
-            const code = document.getElementById('adminGiftCode').value.trim().toUpperCase();
-            const min = parseFloat(document.getElementById('adminGiftMin').value);
-            const max = parseFloat(document.getElementById('adminGiftMax').value);
-            const minutes = parseInt(document.getElementById('adminGiftExpiry').value);
-            
-            if(!code || isNaN(min) || isNaN(max) || isNaN(minutes)) return showToast("Fill all gift code details");
-            if(min > max) return showToast("Min amount cannot be greater than Max amount");
-
-            const expiryTime = Date.now() + (minutes * 60 * 1000);
-
-            db.ref('giftCodes/' + code).set({
-                code: code,
-                minAmount: min,
-                maxAmount: max,
-                expiry: expiryTime,
-                createdAt: Date.now()
-            }).then(() => {
-                showToast("Gift Code Published!");
-                document.getElementById('adminGiftCode').value = '';
-                document.getElementById('adminGiftMin').value = '';
-                document.getElementById('adminGiftMax').value = '';
-                document.getElementById('adminGiftExpiry').value = '';
-            });
-        }
-
-        function loadAdminGiftCodes() {
-            db.ref('giftCodes').on('value', snap => {
-                const c = document.getElementById('adminExistingCodes'); 
-                c.innerHTML = "";
-                
-                if(!snap.exists()) return c.innerHTML = "No active gift codes.";
-                
-                const now = Date.now();
-                snap.forEach(ch => {
-                    const data = ch.val();
-                    const isExpired = now > data.expiry;
-                    const status = isExpired ? "<span style='color:red; font-weight:bold;'>Expired</span>" : "<span style='color:green; font-weight:bold;'>Active</span>";
-                    
-                    c.insertAdjacentHTML('beforeend', `
-                    <div style="border-bottom:1px solid #eee; padding:8px 0; display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <b>${data.code}</b><br>
-                            <small style="color:#777;">${data.minAmount} - ${data.maxAmount} ETB | Status: ${status}</small>
-                        </div>
-                        <span onclick="db.ref('giftCodes/${ch.key}').remove()" style="color:white; background:red; padding:4px 8px; border-radius:5px; cursor:pointer; font-weight:bold;">Delete</span>
-                    </div>`);
-                });
-            });
-        }
-
-        function loadAdminPlans() {
-            db.ref('plans').on('value', snap => {
-                const c = document.getElementById('adminExistingPlans');
-                c.innerHTML = "";
-                if(!snap.exists()) return c.innerHTML = "No packages available.";
-                snap.forEach(ch => {
-                    const p = ch.val();
-                    c.insertAdjacentHTML('beforeend', `
-                    <div style="border-bottom:1px solid #eee; padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <b style="color:var(--primary-dark);">${p.name}</b><br>
-                            <span style="color:var(--text-muted); font-size:0.8rem;">${p.price} ETB | Daily: ${p.roi} ETB | Total: ${parseFloat((p.roi * (p.duration||60)).toFixed(2))} ETB | ${p.duration} Days | Limit: ${p.limit || 1}</span>
-                        </div>
-                        <div style="display:flex; gap:5px;">
-                            <button onclick="editAdminPlan('${ch.key}')" style="background:var(--primary-color); color:white; padding:5px 10px; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">Edit</button>
-                            <button onclick="deleteAdminPlan('${ch.key}')" style="background:#ef4444; color:white; padding:5px 10px; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">Del</button>
-                        </div>
-                    </div>`);
-                });
-            });
-        }
-
-        function editAdminPlan(key) {
-            db.ref('plans/' + key).once('value', snap => {
-                if(!snap.exists()) return;
-                const p = snap.val();
-                editingPlanKey = key;
-                document.getElementById('adminPlanTitle').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Farm Package';
-                document.getElementById('adminPlanName').value = p.name;
-                document.getElementById('adminPlanPrice').value = p.price;
-                document.getElementById('adminPlanRoi').value = p.roi;
-                document.getElementById('adminPlanDuration').value = p.duration;
-                // NEW: Edit Limit
-                document.getElementById('adminPlanLimit').value = p.limit || 1;
-                document.getElementById('adminPlanImg').value = p.img || '';
-                
-                document.getElementById('adminSavePlanBtn').innerText = "Update Package";
-                document.getElementById('adminCancelEditBtn').style.display = "block";
-                
-                document.getElementById('adminPlanTitle').scrollIntoView({behavior: 'smooth'});
-            });
-        }
-
-        function cancelEditPlan() {
-            editingPlanKey = null;
-            document.getElementById('adminPlanTitle').innerHTML = '<i class="fa-solid fa-plus"></i> Add Farm Package';
-            document.getElementById('adminPlanName').value = '';
-            document.getElementById('adminPlanPrice').value = '';
-            document.getElementById('adminPlanRoi').value = '';
-            document.getElementById('adminPlanDuration').value = '';
-            // NEW: Clear Limit
-            document.getElementById('adminPlanLimit').value = '';
-            document.getElementById('adminPlanImg').value = '';
-            
-            document.getElementById('adminSavePlanBtn').innerText = "Publish Package";
-            document.getElementById('adminCancelEditBtn').style.display = "none";
-        }
-
-        function saveAdminPlan() {
-            const name = document.getElementById('adminPlanName').value;
-            const price = parseFloat(document.getElementById('adminPlanPrice').value);
-            const roi = parseFloat(document.getElementById('adminPlanRoi').value);
-            const duration = parseInt(document.getElementById('adminPlanDuration').value) || 60;
-            // NEW: Get Limit
-            const limit = parseInt(document.getElementById('adminPlanLimit').value) || 1;
-            const img = document.getElementById('adminPlanImg').value || "https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1";
-            
-            if(!name || isNaN(price) || isNaN(roi)) return showToast("Fill plan details properly");
-
-            const planData = { name: name, price: price, roi: roi, duration: duration, limit: limit, img: img };
-
-            if (editingPlanKey) {
-                db.ref('plans/' + editingPlanKey).update(planData).then(() => {
-                    showToast("Farm Package Updated!");
-                    cancelEditPlan();
-                });
-            } else {
-                db.ref('plans').push(planData).then(() => {
-                    showToast("Farm Package Created!");
-                    cancelEditPlan();
-                });
-            }
-        }
-
-        function deleteAdminPlan(key) {
-            if(confirm("Are you sure you want to delete this package?")) {
-                db.ref('plans/' + key).remove().then(() => {
-                    showToast("Package deleted!");
-                    if(editingPlanKey === key) cancelEditPlan();
-                });
-            }
-        }
-        // ------------------------------------
-
-        function addNewPaymentMethod() {
-            const b = document.getElementById('adminBankName').value;
-            const n = document.getElementById('adminAccountName').value;
-            const a = document.getElementById('adminAccountNum').value;
-            if(!b || !a) return showToast("Enter Bank Info");
-            db.ref('settings/paymentMethods').push({ bankName: b, accountName: n, accountNumber: a }).then(() => showToast("Bank Added"));
-        }
-
-        function loadAdminBankList() {
-            db.ref('settings/paymentMethods').on('value', snap => {
-                const c = document.getElementById('adminExistingBanks'); c.innerHTML = "";
-                if(!snap.exists()) return c.innerHTML = "No banks.";
-                snap.forEach(ch => {
-                    c.insertAdjacentHTML('beforeend', `<div style="border-bottom:1px solid #eee; padding:5px 0;"><b>${ch.val().bankName}</b> - ${ch.val().accountNumber} <span onclick="db.ref('settings/paymentMethods/${ch.key}').remove()" style="color:red; float:right; cursor:pointer;">X</span></div>`);
-                });
-            });
-        }
-
-        function listenForRequests() {
-            const list = document.getElementById('adminRequestList');
-            let dSnap = null; let wSnap = null;
-            const render = () => {
-                if(!dSnap || !wSnap) return;
-                list.innerHTML = ""; let pend = false;
-                const proc = (snap, path) => {
-                    if(snap.exists()) snap.forEach(ch => {
-                        const r = ch.val();
-                        if(r.status === 'pending') {
-                            pend = true;
-                            // 18% fee calculation logic for display
-                            let dispAmt = r.type === 'withdraw' ? (parseFloat(r.amount) * 0.82).toFixed(2) : r.amount;
-                            
-                            list.insertAdjacentHTML('beforeend', `
-                            <div class="req-card ${r.type==='withdraw'?'withdraw':''}">
-                                <strong>${r.type.toUpperCase()} - ETB ${dispAmt}</strong><br>
-                                <small>User: ${r.phone} | ${r.type==='deposit' ? 'Txn: '+r.txnId : 'Acc: '+r.address}</small><br>
-                                <button onclick="actReq('${ch.key}', 'approve', '${r.user}', ${r.amount}, '${r.type}', '${path}')" style="background:green; color:white; padding:5px 10px; margin-top:5px; border:none; border-radius:5px;">Approve</button>
-                                <button onclick="actReq('${ch.key}', 'reject', '${r.user}', ${r.amount}, '${r.type}', '${path}')" style="background:red; color:white; padding:5px 10px; margin-top:5px; border:none; border-radius:5px;">Reject</button>
-                            </div>`);
-                        }
-                    });
-                };
-                proc(dSnap, 'deposits'); proc(wSnap, 'withdrawals');
-                if(!pend) list.innerHTML = "No pending requests.";
-            };
-            db.ref('deposits').on('value', s => { dSnap = s; render(); });
-            db.ref('withdrawals').on('value', s => { wSnap = s; render(); });
-        }
-
-        function actReq(key, act, uid, amt, type, path) {
-            db.ref(path + '/' + key).update({ status: act }).then(() => {
-                if(act === 'approve' && type === 'deposit') {
-                    db.ref('users/'+uid).once('value', s => db.ref('users/'+uid).update({ balance: parseFloat(s.val().balance||0) + amt }));
-                } else if(act === 'reject' && type === 'withdraw') {
-                    db.ref('users/'+uid).once('value', s => db.ref('users/'+uid).update({ balance: parseFloat(s.val().balance||0) + amt }));
-                }
-                showToast("Action saved");
-            });
-        }
-
-        // --- NEW: APPROVED DEPOSITS HISTORY ---
-        function loadAdminDepositHistory() {
-            const list = document.getElementById('adminDepositHistoryList');
-            list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Loading history...</p>';
-            
-            db.ref('deposits').once('value', snap => {
-                list.innerHTML = "";
-                let count = 0;
-                if(snap.exists()) {
-                    const arr = [];
-                    snap.forEach(ch => {
-                        const r = ch.val();
-                        if(r.status === 'approve') {
-                            arr.push(r);
-                        }
-                    });
-                    
-                    // Sort by newest first
-                    arr.sort((a, b) => b.timestamp - a.timestamp); 
-                    
-                    arr.forEach(r => {
-                        count++;
-                        const date = new Date(r.timestamp).toLocaleString();
-                        list.insertAdjacentHTML('beforeend', `
-                        <div style="background:#dcfce7; border-left:4px solid var(--accent-green); padding:12px; border-radius:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <strong style="color:var(--accent-green); font-size:1.1rem;">ETB ${r.amount}</strong><br>
-                                <small style="color:var(--text-main); font-weight:bold;">User: ${r.phone}</small><br>
-                                <small style="color:var(--text-muted);">Txn: ${r.txnId}</small>
-                            </div>
-                            <div style="text-align:right;">
-                                <span style="background:var(--accent-green); color:white; font-size:0.7rem; padding:3px 8px; border-radius:8px;">Approved</span><br>
-                                <small style="color:var(--text-muted); font-size:0.75rem; margin-top:5px; display:block;">${date}</small>
-                            </div>
-                        </div>`);
-                    });
-                }
-                if(count === 0) list.innerHTML = '<p style="text-align:center; color:var(--text-muted);">No approved deposits found.</p>';
-            });
-        }
-
-        // --- SLIDESHOW LOGIC ---
-        let slideIndex = 0;
-        function showSlides() {
-            let i;
-            let slides = document.getElementsByClassName("mySlides");
-            if(slides.length === 0) {
-                setTimeout(showSlides, 1000);
-                return;
-            }
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";  
-            }
-            slideIndex++;
-            if (slideIndex > slides.length) {slideIndex = 1}    
-            slides[slideIndex-1].style.display = "block";  
-            setTimeout(showSlides, 3000); // Change image every 3 seconds
-        }
-        showSlides();
-
-        // --- UTILS ---
-        function copyRefLink() { navigator.clipboard.writeText(window.location.origin + window.location.pathname + "?ref=" + document.getElementById('invitePageCode').innerText); showToast("Link Copied!"); }
-        function copyString(str) { navigator.clipboard.writeText(str); showToast("Copied!"); }
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function showToast(text) { const t = document.getElementById("toast"); t.className = "show"; t.innerText = text; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
     </script>
 </body>
 </html>
