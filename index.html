@@ -1811,149 +1811,355 @@
         // ==========================================
 
         function showToast(msg) {
-            const toast = document.getElementById('toast');
+            const toast = document.getElementById("toast");
             if(toast) {
                 toast.innerText = msg;
-                toast.classList.add('show');
-                setTimeout(() => { toast.classList.remove('show'); }, 3000);
+                toast.className = "show";
+                setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
             }
         }
 
-        function copyRefLink() {
-            navigator.clipboard.writeText(window.location.origin + window.location.pathname + "?ref=" + userData.refCode).then(() => {
-                showToast("Invite link copied!");
-            });
-        }
-        
-        function copyString(str) {
-            navigator.clipboard.writeText(str).then(() => showToast("Copied to clipboard!"));
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if(modal) modal.style.display = 'flex';
         }
 
-        // --- Admin Plan Management Core Functions ---
+        function copyString(str) {
+            navigator.clipboard.writeText(str).then(() => {
+                showToast("Copied to clipboard!");
+            });
+        }
+
+        function copyRefLink() {
+            if(!userData || !userData.refCode) return showToast("Invite code not ready");
+            const link = window.location.origin + window.location.pathname + "?ref=" + userData.refCode;
+            copyString(link);
+        }
+
+        // --- ADMIN FUNCTIONS ---
+
+        function saveSystemConfig() {
+            const minDep = document.getElementById('cfgMinDeposit').value;
+            const minWith = document.getElementById('cfgMinWithdraw').value;
+            const regBonus = document.getElementById('cfgRegBonus').value;
+            const withFee = document.getElementById('cfgWithFee').value;
+            
+            db.ref('settings/config').update({
+                minDeposit: parseFloat(minDep || 1000),
+                minWithdraw: parseFloat(minWith || 250),
+                registrationBonus: parseFloat(regBonus || 110),
+                withdrawalFee: parseFloat(withFee || 18)
+            }).then(() => showToast("System Configuration saved!"));
+        }
+
+        function createAdminGiftCode() {
+            const code = document.getElementById('adminGiftCode').value.trim().toUpperCase();
+            const min = parseFloat(document.getElementById('adminGiftMin').value);
+            const max = parseFloat(document.getElementById('adminGiftMax').value);
+            const expMinutes = parseInt(document.getElementById('adminGiftExpiry').value);
+            
+            if(!code || !min || !max) return showToast("Please fill code and min/max amounts");
+            
+            const amt = (Math.random() * (max - min) + min).toFixed(2);
+            
+            db.ref('giftCodes/' + code).set({
+                amount: amt,
+                status: 'active',
+                createdAt: Date.now(),
+                expiresAt: expMinutes ? Date.now() + (expMinutes * 60000) : null
+            }).then(() => {
+                showToast("Gift code published successfully!");
+                document.getElementById('adminGiftCode').value = "";
+                document.getElementById('adminGiftMin').value = "";
+                document.getElementById('adminGiftMax').value = "";
+                document.getElementById('adminGiftExpiry').value = "";
+            });
+        }
+
+        function loadAdminGiftCodes() {
+            db.ref('giftCodes').on('value', snap => {
+                const container = document.getElementById('adminExistingCodes');
+                if(!container) return;
+                container.innerHTML = "";
+                if(!snap.exists()) return container.innerHTML = "<p style='color:var(--text-muted);'>No gift codes created.</p>";
+                
+                snap.forEach(c => {
+                    const cd = c.val();
+                    const color = cd.status === 'active' ? 'var(--accent-green)' : '#ef4444';
+                    container.insertAdjacentHTML('beforeend', `
+                    <div style="padding:10px; border-bottom:1px dashed #e4e4e7; display:flex; justify-content:space-between;">
+                        <div><b>${c.key}</b><br><small>${cd.amount} ETB</small></div>
+                        <span style="color:${color}; font-weight:bold; font-size:0.8rem; text-transform:uppercase;">${cd.status}</span>
+                    </div>`);
+                });
+            });
+        }
+
         function saveAdminPlan() {
             const name = document.getElementById('adminPlanName').value;
             const price = parseFloat(document.getElementById('adminPlanPrice').value);
             const roi = parseFloat(document.getElementById('adminPlanRoi').value);
             const duration = parseInt(document.getElementById('adminPlanDuration').value);
             const limit = parseInt(document.getElementById('adminPlanLimit').value);
-            const img = document.getElementById('adminPlanImg').value || 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=400';
-
-            if (!name || !price || !roi || !duration || !limit) {
-                return showToast("Please fill all plan details");
-            }
-
-            const planData = {
-                name: name,
-                price: price,
-                roi: roi,
-                duration: duration,
-                limit: limit,
-                img: img,
-                timestamp: Date.now()
+            const img = document.getElementById('adminPlanImg').value;
+            
+            if(!name || !price || !roi || !duration) return showToast("Fill required plan fields");
+            
+            const planData = { 
+                name: name, price: price, roi: roi, 
+                duration: duration, limit: limit || 0, img: img || "" 
             };
-
-            if (editingPlanKey) {
-                db.ref('plans/' + editingPlanKey).update(planData).then(() => {
-                    showToast("Package updated successfully!");
-                    cancelEditPlan();
-                });
-            } else {
-                db.ref('plans').push(planData).then(() => {
-                    showToast("New farm package published!");
-                    document.getElementById('adminPlanName').value = "";
-                    document.getElementById('adminPlanPrice').value = "";
-                    document.getElementById('adminPlanRoi').value = "";
-                    document.getElementById('adminPlanDuration').value = "";
-                    document.getElementById('adminPlanLimit').value = "";
-                    document.getElementById('adminPlanImg').value = "";
-                });
-            }
-        }
-
-        function loadAdminPlans() {
-            db.ref('plans').on('value', (snapshot) => {
-                const container = document.getElementById('adminExistingPlans');
-                if(!container) return;
-                container.innerHTML = "";
-                
-                if (!snapshot.exists()) {
-                    container.innerHTML = "<p style='color:var(--text-muted);'>No packages found.</p>";
-                    return;
-                }
-                
-                snapshot.forEach((child) => {
-                    const plan = child.val();
-                    const key = child.key;
-                    container.insertAdjacentHTML('beforeend', `
-                        <div style="background:#f4f4f5; padding:15px; border-radius:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <b style="color:var(--text-main); font-size:1.1rem;">${plan.name}</b><br>
-                                <span style="font-size:0.85rem; color:var(--text-muted);">
-                                    Price: <b>${plan.price}</b> | Daily ROI: <b>${plan.roi}</b> | Limit: <b>${plan.limit}</b> | Duration: <b>${plan.duration} Days</b>
-                                </span>
-                            </div>
-                            <div style="display:flex; gap:10px;">
-                                <button onclick="editAdminPlan('${key}')" style="background:#3b82f6; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="deleteAdminPlan('${key}')" style="background:#ef4444; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    `);
-                });
-            });
-        }
-
-        function editAdminPlan(key) {
-            db.ref('plans/' + key).once('value', (snap) => {
-                if(!snap.exists()) return;
-                const plan = snap.val();
-                editingPlanKey = key;
-                
-                document.getElementById('adminPlanTitle').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Farm Package';
-                document.getElementById('adminPlanName').value = plan.name;
-                document.getElementById('adminPlanPrice').value = plan.price;
-                document.getElementById('adminPlanRoi').value = plan.roi;
-                document.getElementById('adminPlanDuration').value = plan.duration;
-                document.getElementById('adminPlanLimit').value = plan.limit;
-                document.getElementById('adminPlanImg').value = plan.img || '';
-                
-                document.getElementById('adminSavePlanBtn').innerText = 'Update Package';
-                document.getElementById('adminCancelEditBtn').style.display = 'block';
-                
-                // Scroll to top for easy editing
-                window.scrollTo({ top: document.getElementById('adminPlanTitle').offsetTop - 100, behavior: 'smooth' });
+            
+            let planRef = editingPlanKey ? db.ref('plans/' + editingPlanKey) : db.ref('plans').push();
+            
+            planRef.set(planData).then(() => {
+                showToast(editingPlanKey ? "Farm Package updated!" : "Farm Package published!");
+                cancelEditPlan();
             });
         }
 
         function cancelEditPlan() {
             editingPlanKey = null;
-            document.getElementById('adminPlanTitle').innerHTML = '<i class="fa-solid fa-plus"></i> Add Farm Package';
             document.getElementById('adminPlanName').value = "";
             document.getElementById('adminPlanPrice').value = "";
             document.getElementById('adminPlanRoi').value = "";
             document.getElementById('adminPlanDuration').value = "";
             document.getElementById('adminPlanLimit').value = "";
             document.getElementById('adminPlanImg').value = "";
-            
-            document.getElementById('adminSavePlanBtn').innerText = 'Publish Package';
-            document.getElementById('adminCancelEditBtn').style.display = 'none';
+            document.getElementById('adminSavePlanBtn').innerText = "Publish Package";
+            document.getElementById('adminCancelEditBtn').style.display = "none";
+            document.getElementById('adminPlanTitle').innerHTML = '<i class="fa-solid fa-plus"></i> Add Farm Package';
+        }
+
+        function editAdminPlan(key) {
+            db.ref('plans/' + key).once('value', snap => {
+                const plan = snap.val();
+                if(plan) {
+                    editingPlanKey = key;
+                    document.getElementById('adminPlanName').value = plan.name || "";
+                    document.getElementById('adminPlanPrice').value = plan.price || "";
+                    document.getElementById('adminPlanRoi').value = plan.roi || "";
+                    document.getElementById('adminPlanDuration').value = plan.duration || "";
+                    document.getElementById('adminPlanLimit').value = plan.limit !== undefined ? plan.limit : "";
+                    document.getElementById('adminPlanImg').value = plan.img || "";
+                    document.getElementById('adminSavePlanBtn').innerText = "Update Package";
+                    document.getElementById('adminCancelEditBtn').style.display = "block";
+                    document.getElementById('adminPlanTitle').innerHTML = '<i class="fa-solid fa-pen"></i> Edit Farm Package';
+                    document.getElementById('adminPlanTitle').scrollIntoView({behavior: "smooth"});
+                }
+            });
         }
 
         function deleteAdminPlan(key) {
-            if(confirm("Are you sure you want to delete this package?")) {
-                db.ref('plans/' + key).remove().then(() => {
-                    showToast("Package deleted successfully!");
-                });
+            if(confirm("Are you sure you want to delete this farm package?")) {
+                db.ref('plans/' + key).remove().then(() => showToast("Package deleted successfully!"));
             }
         }
 
-        // --- Prevent crash if other admin functions are clicked, but logic is pending ---
-        function listenForRequests() { console.log("Request listener initialized"); }
-        function loadAdminBankList() { console.log("Bank list loaded"); }
-        function loadAdminGiftCodes() { console.log("Gift codes loaded"); }
-        function saveSystemConfig() { showToast("Configuration logic goes here"); }
-        function createAdminGiftCode() { showToast("Gift Code creation logic goes here"); }
-        function addNewPaymentMethod() { showToast("Payment method addition logic goes here"); }
-        function loadAdminDepositHistory() { showToast("Deposit history logic goes here"); }
+        function loadAdminPlans() {
+            db.ref('plans').on('value', snap => {
+                const container = document.getElementById('adminExistingPlans');
+                if(!container) return;
+                container.innerHTML = "";
+                if(!snap.exists()) return container.innerHTML = "<p style='color:var(--text-muted);'>No farm packages available.</p>";
+                
+                snap.forEach(c => {
+                    const p = c.val();
+                    container.insertAdjacentHTML('beforeend', `
+                    <div style="padding:15px; border:1px solid #f4f4f5; margin-bottom:10px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; background:#fafaf9;">
+                        <div>
+                            <b style="color:var(--text-main); font-size:1rem;">${p.name}</b><br>
+                            <span style="color:var(--primary-dark); font-weight:600;">${p.price} ETB</span> | 
+                            <span style="color:var(--accent-green); font-size:0.8rem;">Daily: ${p.roi} ETB</span>
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <button onclick="editAdminPlan('${c.key}')" style="background:#3b82f6; color:white; border:none; width:35px; height:35px; border-radius:8px; cursor:pointer; box-shadow:var(--shadow-soft);"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteAdminPlan('${c.key}')" style="background:#ef4444; color:white; border:none; width:35px; height:35px; border-radius:8px; cursor:pointer; box-shadow:var(--shadow-soft);"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>`);
+                });
+            });
+        }
+
+        function addNewPaymentMethod() {
+            const bankName = document.getElementById('adminBankName').value;
+            const accName = document.getElementById('adminAccountName').value;
+            const accNum = document.getElementById('adminAccountNum').value;
+            
+            if(!bankName || !accName || !accNum) return showToast("Fill all bank details");
+            
+            db.ref('settings/paymentMethods').push().set({
+                bankName: bankName, accountName: accName, accountNumber: accNum
+            }).then(() => {
+                showToast("Bank payment method added!");
+                document.getElementById('adminBankName').value = "";
+                document.getElementById('adminAccountName').value = "";
+                document.getElementById('adminAccountNum').value = "";
+            });
+        }
+
+        function deleteAdminBank(key) {
+            if(confirm("Are you sure you want to remove this bank account?")) {
+                db.ref('settings/paymentMethods/' + key).remove().then(() => showToast("Bank account removed!"));
+            }
+        }
+
+        function loadAdminBankList() {
+            db.ref('settings/paymentMethods').on('value', snap => {
+                const container = document.getElementById('adminExistingBanks');
+                if(!container) return;
+                container.innerHTML = "";
+                if(!snap.exists()) return container.innerHTML = "<p style='color:var(--text-muted);'>No deposit banks configured.</p>";
+                
+                snap.forEach(c => {
+                    const b = c.val();
+                    container.insertAdjacentHTML('beforeend', `
+                    <div style="padding:15px; border:1px solid #f4f4f5; margin-bottom:10px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; background:#fafaf9;">
+                        <div>
+                            <b style="color:#0f172a;">${b.bankName}</b><br>
+                            <span style="font-weight:700; color:var(--text-main); font-size:1.1rem;">${b.accountNumber}</span><br>
+                            <small style="color:var(--text-muted);">${b.accountName}</small>
+                        </div>
+                        <button onclick="deleteAdminBank('${c.key}')" style="background:#ef4444; color:white; border:none; width:35px; height:35px; border-radius:8px; cursor:pointer; box-shadow:var(--shadow-soft);"><i class="fa-solid fa-trash"></i></button>
+                    </div>`);
+                });
+            });
+        }
+
+        function listenForRequests() {
+            const container = document.getElementById('adminRequestList');
+            if(!container) return;
+            
+            db.ref('deposits').on('value', snap => { updateAdminRequests(); });
+            db.ref('withdrawals').on('value', snap => { updateAdminRequests(); });
+        }
+        
+        function updateAdminRequests() {
+            const container = document.getElementById('adminRequestList');
+            if(!container) return;
+            container.innerHTML = "";
+            let hasPending = false;
+            
+            db.ref('deposits').once('value', snap => {
+                if(snap.exists()) {
+                    snap.forEach(c => {
+                        const r = c.val();
+                        if(r.status === 'pending') {
+                            hasPending = true;
+                            container.insertAdjacentHTML('beforeend', `
+                            <div class="req-card">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <span style="font-weight:800; color:#b45309;">Deposit: ETB ${r.amount}</span>
+                                    <span style="font-size:0.7rem; color:#b45309;">${r.date}</span>
+                                </div>
+                                <div style="font-size:0.85rem; color:var(--text-main); margin:8px 0; line-height:1.5;">
+                                    <b>User:</b> ${r.user}<br>
+                                    <b>Sender:</b> ${r.senderName}<br>
+                                    <b>Ref:</b> ${r.transId}
+                                </div>
+                                <div style="display:flex; gap:10px; margin-top:10px;">
+                                    <button style="flex:1; background:var(--accent-green); color:white; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="approveReq('deposits', '${c.key}', '${r.user}', ${r.amount})">Approve</button>
+                                    <button style="flex:1; background:#ef4444; color:white; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="rejectReq('deposits', '${c.key}')">Reject</button>
+                                </div>
+                            </div>`);
+                        }
+                    });
+                }
+            }).then(() => {
+                db.ref('withdrawals').once('value', wSnap => {
+                    if(wSnap.exists()) {
+                        wSnap.forEach(c => {
+                            const r = c.val();
+                            if(r.status === 'pending') {
+                                hasPending = true;
+                                container.insertAdjacentHTML('beforeend', `
+                                <div class="req-card withdraw">
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <span style="font-weight:800; color:#1d4ed8;">Withdraw: ETB ${r.amount}</span>
+                                        <span style="font-size:0.7rem; color:#1d4ed8;">${r.date}</span>
+                                    </div>
+                                    <div style="font-size:0.85rem; color:var(--text-main); margin:8px 0; line-height:1.5;">
+                                        <b>User:</b> ${r.user} | Net: ETB ${r.netAmount}<br>
+                                        <b>Bank:</b> ${r.bankName}<br>
+                                        <b>Acc:</b> ${r.accNum} (${r.accName})
+                                    </div>
+                                    <div style="display:flex; gap:10px; margin-top:10px;">
+                                        <button style="flex:1; background:var(--accent-green); color:white; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="approveReq('withdrawals', '${c.key}', '${r.user}', ${r.amount}, true)">Approve</button>
+                                        <button style="flex:1; background:#ef4444; color:white; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="rejectReq('withdrawals', '${c.key}', '${r.user}', ${r.amount})">Reject & Refund</button>
+                                    </div>
+                                </div>`);
+                            }
+                        });
+                    }
+                    if(!hasPending) container.innerHTML = "<p style='color:var(--text-muted); text-align:center;'>No pending transactions.</p>";
+                });
+            });
+        }
+
+        function approveReq(type, reqId, uid, amt, isWithdraw = false) {
+            if(!confirm(`Approve this ${type} for ETB ${amt}?`)) return;
+            
+            db.ref(type + '/' + reqId).update({ status: 'approve' }).then(() => {
+                if(!isWithdraw) {
+                    db.ref('users/' + uid).once('value', snap => {
+                        if(snap.exists()) {
+                            const u = snap.val();
+                            db.ref('users/' + uid).update({ balance: (parseFloat(u.balance) || 0) + parseFloat(amt) });
+                        }
+                    });
+                }
+                showToast("Transaction Approved successfully!");
+            });
+        }
+
+        function rejectReq(type, reqId, uid = null, amt = 0) {
+            if(!confirm(`Reject this ${type}?`)) return;
+            
+            db.ref(type + '/' + reqId).update({ status: 'reject' }).then(() => {
+                if(type === 'withdrawals' && uid) {
+                    db.ref('users/' + uid).once('value', snap => {
+                        if(snap.exists()) {
+                            const u = snap.val();
+                            db.ref('users/' + uid).update({ balance: (parseFloat(u.balance) || 0) + parseFloat(amt) });
+                        }
+                    });
+                }
+                showToast("Transaction Rejected" + (type === 'withdrawals' ? " and Funds Refunded!" : "!"));
+            });
+        }
+
+        function loadAdminDepositHistory() {
+            const container = document.getElementById('adminDepositHistoryList');
+            if(!container) return;
+            container.innerHTML = "<p style='text-align:center; color:var(--text-muted);'>Loading history...</p>";
+            
+            db.ref('deposits').once('value', snap => {
+                container.innerHTML = "";
+                let count = 0;
+                if(snap.exists()) {
+                    const deposits = [];
+                    snap.forEach(c => { deposits.push(c.val()); });
+                    deposits.sort((a,b) => b.timestamp - a.timestamp).forEach(r => {
+                        if(r.status === 'approve') {
+                            count++;
+                            container.insertAdjacentHTML('beforeend', `
+                            <div style="padding:15px; border-bottom:1px solid #f4f4f5; background:white; margin-bottom:8px; border-radius:12px; box-shadow:var(--shadow-soft);">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <b style="color:var(--accent-green); font-size:1.1rem;">+ ${r.amount} ETB</b>
+                                    <span style="font-size:0.75rem; color:var(--text-muted);">${new Date(r.timestamp).toLocaleDateString()}</span>
+                                </div>
+                                <div style="font-size:0.85rem; color:var(--text-main); margin-top:5px;">
+                                    User: <b>${r.user}</b> <br>
+                                    Ref: <span style="color:var(--text-muted);">${r.transId}</span>
+                                </div>
+                            </div>`);
+                        }
+                    });
+                }
+                if(count === 0) container.innerHTML = "<p style='text-align:center; color:var(--text-muted);'>No approved deposits found.</p>";
+            });
+        }
+
     </script>
 </body>
 </html>
