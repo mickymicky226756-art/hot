@@ -399,7 +399,10 @@
             <div style="padding: 0 20px 20px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                     <h3 style="color:var(--text-main); font-weight:700; font-size:1.2rem;" data-lang="navShop">Available Farms</h3>
-                    <span style="color:var(--primary-color); font-size:0.85rem; font-weight:600; cursor:pointer;" onclick="switchView('shop')">See All <i class="fa-solid fa-arrow-right" style="margin-left: 3px;"></i></span>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <span style="color:var(--text-muted); font-size:0.85rem; font-weight:600; cursor:pointer;" onclick="loadShopPlans()" title="Refresh packages"><i class="fa-solid fa-rotate-right"></i></span>
+                        <span style="color:var(--primary-color); font-size:0.85rem; font-weight:600; cursor:pointer;" onclick="switchView('shop')">See All <i class="fa-solid fa-arrow-right" style="margin-left: 3px;"></i></span>
+                    </div>
                 </div>
                 <div class="farm-grid" id="homePlanList"><p style="text-align:center; color:var(--text-muted);">Loading packages...</p></div>
             </div>
@@ -496,7 +499,7 @@
                 <div id="depositStep1">
                     <h4 style="margin-bottom:15px; color:var(--text-main);">Step 1: Enter Deposit Amount</h4>
                     <div class="input-group" style="margin-top:20px; margin-bottom: 10px;">
-                        <label id="depMinLabel">Amount to Send (Min: 1200 ETB)</label>
+                        <label id="depMinLabel">Amount to Send (Min: 1000 ETB)</label>
                         <input type="number" id="depAmountPage" placeholder="Enter Amount">
                     </div>
                     <div class="quick-amounts">
@@ -543,8 +546,8 @@
                 </div>
 
                 <div id="withFeeInfo" style="background:#fff7ed; border:1px solid #ffedd5; color:#c2410c; padding:12px; border-radius:12px; font-size:0.85rem; font-weight:600; margin-bottom:20px;">
-                    <i class="fa-solid fa-circle-info"></i> Fee: 20% | Min Withdraw: 500 ETB<br>
-                    <i class="fa-solid fa-clock" style="margin-top:5px;"></i> ማውጣት የሚቻለው፡ ከጧት 4:00 እስከ ከሰዓት 10:00 (10:00 AM - 4:00 PM)<br>
+                    <i class="fa-solid fa-circle-info"></i> Fee: <span id="withFeePct">18</span>% | Min Withdraw: <span id="withMinAmt">250</span> ETB<br>
+                    <i class="fa-solid fa-clock" style="margin-top:5px;"></i> ማውጣት የሚቻለው፡ ከጧት 10:00 እስከ ምሽት 4:00 (10:00 AM - 4:00 PM)<br>
                     <i class="fa-solid fa-rotate-left" style="margin-top:5px;"></i> በቀን 2 ጊዜ ብቻ (Max 2 withdrawals per day)
                 </div>
 
@@ -565,6 +568,13 @@
                     <p style="color:var(--text-main); font-weight:600;">Please bind your bank account first!</p>
                     <button class="btn-full" style="margin-top:15px;" onclick="switchView('bankcard')">Setup Bank Info</button>
                 </div>
+
+                <div id="withdrawNoInvestMsg" style="display:none; text-align:center;">
+                    <i class="fa-solid fa-seedling" style="font-size:3rem; color:var(--accent-green); margin-bottom:15px;"></i>
+                    <p style="color:var(--text-main); font-weight:600; font-size:1.05rem;">No active investment found!</p>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin: 10px 0 20px;">To withdraw funds, you must first purchase at least one farm package.</p>
+                    <button class="btn-full" onclick="switchView('shop')"><i class="fa-solid fa-basket-shopping"></i> Browse Farm Packages</button>
+                </div>
             </div>
         </section>
 
@@ -583,6 +593,7 @@
 
         <section id="view-shop" class="view-section animate-up">
             <div class="page-header">
+                <div style="position:absolute; right:20px; top:25px; width:40px; height:40px; border-radius:12px; background:white; box-shadow:var(--shadow-soft); display:flex; align-items:center; justify-content:center; color:var(--primary-color); cursor:pointer;" onclick="loadShopPlans()" title="Refresh"><i class="fa-solid fa-rotate-right"></i></div>
                 <h2>Farm Packages</h2>
                 <p>Invest in farms and earn daily.</p>
             </div>
@@ -726,6 +737,7 @@
                 <button class="btn-full" onclick="saveBankInfo()">Save Bank Details</button>
             </div>
         </section>
+
 
         <section id="view-invite" class="view-section animate-up">
             <div class="page-header">
@@ -933,10 +945,12 @@
             if (depLabel) {
                 depLabel.innerText = `Amount to Send (Min: ${appConfig.minDeposit} ETB)`;
             }
-            const withFeeInfo = document.getElementById('withFeeInfo');
-            if (withFeeInfo) {
-                withFeeInfo.innerHTML = `<i class="fa-solid fa-circle-info"></i> Fee: ${appConfig.withdrawalFee}% | Min Withdraw: ${appConfig.minWithdraw} ETB<br><i class="fa-solid fa-clock" style="margin-top:5px;"></i> ማውጣት የሚቻለው፡ ከጧት 4:00 እስከ ከሰዓት 10:00 (10:00 AM - 4:00 PM)<br><i class="fa-solid fa-rotate-left" style="margin-top:5px;"></i> በቀን 2 ጊዜ ብቻ (Max 2 withdrawals per day)`;
-            }
+            // FIX #1: Update fee & min withdraw display dynamically using spans
+            const withFeePct = document.getElementById('withFeePct');
+            const withMinAmt = document.getElementById('withMinAmt');
+            if (withFeePct) withFeePct.innerText = appConfig.withdrawalFee;
+            if (withMinAmt) withMinAmt.innerText = appConfig.minWithdraw;
+            
             const cfgMinDeposit = document.getElementById('cfgMinDeposit');
             const cfgMinWithdraw = document.getElementById('cfgMinWithdraw');
             const cfgRegBonus = document.getElementById('cfgRegBonus');
@@ -1050,6 +1064,9 @@
         }
 
         window.onload = function() {
+            // FIX #2: Apply dynamic config UI immediately on load
+            updateDynamicConfigUI();
+            
             const urlParams = new URLSearchParams(window.location.search);
             const refCode = urlParams.get('ref');
             if (refCode) {
@@ -1122,6 +1139,7 @@
             document.getElementById('authModal').style.display = 'none';
             document.getElementById('app').style.display = 'block';
             applyLanguage(); 
+            updateDynamicConfigUI();
 
             if(phoneKey === '44') {
                 document.getElementById('bottomNav').style.display = 'none';
@@ -1236,16 +1254,46 @@
                 });
             }
 
+            // FIX #3: Withdraw page — check active investment FIRST, then bank info
             if(viewName === 'withdraw') {
                 document.getElementById('withDisplayBal').innerText = parseFloat(userData.balance || 0).toFixed(2);
-                document.getElementById('withdrawInputs').style.display = 'block';
+                
+                // Hide everything first
+                document.getElementById('withdrawInputs').style.display = 'none';
                 document.getElementById('withdrawMsg').style.display = 'none';
+                document.getElementById('withdrawNoInvestMsg').style.display = 'none';
+                
+                // Rule #1: Must have an active investment (active plan)
+                const hasActiveInvestment = userData && userData.plans && Object.keys(userData.plans).some(k => {
+                    const p = userData.plans[k];
+                    if (!p || !p.active) return false;
+                    const duration = p.duration || 60;
+                    const daysClaimed = p.daysClaimed || 0;
+                    return daysClaimed < duration;
+                });
+                
+                if (!hasActiveInvestment) {
+                    document.getElementById('withdrawNoInvestMsg').style.display = 'block';
+                } else if (!userData.bankInfo || !userData.bankInfo.bankName || !userData.bankInfo.withPass) {
+                    // Rule #2: Bank info not bound — show the warning, hide form
+                    document.getElementById('withdrawMsg').style.display = 'block';
+                } else {
+                    // All checks passed — show the form
+                    document.getElementById('withdrawInputs').style.display = 'block';
+                }
             }
             
             if(viewName === 'invite') document.getElementById('invitePageCode').innerText = userData.refCode;
             if(viewName === 'profile') calculateProfileStats();
             if(viewName === 'orders') loadMyOrders();
             if(viewName === 'transactions') loadTransactions();
+
+            // Re-fetch plans from DB every time user lands on home or shop.
+            // Guarantees packages are always shown from the database, not stuck on
+            // "Loading..." from a stale listener or a previous failure.
+            if(viewName === 'home' || viewName === 'shop') {
+                loadShopPlans();
+            }
             
             if(viewName === 'bankcard') {
                 if(userData.bankInfo) {
@@ -1341,68 +1389,159 @@
             });
         }
 
+        // --- Plans loading state tracking (prevents duplicate listeners + handles errors) ---
+        let plansListenerAttached = false;
+        let plansLoadTimeout = null;
+
+        function renderPlanCard(plan, key) {
+            let pCount = 0;
+            if (userData && userData.plans) {
+                for (let pk in userData.plans) {
+                    if (userData.plans[pk].planId === key) pCount++;
+                }
+            }
+            
+            const limit = (plan.limit !== undefined && plan.limit !== null && plan.limit !== "") ? parseInt(plan.limit) : 1;
+            const duration = plan.duration || 60;
+            const totalRevenue = parseFloat((plan.roi * duration).toFixed(2));
+            
+            let btnTxt = currentLang === 'am' ? "ግዛ" : "Invest Now";
+            let dis = "";
+            let limitText = `Limit: ${limit}`;
+
+            if (limit === 0) {
+                btnTxt = currentLang === 'am' ? "በቅርብ ቀን" : "Coming Soon";
+                dis = "disabled";
+                limitText = currentLang === 'am' ? "በቅርብ ቀን" : "Coming Soon";
+            } else if (pCount >= limit) { 
+                btnTxt = "Limit Reached"; 
+                dis = "disabled"; 
+            }
+
+            const vipBadge = plan.price > 2000 ? '<div class="badge-hot">VIP</div>' : '';
+
+            return `
+            <div class="product-card animate-up">
+                ${vipBadge}
+                <div class="prod-img-box">
+                    <div class="badge-limit"><i class="fa-solid fa-lock"></i> ${limitText}</div>
+                    <img src="${plan.img || 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=400'}">
+                </div>
+                <div class="prod-info">
+                    <h4>${plan.name}</h4>
+                    <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                        <div class="roi-tag">Daily: ETB ${plan.roi}</div>
+                        <div class="roi-tag" style="background: #e0f2fe; color: #0284c7;">Total: ETB ${totalRevenue}</div>
+                    </div>
+                    <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">Cycle: ${duration} Days | Bought: ${pCount}/${limit === 0 ? '-' : limit}</div>
+                    <div class="price-row">
+                        <div class="price-val">ETB ${plan.price}</div>
+                        <button class="btn-buy" ${dis} onclick="buyPlan('${key}', ${plan.price}, ${plan.roi}, ${limit}, ${duration})">${btnTxt}</button>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function showPlansLoadingState() {
+            const loadingHtml = "<p style='text-align:center; color:var(--text-muted); padding:20px;'><i class='fa-solid fa-spinner fa-spin' style='font-size:1.5rem; color:var(--primary-color);'></i><br><br>Loading packages...</p>";
+            const shopC = document.getElementById('shopPlanList');
+            const homeC = document.getElementById('homePlanList');
+            if (shopC) shopC.innerHTML = loadingHtml;
+            if (homeC) homeC.innerHTML = loadingHtml;
+        }
+
+        function showPlansErrorState(errMsg) {
+            const errorHtml = "<div style='text-align:center; padding:20px;'>" +
+                "<i class='fa-solid fa-triangle-exclamation' style='font-size:2.5rem; color:#ef4444; margin-bottom:10px;'></i>" +
+                "<p style='color:#ef4444; font-weight:600; margin-bottom:5px;'>Failed to load packages</p>" +
+                "<p style='color:var(--text-muted); font-size:0.8rem; margin-bottom:15px;'>" + (errMsg || 'Check your connection or Firebase rules.') + "</p>" +
+                "<button onclick='loadShopPlans()' style='background:var(--primary-color); color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:600;'>" +
+                "<i class='fa-solid fa-refresh'></i> Retry</button></div>";
+            const shopC = document.getElementById('shopPlanList');
+            const homeC = document.getElementById('homePlanList');
+            if (shopC) shopC.innerHTML = errorHtml;
+            if (homeC) homeC.innerHTML = errorHtml;
+        }
+
+        function showPlansEmptyState() {
+            const emptyHtml = "<div style='text-align:center; padding:30px 20px;'>" +
+                "<i class='fa-solid fa-box-open' style='font-size:3rem; color:var(--text-muted); margin-bottom:10px; opacity:0.5;'></i>" +
+                "<p style='color:var(--text-muted); font-weight:600;'>No packages available yet</p>" +
+                "<p style='color:var(--text-muted); font-size:0.85rem; margin-top:5px;'>The admin hasn't added any farm packages. Please check back later.</p>" +
+                "<button onclick='loadShopPlans()' style='background:var(--primary-color); color:white; border:none; padding:8px 16px; border-radius:10px; cursor:pointer; margin-top:15px;'>" +
+                "<i class='fa-solid fa-refresh'></i> Refresh</button></div>";
+            const shopC = document.getElementById('shopPlanList');
+            const homeC = document.getElementById('homePlanList');
+            if (shopC) shopC.innerHTML = emptyHtml;
+            if (homeC) homeC.innerHTML = emptyHtml;
+        }
+
         function loadShopPlans() {
+            // Show immediate loading state so user knows something is happening
+            showPlansLoadingState();
+
+            // Clear any previous timeout
+            if (plansLoadTimeout) {
+                clearTimeout(plansLoadTimeout);
+                plansLoadTimeout = null;
+            }
+
+            // Detach any previous listener to prevent duplicate handlers / memory leaks
+            if (plansListenerAttached) {
+                db.ref('plans').off('value');
+                plansListenerAttached = false;
+            }
+
+            // Safety net: if Firebase doesn't respond within 10s, show an error
+            // so the user isn't stuck on "Loading packages..." forever.
+            plansLoadTimeout = setTimeout(() => {
+                const shopC = document.getElementById('shopPlanList');
+                const homeC = document.getElementById('homePlanList');
+                const stillLoading = (shopC && shopC.innerHTML.indexOf('Loading') !== -1) ||
+                                     (homeC && homeC.innerHTML.indexOf('Loading') !== -1);
+                if (stillLoading) {
+                    console.warn('Plans load timed out');
+                    showPlansErrorState('Request timed out. Your Firebase database rules may be blocking reads, or you have no internet connection.');
+                }
+            }, 10000);
+
             db.ref('plans').on('value', (snapshot) => {
+                // Clear the safety timeout — we got a response
+                if (plansLoadTimeout) {
+                    clearTimeout(plansLoadTimeout);
+                    plansLoadTimeout = null;
+                }
+                plansListenerAttached = true;
+
                 const container = document.getElementById('shopPlanList');
                 const homeContainer = document.getElementById('homePlanList'); 
                 
-                container.innerHTML = ""; 
+                if (container) container.innerHTML = ""; 
                 if (homeContainer) homeContainer.innerHTML = ""; 
 
                 if (!snapshot.exists()) {
-                    container.innerHTML = "<p style='text-align:center;'>No packages available.</p>";
-                    if (homeContainer) homeContainer.innerHTML = "<p style='text-align:center;'>No packages available.</p>";
+                    showPlansEmptyState();
                     return;
                 }
 
                 snapshot.forEach((childSnap) => {
-                    const plan = childSnap.val(); const key = childSnap.key;
-                    let pCount = 0;
-                    if(userData.plans) for(let pk in userData.plans) { if(userData.plans[pk].planId === key) pCount++; }
-                    
-                    const limit = (plan.limit !== undefined && plan.limit !== null && plan.limit !== "") ? parseInt(plan.limit) : 1;
-                    const duration = plan.duration || 60;
-                    const totalRevenue = parseFloat((plan.roi * duration).toFixed(2));
-                    
-                    let btnTxt = currentLang === 'am' ? "ግዛ" : "Invest Now";
-                    let dis = "";
-                    let limitText = `Limit: ${limit}`;
+                    const plan = childSnap.val(); 
+                    const key = childSnap.key;
+                    const planHtml = renderPlanCard(plan, key);
 
-                    if (limit === 0) {
-                        btnTxt = currentLang === 'am' ? "በቅርብ ቀን" : "Coming Soon";
-                        dis = "disabled";
-                        limitText = currentLang === 'am' ? "በቅርብ ቀን" : "Coming Soon";
-                    } else if (pCount >= limit) { 
-                        btnTxt = "Limit Reached"; 
-                        dis = "disabled"; 
-                    }
-
-                    const vipBadge = plan.price > 2000 ? '<div class="badge-hot">VIP</div>' : '';
-
-                    const planHtml = `
-                    <div class="product-card animate-up">
-                        ${vipBadge}
-                        <div class="prod-img-box">
-                            <div class="badge-limit"><i class="fa-solid fa-lock"></i> ${limitText}</div>
-                            <img src="${plan.img || 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=400'}">
-                        </div>
-                        <div class="prod-info">
-                            <h4>${plan.name}</h4>
-                            <div style="display: flex; gap: 5px; flex-wrap: wrap;">
-                                <div class="roi-tag">Daily: ETB ${plan.roi}</div>
-                                <div class="roi-tag" style="background: #e0f2fe; color: #0284c7;">Total: ETB ${totalRevenue}</div>
-                            </div>
-                            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">Cycle: ${duration} Days | Bought: ${pCount}/${limit === 0 ? '-' : limit}</div>
-                            <div class="price-row">
-                                <div class="price-val">ETB ${plan.price}</div>
-                                <button class="btn-buy" ${dis} onclick="buyPlan('${key}', ${plan.price}, ${plan.roi}, ${limit}, ${duration})">${btnTxt}</button>
-                            </div>
-                        </div>
-                    </div>`;
-
-                    container.insertAdjacentHTML('beforeend', planHtml);
+                    if (container) container.insertAdjacentHTML('beforeend', planHtml);
                     if (homeContainer) homeContainer.insertAdjacentHTML('beforeend', planHtml);
                 });
+            }, (error) => {
+                // Error callback — this fires when Firebase rules block access
+                // or the connection is denied. Without this, the listener just
+                // silently never fires and the user is stuck on "Loading...".
+                console.error('Firebase plans load error:', error);
+                if (plansLoadTimeout) {
+                    clearTimeout(plansLoadTimeout);
+                    plansLoadTimeout = null;
+                }
+                showPlansErrorState(error.message || 'Permission denied or connection lost.');
             });
         }
 
@@ -1577,21 +1716,51 @@
             showToast("አሁን ማውጣት አያስፈልግም፣ ሲስተሙ በተገዛበት ሰዓት በራስ-ሰር ይደምረዋል!");
         }
 
+        // ==========================================
+        // FIXED: submitWithdraw with proper error messages
+        // ==========================================
         function submitWithdraw() {
             const amount = parseFloat(document.getElementById('withAmount').value);
             const pass = document.getElementById('withAuthPass').value;
             
             if (!amount || !pass) return showToast("Please enter amount and password");
+            
+            // FIX #A: Block withdrawal if no active investment
+            const hasActiveInvestment = userData && userData.plans && Object.keys(userData.plans).some(k => {
+                const p = userData.plans[k];
+                if (!p || !p.active) return false;
+                const duration = p.duration || 60;
+                const daysClaimed = p.daysClaimed || 0;
+                return daysClaimed < duration;
+            });
+            if (!hasActiveInvestment) {
+                showToast("You need at least one active investment to withdraw!");
+                switchView('shop');
+                return;
+            }
+            
             if (amount < appConfig.minWithdraw) return showToast(`Minimum withdrawal is ${appConfig.minWithdraw} ETB`);
             if (amount > (userData.balance || 0)) return showToast("Insufficient balance");
             
-            if (!userData.bankInfo || userData.bankInfo.withPass !== pass) {
+            // FIX #B: Check bank info FIRST, with clear separate error
+            if (!userData.bankInfo) {
+                showToast("Please bind your bank account first (Profile → Bank Info)");
+                switchView('bankcard');
+                return;
+            }
+            if (!userData.bankInfo.withPass) {
+                showToast("Please set a withdrawal password in Bank Info");
+                switchView('bankcard');
+                return;
+            }
+            if (userData.bankInfo.withPass !== pass) {
                 return showToast("Incorrect withdrawal password!");
             }
 
+            // FIX #5: Time window check — clearer message matching actual code
             const currentHour = new Date().getHours();
             if (currentHour < 10 || currentHour >= 16) {
-                return showToast("ማውጣት የሚቻለው ከጧት 4:00 እስከ ከሰዓት 10:00 (10:00 AM - 4:00 PM) ብቻ ነው!");
+                return showToast("Withdrawal is only allowed between 10:00 AM and 4:00 PM (ማውጣት ከ10 ጠዋት እስከ 4 ከሰዓት ብቻ ይቻላል)");
             }
 
             const todayStr = new Date().toDateString();
@@ -1691,8 +1860,9 @@
             
             const bankData = { bankName: bName, accName: aName, accNum: aNum, withPass: wPass };
             db.ref('users/' + currentUser + '/bankInfo').set(bankData).then(() => {
-                showToast("Bank details bound successfully!");
-                switchView('profile');
+                userData.bankInfo = bankData;
+                showToast("Bank details bound successfully! Now you can withdraw.");
+                switchView('withdraw');
             });
         }
 
@@ -1809,7 +1979,7 @@
         // ==========================================
         // --- ADDED MISSING FUNCTIONS BELOW HERE ---
         // ==========================================
-
+        
         function showToast(msg) {
             const toast = document.getElementById("toast");
             if(toast) {
@@ -2163,3 +2333,4 @@
     </script>
 </body>
 </html>
+
